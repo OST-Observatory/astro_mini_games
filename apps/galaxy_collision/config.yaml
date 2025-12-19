@@ -1,0 +1,98 @@
+# Galaxien-Kollision - Konfiguration
+
+simulation:
+  time_scale:
+    default: 10.0
+    min: 1.0
+    max: 30.0
+    step: 1.0
+
+  gravitational_constant: 1.0
+
+  # Softening-Länge: größere Werte = stabilere aber weniger realistische Bahnen
+  # Empfohlen: 0.5 - 2.0
+  softening_length: 1.0
+
+  dynamic_friction: 0.02
+  max_dt: 0.05
+
+  merge:
+    enabled: true
+    distance: 2.0
+    min_passages: 2
+    require_bound: true
+    max_relative_velocity_factor: 0.3
+
+galaxies:
+  count: 2 # 1 oder 2
+
+  total_particles:
+    default: 20000
+    min: 5000
+    max: 30000
+    step: 5000
+
+  mass_ratio:
+    default: 1.0
+    min: 0.1
+    max: 5.0
+    step: 0.2
+
+  total_mass:
+    default: 2.0
+    min: 1.0
+    max: 4.0
+    step: 0.5
+
+  base_radius: 10.0
+
+collision:
+  initial_distance:
+    default: 50.0
+    min: 30.0
+    max: 80.0
+    step: 5.0
+
+  velocity_factor:
+    default: 0.5
+    min: 0.2
+    max: 0.9
+    step: 0.1
+
+  impact_parameter:
+    default: 0.3
+    min: 0.0
+    max: 0.7
+    step: 0.1
+
+  inclination:
+    default: 30.0
+    min: 0.0
+    max: 90.0
+    step: 10.0
+
+colors:
+  mode: "distinct"
+
+  distinct:
+    galaxy_a: [0.3, 0.5, 1.0, 1.0]
+    galaxy_b: [1.0, 0.6, 0.2, 1.0]
+
+  realistic:
+    core: [1.0, 0.95, 0.8, 1.0]
+    disk: [0.85, 0.85, 1.0, 1.0]
+    outer: [0.6, 0.7, 0.9, 1.0]
+
+  velocity:
+    slow: [1.0, 0.2, 0.2, 1.0]
+    medium: [1.0, 1.0, 0.2, 1.0]
+    fast: [0.2, 0.4, 1.0, 1.0]
+
+  merged: [0.8, 0.6, 0.9, 1.0]
+
+camera:
+  initial_distance: 200.0
+  min_distance: 50.0
+  max_distance: 500.0
+  rotation_speed: 0.3
+  zoom_speed: 10.0

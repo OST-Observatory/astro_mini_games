@@ -1,0 +1,113 @@
+# Astro-Launcher Konfiguration
+
+launcher:
+  title: "Astro Explorer"
+
+  # Ziel-Display (Pi)
+  target_resolution: [2560, 1440]
+
+  # Grid-Layout
+  grid:
+    cols: 3
+    rows: 2
+    padding: 60
+    spacing: 40
+
+  # NEU: Wackel-Einstellungen
+  wiggle:
+    enabled: true
+    min_interval: 5 # Minimum Sekunden zwischen Wackeln
+    max_interval: 12 # Maximum Sekunden zwischen Wackeln
+
+  # Hintergrund-Einstellungen
+  background:
+    star_count: 200
+    star_size_range: [1, 3]
+    drift_stars: 50
+    drift_speed: 15
+    twinkle_enabled: true
+    twinkle_speed: 2.0
+
+    shooting_stars:
+      enabled: true
+      interval_range: [8, 20]
+      duration: 0.8
+
+    nebula:
+      enabled: true
+      mode: "original" # "original" = eure Bilder, "tinted" = eingefärbte Wolken
+      opacity: 0.5 # 0.3-0.7 empfohlen für Fotos
+      count: 3 # Anzahl gleichzeitig sichtbarer Nebel
+      size: 0.4 # NEU: Größenfaktor (0.3 = klein, 0.6 = groß)
+      speed: 1.5 # NEU: Geschwindigkeit (1.0 = normal, 2.0 = schnell)
+
+apps:
+  # Demo-App als erstes zum Testen
+  - id: demo
+    name: "Demo App"
+    icon: ">"
+    command: "python apps/demo/main.py"
+    description: "Test des Launch-Mechanismus"
+    color: "#2e7d32"
+    enabled: true
+
+  # - id: planetarium
+  #   name: "Planetarium"
+  #   icon: "*"
+  #   command: "python apps/planetarium/main.py"
+  #   description: "Erkunde den Nachthimmel"
+  #   color: "#1a237e"
+  #   enabled: true
+
+  - id: sonnensystem
+    name: "Sonnensystem"
+    icon: "O"
+    command: "python apps/sonnensystem/main.py"
+    description: "Reise durch unser Sonnensystem"
+    color: "#4a148c"
+    enabled: true
+
+  - id: quiz
+    name: "Astro-Quiz"
+    icon: "?"
+    command: "python apps/quiz/main.py"
+    description: "Teste dein Wissen"
+    color: "#006064"
+    enabled: true
+
+  - id: mondphasen
+    name: "Mondphasen"
+    icon: "C"
+    command: "python apps/mondphasen/main.py"
+    description: "Der Mond im Wandel"
+    color: "#37474f"
+    enabled: true
+
+  - id: sternbilder
+    name: "Sternbilder"
+    icon: "+"
+    command: "python apps/sternbilder/main.py"
+    description: "Finde die Konstellationen"
+    color: "#1b5e20"
+    enabled: true
+
+  - id: galaxy_collision
+    name: "Galaxien-Kollision"
+    icon: "@" # Oder später ein PNG
+    command: "python apps/galaxy_collision/main.py"
+    description: "Simulation verschmelzender Galaxien"
+    color: "#1a237e"
+    enabled: true
+
+  # - id: iss_tracker
+  #   name: "ISS Tracker"
+  #   icon: "^"
+  #   command: "python apps/iss/main.py"
+  #   description: "Wo ist die ISS gerade?"
+  #   color: "#b71c1c"
+  #   enabled: true
+
+admin:
+  enabled: true
+  activation: "triple_tap_corner"
+  password: "astro2024"
