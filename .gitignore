@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Astro puzzle: images too large for GitHub
+apps/astro_puzzle/images/*
+!apps/astro_puzzle/images/.gitkeep
+
+# Astro quiz: question images not versioned
+apps/quiz/data/images/*
+!apps/quiz/data/images/.gitkeep

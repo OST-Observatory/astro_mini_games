@@ -1,25 +1,35 @@
 #!/usr/bin/env python3
 """
-Demo-App zum Testen des Launch-Mechanismus
+Demo app for testing the launch mechanism.
 """
 import os
 import sys
 
-# Kivy Argument-Parser deaktivieren
 os.environ['KIVY_NO_ARGS'] = '1'
 
+from pathlib import Path
+
+_project_root = Path(__file__).resolve().parent.parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
+from shared.bootstrap import setup_logging
+setup_logging()
+
 from kivy.config import Config
+Config.set('graphics', 'fullscreen', 'auto')
 Config.set('graphics', 'width', '800')
 Config.set('graphics', 'height', '600')
 Config.set('graphics', 'resizable', '0')
 
 from kivy.app import App
+from shared.base_app import AstroApp
+from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.animation import Animation
 
 import random
@@ -27,7 +37,7 @@ import math
 
 
 class Star:
-    """Einfacher animierter Stern"""
+    """Simple animated star."""
     def __init__(self, x, y, size):
         self.x = x
         self.y = y
@@ -38,7 +48,7 @@ class Star:
 
 
 class DemoWidget(FloatLayout):
-    """Hauptwidget der Demo-App"""
+    """Main widget of the demo app."""
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -46,17 +56,17 @@ class DemoWidget(FloatLayout):
         self.stars = []
         self.time = 0
         
-        # Sterne erstellen
+        # Create stars
         Clock.schedule_once(self._init_stars, 0)
         
-        # UI erstellen
+        # Build UI
         self._build_ui()
         
-        # Animation starten
+        # Start animation
         Clock.schedule_interval(self._update, 1/30)
     
     def _init_stars(self, dt):
-        """Erstellt Sterne"""
+        """Create stars."""
         for _ in range(100):
             self.stars.append(Star(
                 x=random.uniform(0, self.width or 800),
@@ -65,9 +75,9 @@ class DemoWidget(FloatLayout):
             ))
     
     def _build_ui(self):
-        """Erstellt die UI-Elemente"""
+        """Build UI elements."""
         
-        # Titel
+        # Title
         title = Label(
             text="Demo App",
             font_size='48sp',
@@ -78,7 +88,7 @@ class DemoWidget(FloatLayout):
         title.bind(texture_size=title.setter('size'))
         self.add_widget(title)
         
-        # Info-Text
+        # Info text
         info = Label(
             text="Diese App testet den Launch-Mechanismus.\n\n"
                  "Der Launcher sollte im Hintergrund warten\n"
@@ -92,7 +102,7 @@ class DemoWidget(FloatLayout):
         info.bind(texture_size=info.setter('size'))
         self.add_widget(info)
         
-        # Countdown Label
+        # Countdown label
         self.countdown_label = Label(
             text="",
             font_size='24sp',
@@ -103,7 +113,7 @@ class DemoWidget(FloatLayout):
         self.countdown_label.bind(texture_size=self.countdown_label.setter('size'))
         self.add_widget(self.countdown_label)
         
-        # Beenden-Button
+        # Close button
         close_btn = Button(
             text="App beenden",
             font_size='22sp',
@@ -115,7 +125,7 @@ class DemoWidget(FloatLayout):
         close_btn.bind(on_release=self._close_app)
         self.add_widget(close_btn)
         
-        # Auto-Close Button
+        # Auto-close button
         auto_btn = Button(
             text="Auto-Close in 10s",
             font_size='18sp',
@@ -131,7 +141,7 @@ class DemoWidget(FloatLayout):
         self.countdown_value = 0
     
     def _start_countdown(self, instance):
-        """Startet 10-Sekunden Countdown"""
+        """Start 10-second countdown."""
         if self.countdown_active:
             return
         
@@ -140,7 +150,7 @@ class DemoWidget(FloatLayout):
         Clock.schedule_interval(self._countdown_tick, 1)
     
     def _countdown_tick(self, dt):
-        """Countdown aktualisieren"""
+        """Update countdown."""
         self.countdown_value -= 1
         self.countdown_label.text = f"Schliesse in {self.countdown_value}..."
         
@@ -149,29 +159,29 @@ class DemoWidget(FloatLayout):
             return False  # Clock stoppen
     
     def _close_app(self, instance):
-        """App beenden"""
+        """Close app."""
         App.get_running_app().stop()
     
     def _update(self, dt):
-        """Animation Update"""
+        """Animation update."""
         self.time += dt
         
-        # Sterne animieren
+        # Animate stars
         for star in self.stars:
             star.alpha = 0.3 + 0.7 * (0.5 + 0.5 * math.sin(self.time * star.speed + star.offset))
         
         self._draw()
     
     def _draw(self):
-        """Zeichnet den Hintergrund"""
+        """Draw the background."""
         self.canvas.before.clear()
         
         with self.canvas.before:
-            # Hintergrund
+            # Background
             Color(0.05, 0.02, 0.15, 1)
             Rectangle(pos=self.pos, size=self.size)
             
-            # Sterne
+            # Stars
             for star in self.stars:
                 Color(1, 1, 1, star.alpha * 0.8)
                 Ellipse(
@@ -180,16 +190,17 @@ class DemoWidget(FloatLayout):
                 )
 
 
-class DemoApp(App):
-    """Demo-Anwendung"""
+class DemoApp(AstroApp):
+    """Demo application."""
     
     def build(self):
+        """Build the demo UI with animated starfield."""
         self.title = "Astro Demo App"
         Window.bind(on_keyboard=self.on_keyboard)
         return DemoWidget()
     
     def on_keyboard(self, window, key, scancode, codepoint, modifier):
-        # ESC zum Beenden
+        # ESC to exit
         if key == 27:
             self.stop()
             return True

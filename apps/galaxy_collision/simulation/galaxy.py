@@ -1,5 +1,5 @@
 """
-Galaxie-Modell mit korrekten Anfangsbedingungen für Softened-Potential
+Galaxy model with correct initial conditions for softened potential.
 """
 
 import numpy as np
@@ -7,9 +7,9 @@ import numpy as np
 
 class Galaxy:
     """
-    Einzelne Galaxie mit Partikeln
+    Single galaxy with particles.
 
-    Verwendet korrekte Kepler-Geschwindigkeiten für das Softened-Potential.
+    Uses correct Kepler velocities for the softened potential.
     """
 
     def __init__(
@@ -44,46 +44,46 @@ class Galaxy:
 
     @staticmethod
     def radius_from_mass(mass: float, base_radius: float = 10.0) -> float:
-        """Radius skaliert mit M^(1/3)."""
+        """Radius scales with M^(1/3)."""
         return base_radius * (mass ** (1 / 3))
 
     def _init_particles(self):
         """
-        Initialisiert Partikel mit stabilen Kreisbahnen.
+        Initialize particles with stable circular orbits.
 
-        Verwendet die korrekte Geschwindigkeit für das Softened-Potential.
+        Uses correct velocity for the softened potential.
         """
         N = self.particle_count
 
-        # Radiale Verteilung: exponentiell abfallend
-        # r ~ exp(-r/scale), mit scale = radius/3
+        # Radial distribution: exponentially decreasing
+        # r ~ exp(-r/scale), with scale = radius/3
         scale_length = self.radius / 3.0
 
-        # Inverse CDF Sampling für Exponential-Profil
+        # Inverse CDF sampling for exponential profile
         u = np.random.uniform(0, 1, N)
-        # Begrenzen auf ~5 Skalenlängen
+        # Limit to ~5 scale lengths
         r_max_factor = 5.0
         r = -scale_length * np.log(1 - u * (1 - np.exp(-r_max_factor)))
 
-        # Alternativ: Einfachere Verteilung für Stabilität
+        # Alternative: simpler distribution for stability
         # r = np.random.exponential(scale_length, N)
         # r = np.clip(r, 0.1, self.radius * 2)
 
-        # Minimum-Radius (vermeidet Singularität)
+        # Minimum radius (avoids singularity)
         r = np.maximum(r, self.softening * 0.5)
 
-        # Azimutaler Winkel (gleichverteilt)
+        # Azimuthal angle (uniformly distributed)
         phi = np.random.uniform(0, 2 * np.pi, N)
 
-        # Kleine vertikale Streuung (dünne Scheibe)
+        # Small vertical scatter (thin disk)
         z_scale = 0.05 * self.radius
         z = np.random.normal(0, z_scale, N)
 
-        # Positionen in der Scheiben-Ebene (x-y)
+        # Positions in disk plane (x-y)
         x = r * np.cos(phi)
         y = r * np.sin(phi)
 
-        # === KORREKTE KEPLER-GESCHWINDIGKEIT FÜR SOFTENED POTENTIAL ===
+        # === CORRECT KEPLER VELOCITY FOR SOFTENED POTENTIAL ===
         # v_circ = r * sqrt(G*M / (r² + ε²)^(3/2))
         eps_sq = self.softening**2
         v_kepler = r * np.sqrt(self.G * self.mass / (r**2 + eps_sq) ** 1.5)
@@ -91,13 +91,13 @@ class Galaxy:
         # Rotationsrichtung
         v_kepler *= self.rotation_direction
 
-        # Geschwindigkeitskomponenten (tangential zur Kreisbahn)
+        # Velocity components (tangential to circular orbit)
         vx = -v_kepler * np.sin(phi)
         vy = v_kepler * np.cos(phi)
         vz = np.zeros(N)
 
-        # Kleine Geschwindigkeitsdispersion für Realismus
-        # (verhindert perfekt kreisförmige Bahnen)
+        # Small velocity dispersion for realism
+        # (prevents perfectly circular orbits)
         dispersion = 0.05 * np.abs(v_kepler)
         vx += np.random.normal(0, dispersion)
         vy += np.random.normal(0, dispersion)
@@ -107,18 +107,18 @@ class Galaxy:
         self.positions = np.column_stack([x, y, z])
         self.velocities = np.column_stack([vx, vy, vz])
 
-        # Inklination anwenden (Rotation um x-Achse)
+        # Apply inclination (rotation around x-axis)
         if abs(self.inclination) > 1e-6:
             self._apply_inclination()
 
-        # Zum Galaxienzentrum verschieben
+        # Shift to galaxy center
         self.positions += self.center
         self.velocities += self.velocity
 
-        # Farben
+        # Colors
         self.colors = np.tile(self.color, (N, 1))
 
-        # Debug-Info
+        # Debug info
         v_mean = np.mean(np.abs(v_kepler))
         r_mean = np.mean(r)
         print(
@@ -126,7 +126,7 @@ class Galaxy:
         )
 
     def _apply_inclination(self):
-        """Rotiert die Galaxie um die x-Achse."""
+        """Rotate the galaxy around the x-axis."""
         cos_i = np.cos(self.inclination)
         sin_i = np.sin(self.inclination)
 
@@ -142,5 +142,5 @@ class Galaxy:
         self.velocities[:, 2] = vz_new
 
     def get_particle_data(self):
-        """Gibt Positionen und Farben zurück."""
+        """Return positions and colors."""
         return self.positions.copy(), self.colors.copy()

@@ -1,4 +1,4 @@
-# Galaxien-Kollision - Konfiguration
+# Galaxy collision configuration
 
 simulation:
   time_scale:
@@ -9,11 +9,20 @@ simulation:
 
   gravitational_constant: 1.0
 
-  # Softening-Länge: größere Werte = stabilere aber weniger realistische Bahnen
-  # Empfohlen: 0.5 - 2.0
-  softening_length: 1.0
+  # Softening length: larger values = more stable but less realistic orbits
+  # Recommended: 0.5 - 2.0
+  softening_length:
+    default: 1.0
+    min: 0.5
+    max: 3.0
+    step: 0.5
 
-  dynamic_friction: 0.02
+  dynamic_friction:
+    default: 0.01
+    min: 0.0
+    max: 0.05
+    step: 0.005
+
   max_dt: 0.05
 
   merge:
@@ -24,7 +33,7 @@ simulation:
     max_relative_velocity_factor: 0.3
 
 galaxies:
-  count: 2 # 1 oder 2
+  count: 2 # 1 or 2
 
   total_particles:
     default: 20000
@@ -96,3 +105,10 @@ camera:
   max_distance: 500.0
   rotation_speed: 0.3
   zoom_speed: 10.0
+
+ui:
+  layout_mode: "auto"  # auto | desktop | touch
+  breakpoint_width: 768
+  drawer_width: 320
+  show_zoom_buttons: true  # Zoom buttons at bottom (in addition to pinch)
+  show_physics_params: false  # Show physics params (friction, softening)

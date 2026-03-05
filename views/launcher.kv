@@ -1,51 +1,46 @@
 #:kivy 2.0
 #:import StarfieldBackground launcher.widgets.background.StarfieldBackground
 #:import AppTile launcher.widgets.tile.AppTile
+#:import StatsTapArea launcher.widgets.stats_overlay.StatsTapArea
 
 <AppTile>:
-    # Styling wird in Python gemacht
+    # Styling done in Python
 
 <StarfieldBackground>:
-    # Styling wird in Python gemacht
+    # Styling done in Python
 
-# Haupt-Layout
+# Main layout
 FloatLayout:
     id: root_layout
 
-    # Animierter Sternenhimmel-Hintergrund
+    # Animated starfield background
     StarfieldBackground:
         id: starfield
         pos: 0, 0
         size: root.size
 
-    # Titel oben
-    Label:
-        id: title_label
-        text: "* Astro Explorer *"
-        font_size: min(root.width * 0.035, 48)  # Skaliert mit Fenster
-        bold: True
-        size_hint: None, None
-        size: self.texture_size[0] + dp(40), self.texture_size[1] + dp(20)
-        pos_hint: {'center_x': 0.5}
-        top: root.top - root.height * 0.03
-        color: 1, 1, 1, 0.95
+    # Hidden 8x-tap area top center for statistics screen
+    StatsTapArea:
+        id: stats_tap_area
+        size_hint: 0.15, 0.08
+        pos_hint: {'center_x': 0.5, 'top': 1}
 
-    # Container für das App-Grid - ZENTRIERT
+    # Container for app grid – centered
     AnchorLayout:
         anchor_x: 'center'
         anchor_y: 'center'
-        # Padding auch proportional
-        padding: root.width * 0.05, root.height * 0.12, root.width * 0.05, root.height * 0.06
+        # Proportional padding, top/bottom balanced (title removed)
+        padding: root.width * 0.05, root.height * 0.08, root.width * 0.05, root.height * 0.08
 
-        # App-Grid mit dynamischem Spacing
+        # App grid with dynamic spacing
         GridLayout:
             id: app_grid
             cols: 3
-            # Spacing proportional zur Fenstergröße (ca. 4% der Breite)
+            # Spacing proportional to window size (~4% of width)
             spacing: root.width * 0.04, root.height * 0.05
             size_hint: 0.85, 0.7
 
-    # Dev-Mode Indikator (unten links)
+    # Dev mode indicator (bottom left)
     Label:
         id: dev_label
         text: "DEV MODE - ESC beenden | F11 Vollbild"

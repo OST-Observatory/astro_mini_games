@@ -1,8 +1,7 @@
 """
-UI Module
+UI module
 
-WICHTIG: fonts.init_fonts() muss in main.py aufgerufen werden
-BEVOR dieses Modul importiert wird!
+IMPORTANT: fonts.init_fonts() must be called in main.py before this module is imported!
 """
 
 from .controls import ControlPanel

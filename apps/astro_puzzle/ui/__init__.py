@@ -1,0 +1,1 @@
+"""Astro puzzle UI"""

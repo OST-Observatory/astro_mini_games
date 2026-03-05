@@ -1,0 +1,10 @@
+# Constellation finder configuration
+
+session:
+  learn_count: 7      # 5–10, number of constellations in learn mode
+  quiz_count: 7      # 5–10, number of constellations per quiz
+  always_include: "Große Bärin (Ursa Major)"  # always in selection
+
+display:
+  star_size_min: 1
+  star_size_max: 15

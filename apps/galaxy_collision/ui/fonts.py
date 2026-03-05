@@ -1,15 +1,15 @@
 """
-Schriftart-Konfiguration für Kivy mit Unicode-Support
+Font configuration for Kivy with Unicode support.
 """
 
 import os
 from pathlib import Path
 
-# Status-Variablen
+# Status variables
 _font_initialized = False
-_font_name = "Roboto"  # Kivy-Default
+_font_name = "Roboto"  # Kivy default
 
-# Pfade
+# Paths
 ASSETS_DIR = Path(__file__).parent.parent / "assets"
 FONTS_DIR = ASSETS_DIR / "fonts"
 UNICODE_FONT_FILE = FONTS_DIR / "DejaVuSans.ttf"
@@ -17,9 +17,9 @@ UNICODE_FONT_FILE = FONTS_DIR / "DejaVuSans.ttf"
 
 def init_fonts() -> bool:
     """
-    Initialisiert die Unicode-Schriftart für Kivy.
+    Initializes the Unicode font for Kivy.
 
-    MUSS vor dem Erstellen von Widgets aufgerufen werden!
+    MUST be called before creating any widgets!
     """
     global _font_initialized, _font_name
 
@@ -28,7 +28,7 @@ def init_fonts() -> bool:
 
     from kivy.core.text import LabelBase
 
-    # Suche nach Schriftart
+    # Search for font
     font_candidates = [
         UNICODE_FONT_FILE,
         Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
@@ -61,10 +61,10 @@ def init_fonts() -> bool:
 
 
 def get_font_name() -> str:
-    """Gibt den Namen der zu verwendenden Schriftart zurück."""
+    """Returns the name of the font to use."""
     return _font_name
 
 
 def is_unicode_available() -> bool:
-    """Prüft ob Unicode-Schriftart verfügbar ist."""
+    """Checks if Unicode font is available."""
     return _font_name != "Roboto"

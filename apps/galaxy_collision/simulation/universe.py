@@ -1,5 +1,5 @@
 """
-Universum mit Einzel- und Zwei-Galaxien-Modus
+Universe with single- and two-galaxy mode.
 """
 import numpy as np
 from .galaxy import Galaxy
@@ -26,8 +26,13 @@ class Universe:
 
         # Maximaler Zeitschritt
         self.max_dt = sim.get('max_dt', 0.05)
+        
+        # Adaptive timesteps for particles
+        self.adaptive_timesteps_enabled = sim.get('adaptive_timesteps', True)
+        self.min_dt = sim.get('min_dt', 0.001)  # Minimaler Zeitschritt
+        self.adaptive_factor = sim.get('adaptive_factor', 0.1)  # Factor for adjustment
 
-        # Anzahl Galaxien - wird in _init_galaxies nochmal gelesen
+        # Galaxy count – read again in _init_galaxies
         self.galaxy_count = 2  # Default
 
         # Verschmelzungs-Einstellungen
@@ -57,7 +62,7 @@ class Universe:
         self._init_galaxies()
 
     def _init_galaxies(self):
-        """Initialisiert Galaxie(n)."""
+        """Initialize galaxy(ies)."""
         cfg = self.config
         gal = cfg.get('galaxies', {})
         col = cfg.get('collision', {})
@@ -71,7 +76,7 @@ class Universe:
         # === GALAXY COUNT HIER LESEN ===
         self.galaxy_count = gal.get('count', 2)
 
-        # Merge nur bei 2 Galaxien
+        # Merge only with 2 galaxies
         self.merge_enabled = self.merge_enabled and self.galaxy_count == 2
 
         print(f"[Universe] galaxy_count = {self.galaxy_count}")
@@ -88,7 +93,7 @@ class Universe:
             M_b = M_total / (1.0 + ratio)
             M_a = M_total - M_b
 
-        # Radien
+        # Radii
         base_r = gal.get('base_radius', 10.0)
         R_a = Galaxy.radius_from_mass(M_a, base_r)
         R_b = Galaxy.radius_from_mass(M_b, base_r) if M_b > 0 else 0
@@ -111,7 +116,7 @@ class Universe:
         print(f"{'='*50}")
         print(f"Galaxie A: M={M_a:.2f}, R={R_a:.1f}, N={N_a}")
 
-        # Kollisions-Parameter (für 2 Galaxien)
+        # Collision parameters (for 2 galaxies)
         d = self._get_param(col, 'initial_distance', 50.0)
         v_fac = self._get_param(col, 'velocity_factor', 0.5)
         impact = self._get_param(col, 'impact_parameter', 0.3)
@@ -127,9 +132,9 @@ class Universe:
             print(f"v/v_escape: {v_fac:.2f}")
             print(f"\nVerschmelzung: {'AN' if self.merge_enabled else 'AUS'}")
             if self.merge_enabled:
-                print(f"  Abstand: {self.merge_distance:.1f}")
+                print(f"  Distance: {self.merge_distance:.1f}")
                 print(f"  Min. Passagen: {self.merge_min_passages}")
-                print(f"  Energie-Bedingung: {'AN' if self.merge_require_bound else 'AUS'}")
+                print(f"  Energy condition: {'ON' if self.merge_require_bound else 'OFF'}")
 
         print(f"\nMax dt: {self.max_dt:.3f}")
         print(f"{'='*50}")
@@ -160,7 +165,7 @@ class Universe:
             softening=softening
         )
 
-        # === GALAXIE B ERSTELLEN (nur im 2-Galaxien-Modus) ===
+        # === CREATE GALAXY B (only in 2-galaxy mode) ===
         if self.galaxy_count == 2:
             pos_b = np.array([d/2, 0, 0], dtype=np.float64)
             vel_b = np.array([-v_radial, -v_tang, 0], dtype=np.float64) * (M_a / M_total)
@@ -180,7 +185,7 @@ class Universe:
         else:
             self.galaxy_b = None
 
-        # Zustand zurücksetzen
+        # Reset state
         self.is_merged = False
         self.merged_center = None
         self.merged_velocity = None
@@ -193,11 +198,11 @@ class Universe:
 
     def _get_param(self, cfg_section: dict, key: str, default):
         """
-        Holt Parameter aus Config.
+        Get parameter from config.
 
-        Unterstützt beide Formate:
-        - Direkt: key: value
-        - Verschachtelt: key: {default: value, min: ..., max: ...}
+        Supports both formats:
+        - Direct: key: value
+        - Nested: key: {default: value, min: ..., max: ...}
         """
         val = cfg_section.get(key, default)
         if isinstance(val, dict):
@@ -205,7 +210,7 @@ class Universe:
         return val
 
     def _check_and_perform_merge(self):
-        """Prüft ob Verschmelzung stattfinden sollte."""
+        """Check if merge should occur."""
         if not self.merge_enabled or self.is_merged or self.galaxy_b is None:
             return
 
@@ -222,7 +227,7 @@ class Universe:
             self._merge_galaxies(reason)
 
     def _merge_galaxies(self, reason: str):
-        """Verschmilzt beide Galaxien zu einer."""
+        """Merge both galaxies into one."""
         M_a = self.galaxy_a.mass
         M_b = self.galaxy_b.mass
         M_total = M_a + M_b
@@ -240,14 +245,14 @@ class Universe:
         self.is_merged = True
 
         print(f"\n{'*'*50}")
-        print(f"  VERSCHMELZUNG bei t={self.time:.2f}")
-        print(f"  Grund: {reason}")
-        print(f"  Passagen: {self.physics.passage_count}")
-        print(f"  Neue Masse: {M_total:.2f}")
+        print(f"  MERGER at t={self.time:.2f}")
+        print(f"  Reason: {reason}")
+        print(f"  Passages: {self.physics.passage_count}")
+        print(f"  New mass: {M_total:.2f}")
         print(f"{'*'*50}\n")
 
     def _update_render_data(self):
-        """Aktualisiert die Render-Daten."""
+        """Update render data."""
         pos_a, col_a = self.galaxy_a.get_particle_data()
 
         if self.galaxy_b is not None:
@@ -266,7 +271,7 @@ class Universe:
             self.all_colors = col_a
 
     def update_config(self, new_config: dict):
-        """Aktualisiert Konfiguration."""
+        """Updates configuration."""
         for k, v in new_config.items():
             if isinstance(v, dict) and k in self.config:
                 self.config[k].update(v)
@@ -318,7 +323,7 @@ class Universe:
         self.time += dt_s
 
     def _step_single_galaxy(self, dt: float):
-        """Schritt für Einzelgalaxie."""
+        """Step for single galaxy."""
         acc = self.physics.particle_accelerations_single_center(
             self.galaxy_a.positions,
             self.galaxy_a.center,
@@ -347,7 +352,7 @@ class Universe:
             print(f"  [Einzelgalaxie] t={self.time:.1f}, <r>={r_mean:.2f}, r_max={r_max:.2f}")
 
     def _step_merged(self, dt: float):
-        """Schritt nach Verschmelzung."""
+        """Step after merger."""
         self.merged_center, self.merged_velocity = self.physics.step_merged_center(
             self.merged_center,
             self.merged_velocity,
@@ -377,7 +382,7 @@ class Universe:
         self.galaxy_b.velocities = all_vel[n_a:]
 
     def _step_two_galaxies(self, dt: float):
-        """Schritt für zwei separate Galaxien."""
+        """Step for two separate galaxies with adaptive timesteps."""
         new_pos_a, new_vel_a, new_pos_b, new_vel_b = self.physics.step_centers_verlet(
             self.galaxy_a.center, self.galaxy_a.velocity, self.galaxy_a.mass,
             self.galaxy_b.center, self.galaxy_b.velocity, self.galaxy_b.mass,
@@ -405,21 +410,49 @@ class Universe:
                 self.galaxy_b.center, self.galaxy_b.mass
             )
 
-        vel_half = all_vel + 0.5 * acc * dt
-        all_pos = all_pos + vel_half * dt
-
-        if self.is_merged:
-            acc_new = self.physics.particle_accelerations_single_center(
-                all_pos, self.merged_center, self.merged_mass
-            )
+        # Adaptive timesteps for particles
+        if self.adaptive_timesteps_enabled:
+            max_accel = np.max(np.linalg.norm(acc, axis=1))
+            if max_accel > 0:
+                optimal_dt = self.adaptive_factor / np.sqrt(max_accel + 1e-10)
+                optimal_dt = np.clip(optimal_dt, self.min_dt, dt)
+            else:
+                optimal_dt = dt
+            
+            n_substeps = max(1, int(np.ceil(dt / optimal_dt)))
+            dt_sub = dt / n_substeps
         else:
-            acc_new = self.physics.particle_accelerations_two_centers(
-                all_pos,
-                self.galaxy_a.center, self.galaxy_a.mass,
-                self.galaxy_b.center, self.galaxy_b.mass
-            )
+            n_substeps = 1
+            dt_sub = dt
 
-        all_vel = vel_half + 0.5 * acc_new * dt
+        # Execute substeps
+        for _ in range(n_substeps):
+            if self.is_merged:
+                acc = self.physics.particle_accelerations_single_center(
+                    all_pos, self.merged_center, self.merged_mass
+                )
+            else:
+                acc = self.physics.particle_accelerations_two_centers(
+                    all_pos,
+                    self.galaxy_a.center, self.galaxy_a.mass,
+                    self.galaxy_b.center, self.galaxy_b.mass
+                )
+
+            vel_half = all_vel + 0.5 * acc * dt_sub
+            all_pos = all_pos + vel_half * dt_sub
+
+            if self.is_merged:
+                acc_new = self.physics.particle_accelerations_single_center(
+                    all_pos, self.merged_center, self.merged_mass
+                )
+            else:
+                acc_new = self.physics.particle_accelerations_two_centers(
+                    all_pos,
+                    self.galaxy_a.center, self.galaxy_a.mass,
+                    self.galaxy_b.center, self.galaxy_b.mass
+                )
+
+            all_vel = vel_half + 0.5 * acc_new * dt_sub
 
         n_a = self.galaxy_a.particle_count
         self.galaxy_a.positions = all_pos[:n_a]
@@ -428,31 +461,36 @@ class Universe:
         self.galaxy_b.velocities = all_vel[n_a:]
 
     def reset(self):
-        """Reset der Simulation."""
+        """Reset the simulation."""
         self.time = 0.0
         self.paused = True
         self._init_galaxies()
 
     def play(self):
+        """Resume simulation."""
         self.paused = False
 
     def pause(self):
+        """Pause simulation."""
         self.paused = True
 
     def toggle_pause(self):
+        """Toggle between play and pause."""
         if self.paused:
             self.play()
         else:
             self.pause()
 
     def set_time_scale(self, s):
-        self.time_scale = max(0.1, min(20.0, s))
+        """Set simulation speed (0.1–30.0)."""
+        self.time_scale = max(0.1, min(30.0, s))
 
     def get_render_data(self):
+        """Return (positions, colors) arrays for rendering."""
         return self.all_positions, self.all_colors
 
     def get_stats(self) -> dict:
-        """Gibt Statistiken zurück."""
+        """Return statistics."""
         if self.galaxy_count == 1:
             r_mean = np.mean(np.linalg.norm(
                 self.galaxy_a.positions - self.galaxy_a.center, axis=1
@@ -483,7 +521,7 @@ class Universe:
             mass_a = self.galaxy_a.mass
             mass_b = self.galaxy_b.mass
 
-        return {
+        stats = {
             'time': self.time,
             'distance': distance,
             'particles': len(self.all_positions) if self.all_positions is not None else 0,
@@ -498,3 +536,13 @@ class Universe:
             'passages': self.physics.passage_count,
             'galaxy_count': 2,
         }
+        
+        # Add energy statistics
+        energy_stats = self.physics.get_energy_stats()
+        stats.update({
+            'energy_current': energy_stats['current'],
+            'energy_initial': energy_stats['initial'],
+            'energy_drift_percent': energy_stats['drift_percent']
+        })
+        
+        return stats

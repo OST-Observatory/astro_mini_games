@@ -1,0 +1,12 @@
+# Solar system configuration (ephemerides-based)
+
+# Display
+display:
+  reference_height: 720
+  min_planet_radius_px: 24
+  sun_core_factor: 48
+  orbit_line_base_width: 2
+
+touch:
+  pinch_enabled: true
+  tap_tolerance_px: 40

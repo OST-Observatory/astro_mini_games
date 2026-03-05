@@ -1,0 +1,10 @@
+# Astro puzzle configuration
+
+puzzle:
+  images_dir: "images"
+  grid_sizes:
+    - [3, 3]
+    - [4, 4]
+    - [5, 4]
+  scale_factor: 0.8
+  snap_threshold: 95

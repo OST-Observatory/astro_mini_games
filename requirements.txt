@@ -13,6 +13,9 @@ numba==0.63.1
 numpy==2.3.5
 Pygments==2.19.2
 pyrr==0.10.3
+Pillow>=10.0
 PyYAML==6.0.3
 requests==2.32.5
+sgp4>=2.21
+skyfield>=1.46
 urllib3==2.6.2

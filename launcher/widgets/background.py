@@ -1,5 +1,5 @@
 """
-Animierter Sternenhimmel-Hintergrund mit Nebel
+Animated starfield background with nebula.
 """
 
 import math
@@ -29,7 +29,7 @@ from kivy.uix.widget import Widget
 
 
 class Star:
-    """Einzelner Stern mit Position und Eigenschaften"""
+    """Single star with position and properties."""
 
     def __init__(self, x, y, size, brightness, drift_speed=0):
         self.x = x
@@ -44,7 +44,7 @@ class Star:
 
 
 class ShootingStar:
-    """Sternschnuppe"""
+    """Shooting star."""
 
     def __init__(self, start_x, start_y, angle, length, speed):
         self.x = start_x
@@ -57,7 +57,7 @@ class ShootingStar:
 
 
 class Nebula:
-    """Nebel-Wolke"""
+    """Nebula cloud."""
 
     def __init__(
         self,
@@ -79,7 +79,7 @@ class Nebula:
         self.base_alpha = alpha
         self.alpha = alpha
         self.rotation = rotation
-        # Schnellere Rotation und Drift
+        # Faster rotation and drift
         self.rotation_speed = random.uniform(-3, 3) * drift_speed_multiplier
         self.drift_x = random.uniform(-8, 8) * drift_speed_multiplier
         self.drift_y = random.uniform(-5, 5) * drift_speed_multiplier
@@ -92,28 +92,28 @@ class Nebula:
 
 class StarfieldBackground(Widget):
     """
-    Widget für animierten Sternenhimmel mit Nebeln
+    Widget for animated starfield with nebulae.
     """
 
-    # Stern-Properties
+    # Star properties
     star_count = NumericProperty(200)
     drift_star_count = NumericProperty(50)
     drift_speed = NumericProperty(15)
     twinkle_enabled = BooleanProperty(True)
 
-    # Sternschnuppen-Properties
+    # Shooting star properties
     shooting_stars_enabled = BooleanProperty(True)
     shooting_star_interval = ListProperty([8, 20])
 
-    # Nebel-Properties
+    # Nebula properties
     nebula_enabled = BooleanProperty(True)
     nebula_count = NumericProperty(3)
     nebula_opacity = NumericProperty(0.4)
     nebula_mode = StringProperty("original")
-    nebula_size = NumericProperty(0.4)  # NEU: Größenfaktor
-    nebula_speed = NumericProperty(1.5)  # NEU: Geschwindigkeitsfaktor
+    nebula_size = NumericProperty(0.4)  # Size factor
+    nebula_speed = NumericProperty(1.5)  # Speed factor
 
-    # Listen
+    # Lists
     stars = ListProperty([])
     drift_stars = ListProperty([])
     shooting_stars = ListProperty([])
@@ -137,7 +137,7 @@ class StarfieldBackground(Widget):
         self.bind(size=self._on_resize)
 
     def apply_config(self, config: dict):
-        """Wendet Konfiguration aus config.yaml an"""
+        """Applies configuration from config.yaml."""
         self.star_count = config.get("star_count", 200)
         self.drift_star_count = config.get("drift_stars", 50)
         self.drift_speed = config.get("drift_speed", 15)
@@ -158,7 +158,7 @@ class StarfieldBackground(Widget):
         Clock.schedule_once(self._init_starfield, 0)
 
     def _init_starfield(self, dt=None):
-        """Initialisiert alle Elemente"""
+        """Initializes all elements."""
         if self.width <= 1 or self.height <= 1:
             Clock.schedule_once(self._init_starfield, 0.1)
             return
@@ -174,7 +174,7 @@ class StarfieldBackground(Widget):
         self._draw()
 
     def _load_nebula_textures(self):
-        """Lädt PNG-Texturen falls vorhanden"""
+        """Loads PNG textures if available."""
         self._nebula_textures = []
 
         textures_path = Path(__file__).parent.parent.parent / "assets" / "textures"
@@ -204,7 +204,7 @@ class StarfieldBackground(Widget):
             print("   → Keine PNG-Texturen gefunden, nutze prozedurale Nebel")
 
     def _create_procedural_nebula_texture(self):
-        """Erstellt eine prozedurale Nebel-Textur"""
+        """Creates a procedural nebula texture."""
         size = 128
         pixels = []
 
@@ -234,7 +234,7 @@ class StarfieldBackground(Widget):
         self._procedural_nebula_texture = texture
 
     def _create_stars(self):
-        """Erstellt statische Sterne"""
+        """Creates static stars."""
         self.stars = []
 
         for _ in range(self.star_count):
@@ -247,7 +247,7 @@ class StarfieldBackground(Widget):
             self.stars.append(star)
 
     def _create_drift_stars(self):
-        """Erstellt driftende Sterne"""
+        """Creates drifting stars."""
         self.drift_stars = []
 
         for _ in range(self.drift_star_count):
@@ -261,7 +261,7 @@ class StarfieldBackground(Widget):
             self.drift_stars.append(star)
 
     def _create_nebulae(self):
-        """Erstellt Nebel-Wolken"""
+        """Creates nebula clouds."""
         self.nebulae = []
 
         if not self.nebula_enabled:
@@ -286,9 +286,9 @@ class StarfieldBackground(Widget):
             x = random.uniform(-self.width * 0.1, self.width * 0.7)
             y = random.uniform(-self.height * 0.1, self.height * 0.7)
 
-            # KLEINERE Größe
+            # Smaller size
             base_size = min(self.width, self.height)
-            size_factor = self.nebula_size  # Aus Config (Standard: 0.4)
+            size_factor = self.nebula_size  # From config (default: 0.4)
             width = random.uniform(
                 base_size * size_factor * 0.7, base_size * size_factor * 1.2
             )
@@ -312,7 +312,7 @@ class StarfieldBackground(Widget):
                 texture=texture,
                 tint_color=tint,
                 use_original_colors=use_original,
-                drift_speed_multiplier=self.nebula_speed,  # Aus Config
+                drift_speed_multiplier=self.nebula_speed,  # From config
             )
             self.nebulae.append(nebula)
 
@@ -323,14 +323,14 @@ class StarfieldBackground(Widget):
                 )
 
     def _schedule_shooting_star(self):
-        """Plant die nächste Sternschnuppe"""
+        """Schedules the next shooting star."""
         if not self.shooting_stars_enabled:
             return
         interval = random.uniform(*self.shooting_star_interval)
         self._next_shooting_star = self._time + interval
 
     def _spawn_shooting_star(self):
-        """Erzeugt eine neue Sternschnuppe"""
+        """Creates a new shooting star."""
         start_x = random.uniform(0, self.width)
         start_y = random.uniform(self.height * 0.5, self.height)
         angle = random.uniform(200, 340)
@@ -347,10 +347,10 @@ class StarfieldBackground(Widget):
         self._schedule_shooting_star()
 
     def _update(self, dt):
-        """Update-Loop für Animationen"""
+        """Update loop for animations."""
         self._time += dt
 
-        # Funkeln
+        # Twinkle
         if self.twinkle_enabled:
             for star in self.stars:
                 twinkle = math.sin(
@@ -358,14 +358,14 @@ class StarfieldBackground(Widget):
                 )
                 star.brightness = star.base_brightness * (0.7 + 0.3 * twinkle)
 
-        # Stern-Drift
+        # Star drift
         for star in self.drift_stars:
             star.x -= star.drift_speed * dt
             if star.x < -10:
                 star.x = self.width + 10
                 star.y = random.uniform(0, self.height)
 
-        # Nebel animieren
+        # Animate nebulae
         for nebula in self.nebulae:
             nebula.rotation += nebula.rotation_speed * dt
             nebula.x += nebula.drift_x * dt
@@ -385,7 +385,7 @@ class StarfieldBackground(Widget):
             pulse = math.sin(self._time * nebula.pulse_speed + nebula.pulse_offset)
             nebula.alpha = nebula.base_alpha * (0.85 + 0.15 * pulse)
 
-        # Sternschnuppen
+        # Shooting stars
         if self.shooting_stars_enabled:
             if self._time >= self._next_shooting_star:
                 self._spawn_shooting_star()
@@ -401,11 +401,11 @@ class StarfieldBackground(Widget):
         self._draw()
 
     def _draw(self):
-        """Zeichnet den gesamten Hintergrund"""
+        """Draws the entire background."""
         self.canvas.clear()
 
         with self.canvas:
-            # Dunkler Hintergrund
+            # Dark background
             Color(0.02, 0.02, 0.08, 1)
             Rectangle(pos=self.pos, size=self.size)
 
@@ -482,7 +482,7 @@ class StarfieldBackground(Widget):
                 Ellipse(pos=(current_x - 3, current_y - 3), size=(6, 6))
 
     def _on_resize(self, instance, value):
-        """Bei Größenänderung neu initialisieren"""
+        """Re-initialize on size change."""
         if self.stars:
             for star in self.stars + self.drift_stars:
                 star.x = random.uniform(0, self.width)

@@ -1,12 +1,12 @@
 """
-Einfache 3D-Kamera
+Simple 3D camera
 """
 
 import numpy as np
 
 
 class Camera3D:
-    """Orbitale Kamera um einen Zielpunkt"""
+    """Orbital camera around a target"""
 
     def __init__(
         self,
@@ -38,7 +38,7 @@ class Camera3D:
         return self.target + np.array([x, y, z], dtype=np.float32)
 
     def rotate(self, dx: float, dy: float):
-        """Rotiert Kamera"""
+        """Rotate camera"""
         self.azimuth -= dx * self.rotation_speed
         self.elevation += dy * self.rotation_speed
 
@@ -46,7 +46,7 @@ class Camera3D:
         self.elevation = np.clip(self.elevation, -85, 85)
 
     def zoom_scroll(self, scroll_y: float):
-        """Zoom via Mausrad"""
+        """Zoom with mouse wheel"""
         factor = 1.0 - scroll_y * 0.1
         self.distance *= factor
         self.distance = np.clip(self.distance, self.min_distance, self.max_distance)

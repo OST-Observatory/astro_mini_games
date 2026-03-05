@@ -1,1 +1,1 @@
-"""Astro-Launcher Package"""
+"""Astro launcher package"""

@@ -1,5 +1,5 @@
 """
-Symbol-Definitionen mit Unicode-Zeichen
+Symbol definitions with Unicode characters
 """
 
 from ui.fonts import is_unicode_available
@@ -7,7 +7,7 @@ from ui.fonts import is_unicode_available
 
 class Symbols:
     """
-    Symbol-Sammlung für die UI
+    Symbol collection for the UI.
     """
 
     def __init__(self, use_unicode: bool = True):
@@ -15,7 +15,7 @@ class Symbols:
 
     @property
     def _unicode(self) -> bool:
-        """Prüft dynamisch ob Unicode verwendet werden soll."""
+        """Dynamically checks whether Unicode should be used."""
         return self._use_unicode and is_unicode_available()
 
     # === PLAYBACK ===

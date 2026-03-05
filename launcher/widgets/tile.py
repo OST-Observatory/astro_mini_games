@@ -1,5 +1,5 @@
 """
-App-Kachel Widget mit Touch-Feedback und Aufmerksamkeits-Animation
+App tile widget with touch feedback and attention animation.
 """
 
 import math
@@ -26,16 +26,18 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
+from launcher.material_icons import resolve_icon
+
 
 def hex_to_rgb(hex_color):
-    """Konvertiert Hex-Farbe zu RGB-Tuple"""
+    """Converts hex color to RGB tuple."""
     hex_color = hex_color.lstrip("#")
     return tuple(int(hex_color[i : i + 2], 16) / 255 for i in (0, 2, 4))
 
 
 class AppTile(ButtonBehavior, BoxLayout):
     """
-    Touch-fähige Kachel für eine App mit Wackel-Animation
+    Touchable tile for an app with wiggle animation.
     """
 
     app_config = DictProperty({})
@@ -47,24 +49,30 @@ class AppTile(ButtonBehavior, BoxLayout):
     # Animation Properties
     scale = NumericProperty(1.0)
     glow_alpha = NumericProperty(0)
-    wiggle_angle = NumericProperty(0)  # NEU: Wackel-Winkel
-    is_wiggling = BooleanProperty(False)  # NEU: Wackelt gerade?
+    wiggle_angle = NumericProperty(0)  # Wiggle angle
+    is_wiggling = BooleanProperty(False)  # Currently wiggling?
+
+    _icon_font = None  # Path to Material Icons font, or None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.orientation = "vertical"
         self.padding = 15
         self.spacing = 8
+        self._icon_font = None
 
         self.bind(app_config=self._apply_config)
         self.bind(size=self._on_size_change, pos=self._draw)
         self.bind(scale=self._draw, glow_alpha=self._draw, wiggle_angle=self._draw)
 
     def _apply_config(self, instance, config):
-        """Wendet App-Konfiguration an"""
+        """Applies app configuration."""
         self.app_name = config.get("name", "App")
-        self.app_icon = config.get("icon", "*")
         self.app_description = config.get("description", "")
+
+        icon_char, icon_font = resolve_icon(config.get("icon", "*"))
+        self.app_icon = icon_char
+        self._icon_font = icon_font
 
         color_hex = config.get("color", "#1a237e")
         rgb = hex_to_rgb(color_hex)
@@ -74,12 +82,12 @@ class AppTile(ButtonBehavior, BoxLayout):
         self._draw()
 
     def _on_size_change(self, *args):
-        """Wird aufgerufen wenn sich die Größe ändert"""
+        """Called when size changes."""
         self._update_font_sizes()
         self._draw()
 
     def _update_font_sizes(self):
-        """Passt Schriftgrößen an Kachelgröße an"""
+        """Adjusts font sizes to tile size."""
         if not self.children or self.width <= 0:
             return
 
@@ -95,10 +103,13 @@ class AppTile(ButtonBehavior, BoxLayout):
                     child.font_size = base * 0.07
 
     def _build_ui(self):
-        """Erstellt die UI-Elemente"""
+        """Builds the UI elements."""
         self.clear_widgets()
 
-        icon_label = Label(text=self.app_icon, font_size="48sp", size_hint_y=0.45)
+        icon_kw = {"text": self.app_icon, "font_size": "48sp", "size_hint_y": 0.45}
+        if getattr(self, "_icon_font", None):
+            icon_kw["font_name"] = self._icon_font
+        icon_label = Label(**icon_kw)
 
         name_label = Label(
             text=self.app_name, font_size="22sp", bold=True, size_hint_y=0.28
@@ -125,7 +136,7 @@ class AppTile(ButtonBehavior, BoxLayout):
         self._update_font_sizes()
 
     def _draw(self, *args):
-        """Zeichnet den Hintergrund der Kachel mit Rotation"""
+        """Draws the tile background with rotation."""
         self.canvas.before.clear()
 
         scaled_width = self.width * self.scale
@@ -135,19 +146,19 @@ class AppTile(ButtonBehavior, BoxLayout):
 
         corner_radius = min(self.width, self.height) * 0.08
 
-        # Zentrum für Rotation
+        # Center for rotation
         center_x = self.x + self.width / 2
         center_y = self.y + self.height / 2
 
         with self.canvas.before:
             PushMatrix()
 
-            # Rotation um Zentrum (für Wackeln)
+            # Rotation around center (for wiggle)
             Translate(center_x, center_y, 0)
             Rotate(angle=self.wiggle_angle, axis=(0, 0, 1))
             Translate(-center_x, -center_y, 0)
 
-            # Glow-Effekt (verstärkt beim Wackeln)
+            # Glow effect (enhanced when wiggling)
             glow = self.glow_alpha
             if self.is_wiggling:
                 glow = max(glow, 0.5)
@@ -160,7 +171,7 @@ class AppTile(ButtonBehavior, BoxLayout):
                     radius=[corner_radius + 5],
                 )
 
-            # Haupthintergrund
+            # Main background
             Color(*self.app_color)
             RoundedRectangle(
                 pos=(self.x + offset_x, self.y + offset_y),
@@ -184,13 +195,13 @@ class AppTile(ButtonBehavior, BoxLayout):
             PopMatrix()
 
     def wiggle(self):
-        """Startet die Wackel-Animation"""
+        """Starts the wiggle animation."""
         if self.is_wiggling:
             return
 
         self.is_wiggling = True
 
-        # Wackel-Sequenz: links-rechts-links-rechts-stop
+        # Wiggle sequence: left-right-left-right-stop
         anim = (
             Animation(wiggle_angle=3, duration=0.08)
             + Animation(wiggle_angle=-3, duration=0.08)
@@ -205,13 +216,13 @@ class AppTile(ButtonBehavior, BoxLayout):
         anim.start(self)
 
     def _on_wiggle_complete(self, *args):
-        """Callback wenn Wackeln fertig"""
+        """Callback when wiggle finished."""
         self.is_wiggling = False
         self.wiggle_angle = 0
 
     def on_press(self):
-        """Touch-Start Animation"""
-        # Wackeln stoppen falls aktiv
+        """Touch start animation."""
+        # Stop wiggle if active
         Animation.cancel_all(self, "wiggle_angle")
         self.is_wiggling = False
         self.wiggle_angle = 0
@@ -221,7 +232,7 @@ class AppTile(ButtonBehavior, BoxLayout):
         anim.start(self)
 
     def on_release(self):
-        """Touch-Ende - App starten"""
+        """Touch end – launch app."""
         Animation.cancel_all(self, "scale", "glow_alpha")
 
         anim = Animation(scale=1.0, glow_alpha=0, duration=0.2)

@@ -1,0 +1,42 @@
+# Astro Quiz configuration
+
+game:
+  timer_seconds: 20
+  points_per_correct: 10
+  questions_per_round: 10
+  bonus_for_fast: true    # Extra points for fast answers
+  bonus_threshold_seconds: 5
+  # Points per difficulty level (multiplier on points_per_correct)
+  difficulty_levels:
+    laie: 1.0
+    amateur: 1.5
+    astronom: 2.5
+
+# Category list (id, name). Category -> difficulty mapping is derived
+# dynamically from questions.yaml (categories with only one difficulty = fixed, else flexible).
+categories:
+  - id: sonnensystem
+    name: "Sonnensystem"
+  - id: sternbilder
+    name: "Sternbilder"
+  - id: allgemein
+    name: "Allgemein"
+  - id: astronomische_phanomene
+    name: "Astronomische Phänomene"
+  - id: raumsonden_teleskope
+    name: "Raumsonden & Teleskope"
+  - id: nebel_galaxien
+    name: "Nebel & Galaxien"
+  - id: himmelsmechanik
+    name: "Himmelsmechanik"
+  - id: kosmologie
+    name: "Kosmologie"
+  - id: entfernungsbestimmung_helligkeit
+    name: "Entfernungsbestimmung & Helligkeit"
+  - id: exotische_objekte
+    name: "Exotische Objekte"
+  - id: sterne
+    name: "Sterne"
+
+
+

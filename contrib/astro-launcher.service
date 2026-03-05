@@ -1,0 +1,42 @@
+# Astro Launcher - systemd Service (Kiosk)
+#
+# IMPORTANT for Pi without desktop: Launcher must use tty1 (main console),
+# otherwise it renders behind the console and is invisible.
+#
+# Installation:
+#   1. Adjust paths under [Service] (User, ExecStart, WorkingDirectory)
+#   2. sudo systemctl disable getty@tty1    # Disable login on tty1
+#   3. sudo cp contrib/astro-launcher.service /etc/systemd/system/
+#   4. sudo systemctl enable astro-launcher
+#   5. sudo systemctl start astro-launcher
+#
+# With KMS/DRM (without X11): No DISPLAY needed.
+#
+# Log-Datei (User kiosk-pi):
+#   /home/kiosk-pi/.local/share/astro_mini_games/astro.log
+# To check: sudo -u kiosk-pi tail -f /home/kiosk-pi/.local/share/astro_mini_games/astro.log
+
+[Unit]
+Description=Astro Mini Games Launcher
+After=multi-user.target
+# Prevent getty from starting on tty1 – we take over the console
+Conflicts=getty@tty1.service
+Before=getty@tty1.service
+
+[Service]
+Type=simple
+User=kiosk-pi
+Environment=SDL_VIDEODRIVER=kmsdrm
+ExecStart=/home/kiosk-pi/projects/astro_mini_games/venv/bin/python /home/kiosk-pi/projects/astro_mini_games/astro_mini_games/main.py
+WorkingDirectory=/home/kiosk-pi/projects/astro_mini_games/astro_mini_games
+Restart=always
+RestartSec=1
+
+# Attach launcher to tty1 – otherwise window is invisible
+TTYPath=/dev/tty1
+StandardInput=tty
+StandardOutput=tty
+StandardError=tty
+
+[Install]
+WantedBy=multi-user.target
