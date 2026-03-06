@@ -112,3 +112,4 @@ ui:
   drawer_width: 320
   show_zoom_buttons: true  # Zoom buttons at bottom (in addition to pinch)
   show_physics_params: false  # Show physics params (friction, softening)
+  adaptive_quality: true  # FPS-basierte Anpassung von Partikelanzahl und Update-Rate

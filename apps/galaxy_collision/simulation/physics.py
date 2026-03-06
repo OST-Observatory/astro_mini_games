@@ -5,7 +5,7 @@ import numpy as np
 
 # Numba JIT for performance optimization
 try:
-    from numba import jit, njit
+    from numba import jit, njit, prange
     NUMBA_AVAILABLE = True
 except ImportError:
     # Fallback when Numba not available
@@ -315,15 +315,15 @@ class Physics:
 
 # Numba-optimized functions for large particle counts
 if NUMBA_AVAILABLE:
-    @njit(cache=True)
+    @njit(cache=True, parallel=True)
     def _particle_accelerations_single_center_numba(
         positions, center, mass, G, eps_sq
     ):
-        """Numba-optimized version for single center."""
+        """Numba-optimized version for single center (parallel)."""
         n = len(positions)
         acc = np.zeros((n, 3), dtype=np.float64)
         
-        for i in range(n):
+        for i in prange(n):
             dx = center[0] - positions[i, 0]
             dy = center[1] - positions[i, 1]
             dz = center[2] - positions[i, 2]
@@ -339,15 +339,15 @@ if NUMBA_AVAILABLE:
         
         return acc
     
-    @njit(cache=True)
+    @njit(cache=True, parallel=True)
     def _particle_accelerations_two_centers_numba(
         positions, center_a, mass_a, center_b, mass_b, G, eps_sq
     ):
-        """Numba-optimized version for two centers."""
+        """Numba-optimized version for two centers (parallel)."""
         n = len(positions)
         acc = np.zeros((n, 3), dtype=np.float64)
         
-        for i in range(n):
+        for i in prange(n):
             # Zu Zentrum A
             dx_a = center_a[0] - positions[i, 0]
             dy_a = center_a[1] - positions[i, 1]

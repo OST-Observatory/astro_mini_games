@@ -26,7 +26,7 @@ class Universe:
 
         # Maximaler Zeitschritt
         self.max_dt = sim.get('max_dt', 0.05)
-        
+
         # Adaptive timesteps for particles
         self.adaptive_timesteps_enabled = sim.get('adaptive_timesteps', True)
         self.min_dt = sim.get('min_dt', 0.001)  # Minimaler Zeitschritt
@@ -301,7 +301,7 @@ class Universe:
             self.merge_max_rel_vel = merge_cfg['max_relative_velocity_factor']
 
     def step(self, dt: float):
-        """Simulationsschritt."""
+        """Simulation step"""
         if self.paused:
             return
 

@@ -160,10 +160,18 @@ class GalaxyView(Widget):
         """Set renderer color mode (distinct, realistic, velocity, merged)."""
         self.renderer.set_color_mode(mode)
 
+    # Max. physics step per step (60 FPS). At low frame rate, multiple steps per frame 
+    # are executed to maintain numerical stability.
+    PHYSICS_MAX_DT = 1.0 / 60.0
+
     def update(self, dt):
         """Advance simulation, update render data and render frame."""
         if self.universe:
-            self.universe.step(dt)
+            remaining = min(dt, 10.0)  # Cap large dt (e.g. after pause)
+            while remaining > 1e-9:
+                step_dt = min(remaining, self.PHYSICS_MAX_DT)
+                self.universe.step(step_dt)
+                remaining -= step_dt
             self._update_data()
         self.renderer.set_size(self.width, self.height)
         self.renderer.render(self.camera)
@@ -284,6 +292,7 @@ class GalaxyCollisionApp(AstroApp):
         layout_mode = ui_cfg.get("layout_mode", "auto")
         breakpoint_w = ui_cfg.get("breakpoint_width", 768)
         drawer_w = ui_cfg.get("drawer_width", 320)
+        self._adaptive_quality = ui_cfg.get("adaptive_quality", True)
 
         win_w = Window.size[0]
         self._use_drawer = is_touch_layout(win_w, layout_mode, breakpoint_w)
@@ -468,7 +477,7 @@ class GalaxyCollisionApp(AstroApp):
                 },
                 "collision": {
                     "initial_distance": g(col.get("initial_distance"), 50.0),
-                    "velocity_factor": g(col.get("velocity_factor"), 0.6),
+                    "velocity_factor": g(col.get("velocity_factor"), 0.5),
                     "impact_parameter": g(col.get("impact_parameter"), 0.3),
                     "inclination": g(col.get("inclination"), 30.0),
                 },
@@ -491,8 +500,8 @@ class GalaxyCollisionApp(AstroApp):
         self._last_frame_time = current_time
         self._frame_count += 1
         
-        # Adaptive quality adjustment
-        self._adjust_quality()
+        if self._adaptive_quality:
+            self._adjust_quality()
         
         if self.view:
             self.view.update(dt)
