@@ -43,14 +43,6 @@ apps:
     color: "#2e7d32"
     enabled: false
 
-  # - id: planetarium
-  #   name: "Planetarium"
-  #   icon: "*"
-  #   command: "python apps/planetarium/main.py"
-  #   description: "Explore the night sky"
-  #   color: "#1a237e"
-  #   enabled: true
-
   - id: quiz
     name: "Astro-Quiz"
     icon: "?"
@@ -122,11 +114,3 @@ apps:
     description: "Setze ein Astro-Bild zusammen"
     color: "#6a1b9a"
     enabled: true
-
-  # - id: iss_tracker
-  #   name: "ISS Tracker"
-  #   icon: "^"
-  #   command: "python apps/iss/main.py"
-  #   description: "Where is the ISS right now?"
-  #   color: "#b71c1c"
-  #   enabled: true
