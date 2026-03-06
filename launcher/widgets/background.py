@@ -6,6 +6,8 @@ import math
 import random
 from pathlib import Path
 
+import numpy as np
+
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.graphics import (
@@ -129,15 +131,25 @@ class StarfieldBackground(Widget):
 
         self._time = 0
         self._next_shooting_star = 0
+        self._fps = 30
+        self._update_event = None
 
         self._nebula_textures = []
         self._procedural_nebula_texture = None
+
+        # Reusable canvas instruction refs (Option 2)
+        self._bg_rect = None
+        self._star_instructions = []  # [(Color, Ellipse), ...]
+        self._drift_instructions = []  # [(Color, Ellipse), ...]
+        self._nebula_instructions = []  # [{push, translate1, rotate, translate2, color, rect, pop}, ...]
+        self._shooting_star_instructions = []  # [(Color, Line, Color, Ellipse), ...] max 3
 
         Clock.schedule_once(self._init_starfield, 0)
         self.bind(size=self._on_resize)
 
     def apply_config(self, config: dict):
         """Applies configuration from config.yaml."""
+        self._fps = max(10, min(60, config.get("fps", 30)))
         self.star_count = config.get("star_count", 200)
         self.drift_star_count = config.get("drift_stars", 50)
         self.drift_speed = config.get("drift_speed", 15)
@@ -170,7 +182,14 @@ class StarfieldBackground(Widget):
         self._create_nebulae()
         self._schedule_shooting_star()
 
-        Clock.schedule_interval(self._update, 1 / 60)
+        # Cancel previous schedule if reinitializing
+        if self._update_event:
+            self._update_event.cancel()
+        self._update_event = Clock.schedule_interval(
+            self._update, 1.0 / self._fps
+        )
+
+        self._build_canvas_instructions()
         self._draw()
 
     def _load_nebula_textures(self):
@@ -234,31 +253,29 @@ class StarfieldBackground(Widget):
         self._procedural_nebula_texture = texture
 
     def _create_stars(self):
-        """Creates static stars."""
-        self.stars = []
-
-        for _ in range(self.star_count):
-            star = Star(
-                x=random.uniform(0, self.width),
-                y=random.uniform(0, self.height),
-                size=random.uniform(1, 3),
-                brightness=random.uniform(0.3, 1.0),
-            )
-            self.stars.append(star)
+        """Creates static stars and NumPy arrays for fast updates."""
+        n = self.star_count
+        rng = np.random.default_rng()
+        self._star_x = rng.uniform(0, self.width, n)
+        self._star_y = rng.uniform(0, self.height, n)
+        self._star_size = rng.uniform(1, 3, n)
+        self._star_base_brightness = rng.uniform(0.3, 1.0, n)
+        self._star_twinkle_offset = rng.uniform(0, 2 * np.pi, n)
+        self._star_twinkle_speed = rng.uniform(0.5, 2.0, n)
+        self._star_brightness = self._star_base_brightness.copy()
 
     def _create_drift_stars(self):
-        """Creates drifting stars."""
-        self.drift_stars = []
-
-        for _ in range(self.drift_star_count):
-            star = Star(
-                x=random.uniform(0, self.width),
-                y=random.uniform(0, self.height),
-                size=random.uniform(2, 5),
-                brightness=random.uniform(0.5, 1.0),
-                drift_speed=random.uniform(0.5, 1.5) * self.drift_speed,
-            )
-            self.drift_stars.append(star)
+        """Creates drifting stars and NumPy arrays; fixed tint per star."""
+        n = self.drift_star_count
+        rng = np.random.default_rng()
+        self._drift_x = rng.uniform(0, self.width, n)
+        self._drift_y = rng.uniform(0, self.height, n)
+        self._drift_size = rng.uniform(2, 5, n)
+        self._drift_brightness = rng.uniform(0.5, 1.0, n)
+        drift_speeds = rng.uniform(0.5, 1.5, n) * self.drift_speed
+        self._drift_speed = drift_speeds
+        tints = np.array([(1, 1, 0.9), (0.9, 0.95, 1), (1, 0.95, 0.9)])
+        self._drift_tint = tints[rng.integers(0, 3, n)]
 
     def _create_nebulae(self):
         """Creates nebula clouds."""
@@ -322,6 +339,58 @@ class StarfieldBackground(Widget):
                     f"({'Original' if use_original else 'Tinted'})"
                 )
 
+    def _build_canvas_instructions(self):
+        """Create canvas instructions once; _draw will only update their properties."""
+        self.canvas.clear()
+        self._star_instructions.clear()
+        self._drift_instructions.clear()
+        self._nebula_instructions.clear()
+        self._shooting_star_instructions.clear()
+
+        with self.canvas:
+            Color(0.02, 0.02, 0.08, 1)
+            self._bg_rect = Rectangle(pos=self.pos, size=self.size)
+
+            for nebula in self.nebulae:
+                push = PushMatrix()
+                center_x = nebula.x + nebula.width / 2
+                center_y = nebula.y + nebula.height / 2
+                trans1 = Translate(center_x, center_y, 0)
+                rot = Rotate(angle=nebula.rotation, axis=(0, 0, 1))
+                trans2 = Translate(-center_x, -center_y, 0)
+                color = Color(1, 1, 1, nebula.alpha)
+                rect = Rectangle(
+                    pos=(nebula.x, nebula.y),
+                    size=(nebula.width, nebula.height),
+                    texture=nebula.texture or self._procedural_nebula_texture,
+                )
+                pop = PopMatrix()
+                self._nebula_instructions.append({
+                    "nebula": nebula,
+                    "trans1": trans1,
+                    "rot": rot,
+                    "trans2": trans2,
+                    "color": color,
+                    "rect": rect,
+                })
+
+            for i in range(self.star_count):
+                c = Color(1, 1, 1, 0.8)
+                e = Ellipse(pos=(0, 0), size=(2, 2))
+                self._star_instructions.append((c, e))
+
+            for i in range(self.drift_star_count):
+                c = Color(1, 1, 1, 0.9)
+                e = Ellipse(pos=(0, 0), size=(4, 4))
+                self._drift_instructions.append((c, e))
+
+            for _ in range(3):
+                c1 = Color(1, 1, 1, 0)
+                line = Line(points=[0, 0, 0, 0], width=2)
+                c2 = Color(1, 1, 0.9, 0)
+                ellipse = Ellipse(pos=(0, 0), size=(6, 6))
+                self._shooting_star_instructions.append((c1, line, c2, ellipse))
+
     def _schedule_shooting_star(self):
         """Schedules the next shooting star."""
         if not self.shooting_stars_enabled:
@@ -347,23 +416,26 @@ class StarfieldBackground(Widget):
         self._schedule_shooting_star()
 
     def _update(self, dt):
-        """Update loop for animations."""
+        """Update loop for animations (NumPy for stars, vectorized)."""
         self._time += dt
 
-        # Twinkle
+        # Twinkle (NumPy vectorized)
         if self.twinkle_enabled:
-            for star in self.stars:
-                twinkle = math.sin(
-                    self._time * star.twinkle_speed + star.twinkle_offset
+            self._star_brightness[:] = self._star_base_brightness * (
+                0.7 + 0.3 * np.sin(
+                    self._time * self._star_twinkle_speed + self._star_twinkle_offset
                 )
-                star.brightness = star.base_brightness * (0.7 + 0.3 * twinkle)
+            )
+        else:
+            self._star_brightness[:] = self._star_base_brightness
 
-        # Star drift
-        for star in self.drift_stars:
-            star.x -= star.drift_speed * dt
-            if star.x < -10:
-                star.x = self.width + 10
-                star.y = random.uniform(0, self.height)
+        # Star drift (NumPy vectorized)
+        self._drift_x -= self._drift_speed * dt
+        wrap_mask = self._drift_x < -10
+        if np.any(wrap_mask):
+            n_wrap = np.sum(wrap_mask)
+            self._drift_x[wrap_mask] = self.width + 10
+            self._drift_y[wrap_mask] = np.random.uniform(0, self.height, n_wrap)
 
         # Animate nebulae
         for nebula in self.nebulae:
@@ -401,92 +473,65 @@ class StarfieldBackground(Widget):
         self._draw()
 
     def _draw(self):
-        """Draws the entire background."""
-        self.canvas.clear()
+        """Update canvas instruction properties (no clear, no new allocations)."""
+        self._bg_rect.pos = self.pos
+        self._bg_rect.size = self.size
 
-        with self.canvas:
-            # Dark background
-            Color(0.02, 0.02, 0.08, 1)
-            Rectangle(pos=self.pos, size=self.size)
+        for info in self._nebula_instructions:
+            n = info["nebula"]
+            cx = n.x + n.width / 2
+            cy = n.y + n.height / 2
+            info["trans1"].x, info["trans1"].y, info["trans1"].z = cx, cy, 0
+            info["rot"].angle = n.rotation
+            info["trans2"].x, info["trans2"].y, info["trans2"].z = -cx, -cy, 0
+            if n.use_original_colors:
+                info["color"].rgba = (1, 1, 1, n.alpha)
+            else:
+                info["color"].rgba = (*n.tint_color, n.alpha)
+            info["rect"].pos = (n.x, n.y)
+            info["rect"].size = (n.width, n.height)
 
-            # === NEBEL ===
-            for nebula in self.nebulae:
-                PushMatrix()
+        for i, (c, e) in enumerate(self._star_instructions):
+            b = self._star_brightness[i] * 0.8
+            c.rgba = (1, 1, 1, b)
+            s = self._star_size[i]
+            e.pos = (self._star_x[i] - s / 2, self._star_y[i] - s / 2)
+            e.size = (s, s)
 
-                center_x = nebula.x + nebula.width / 2
-                center_y = nebula.y + nebula.height / 2
-                Translate(center_x, center_y, 0)
-                Rotate(angle=nebula.rotation, axis=(0, 0, 1))
-                Translate(-center_x, -center_y, 0)
+        for i, (c, e) in enumerate(self._drift_instructions):
+            t = self._drift_tint[i]
+            b = self._drift_brightness[i] * 0.9
+            c.rgba = (*t, b)
+            s = self._drift_size[i]
+            e.pos = (self._drift_x[i] - s / 2, self._drift_y[i] - s / 2)
+            e.size = (s, s)
 
-                if nebula.use_original_colors:
-                    Color(1, 1, 1, nebula.alpha)
-                else:
-                    Color(
-                        nebula.tint_color[0],
-                        nebula.tint_color[1],
-                        nebula.tint_color[2],
-                        nebula.alpha,
-                    )
-
-                if nebula.texture:
-                    Rectangle(
-                        pos=(nebula.x, nebula.y),
-                        size=(nebula.width, nebula.height),
-                        texture=nebula.texture,
-                    )
-                elif self._procedural_nebula_texture:
-                    Rectangle(
-                        pos=(nebula.x, nebula.y),
-                        size=(nebula.width, nebula.height),
-                        texture=self._procedural_nebula_texture,
-                    )
-
-                PopMatrix()
-
-            # === STATISCHE STERNE ===
-            for star in self.stars:
-                Color(1, 1, 1, star.brightness * 0.8)
-                Ellipse(
-                    pos=(star.x - star.size / 2, star.y - star.size / 2),
-                    size=(star.size, star.size),
-                )
-
-            # === DRIFTENDE STERNE ===
-            for star in self.drift_stars:
-                tint = random.choice([(1, 1, 0.9), (0.9, 0.95, 1), (1, 0.95, 0.9)])
-                Color(tint[0], tint[1], tint[2], star.brightness * 0.9)
-                Ellipse(
-                    pos=(star.x - star.size / 2, star.y - star.size / 2),
-                    size=(star.size, star.size),
-                )
-
-            # === STERNSCHNUPPEN ===
-            for ss in self.shooting_stars:
-                if not ss.active:
-                    continue
-
-                current_x = ss.x + math.cos(ss.angle) * ss.length * ss.progress
-                current_y = ss.y + math.sin(ss.angle) * ss.length * ss.progress
-
-                tail_length = min(ss.progress, 0.3) * ss.length
-                tail_x = current_x - math.cos(ss.angle) * tail_length
-                tail_y = current_y - math.sin(ss.angle) * tail_length
-
+        for i, (c1, line, c2, ellipse) in enumerate(self._shooting_star_instructions):
+            if i < len(self.shooting_stars) and self.shooting_stars[i].active:
+                ss = self.shooting_stars[i]
+                curr_x = ss.x + math.cos(ss.angle) * ss.length * ss.progress
+                curr_y = ss.y + math.sin(ss.angle) * ss.length * ss.progress
+                tail_len = min(ss.progress, 0.3) * ss.length
+                tail_x = curr_x - math.cos(ss.angle) * tail_len
+                tail_y = curr_y - math.sin(ss.angle) * tail_len
                 alpha = 1.0 - (ss.progress**2)
-
-                Color(1, 1, 1, alpha)
-                Line(points=[tail_x, tail_y, current_x, current_y], width=2)
-
-                Color(1, 1, 0.9, alpha)
-                Ellipse(pos=(current_x - 3, current_y - 3), size=(6, 6))
+                c1.rgba = (1, 1, 1, alpha)
+                line.points = [tail_x, tail_y, curr_x, curr_y]
+                c2.rgba = (1, 1, 0.9, alpha)
+                ellipse.pos = (curr_x - 3, curr_y - 3)
+                ellipse.size = (6, 6)
+            else:
+                c1.rgba = (1, 1, 1, 0)
+                c2.rgba = (1, 1, 0.9, 0)
 
     def _on_resize(self, instance, value):
-        """Re-initialize on size change."""
-        if self.stars:
-            for star in self.stars + self.drift_stars:
-                star.x = random.uniform(0, self.width)
-                star.y = random.uniform(0, self.height)
+        """Re-initialize positions on size change."""
+        if hasattr(self, "_star_x") and self._star_x is not None:
+            rng = np.random.default_rng()
+            self._star_x[:] = rng.uniform(0, self.width, self.star_count)
+            self._star_y[:] = rng.uniform(0, self.height, self.star_count)
+            self._drift_x[:] = rng.uniform(0, self.width, self.drift_star_count)
+            self._drift_y[:] = rng.uniform(0, self.height, self.drift_star_count)
 
             for nebula in self.nebulae:
                 nebula.x = random.uniform(-self.width * 0.1, self.width * 0.6)

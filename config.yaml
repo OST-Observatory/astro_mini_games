@@ -16,6 +16,7 @@ launcher:
     max_interval: 12
 
   background:
+    fps: 30  # Update rate (30 = lower CPU, 60 = smoother)
     star_count: 200
     drift_stars: 50
     drift_speed: 15
