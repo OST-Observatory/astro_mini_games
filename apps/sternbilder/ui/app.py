@@ -6,10 +6,12 @@ from pathlib import Path
 from shared.base_app import AstroApp
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, RoundedRectangle
+from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.widget import Widget
 
 from star_map.data_loader import (
     load_constellations,
@@ -45,6 +47,50 @@ QUIZ_INTRO_TEXT = (
 def _font():
     from shared.fonts import get_safe_font
     return get_safe_font()
+
+
+def _style_icon_arrow_button(btn):
+    """Zentriert einzeilige Pfeil-Glyphen (Kivy-Label: valign default ist 'bottom')."""
+    btn.halign = "center"
+    btn.valign = "middle"
+    btn.padding = [0, 0, 0, 5]
+    btn.bind(size=lambda inst, s: setattr(inst, "text_size", s))
+
+
+class LearnSwipeLayer(Widget):
+    """Volle Fläche unter den UI-Elementen: horizontales Wischen = vor/zurück."""
+
+    def __init__(self, on_swipe_next, on_swipe_prev, **kwargs):
+        super().__init__(**kwargs)
+        self.size_hint = (1, 1)
+        self._on_swipe_next = on_swipe_next
+        self._on_swipe_prev = on_swipe_prev
+        self._start_x = None
+
+    def on_touch_down(self, touch):
+        if not self.collide_point(*touch.pos):
+            return False
+        self._start_x = touch.x
+        touch.grab(self)
+        return True
+
+    def on_touch_move(self, touch):
+        return touch.grab_current is self
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is not self:
+            return False
+        touch.ungrab(self)
+        if self._start_x is None:
+            return True
+        dx = touch.x - self._start_x
+        self._start_x = None
+        thr = dp(56)
+        if dx < -thr:
+            self._on_swipe_next()
+        elif dx > thr:
+            self._on_swipe_prev()
+        return True
 
 
 class SternbilderApp(AstroApp):
@@ -304,6 +350,12 @@ class SternbilderApp(AstroApp):
     def _build_learn_ui(self):
         layout = FloatLayout(size_hint=(1, 1))
 
+        learn_swipe = LearnSwipeLayer(
+            on_swipe_next=self._learn_next,
+            on_swipe_prev=self._learn_back,
+        )
+        layout.add_widget(learn_swipe)
+
         title = Label(
             text="",
             font_name=_font(),
@@ -330,42 +382,39 @@ class SternbilderApp(AstroApp):
         layout.add_widget(note)
         self._learn_note = note
 
-        nav = BoxLayout(
-            orientation="horizontal",
-            size_hint=(0.9, 0.08),
-            pos_hint={"center_x": 0.5, "bottom": 0.02},
-            spacing=20,
-        )
+        nav_btn_size = max(MIN_TOUCH_TARGET + 24, int(dp(72)))
         back_btn = RoundedButton(
-            text="Zurück",
+            text="◀",
             font_name=_font(),
-            font_size="25sp",
+            font_size="42sp",
             bold=True,
-            size_hint_x=None,
-            width=120,
+            size_hint=(None, None),
+            size=(nav_btn_size, nav_btn_size),
+            pos_hint={"x": 0.02, "center_y": 0.5},
             background_color=Colors.BG_BUTTON,
-            background_normal="",
         )
         back_btn.bind(on_release=self._learn_back)
+        _style_icon_arrow_button(back_btn)
+        layout.add_widget(back_btn)
+        self._learn_back_btn = back_btn
+
         next_btn = RoundedButton(
-            text="Weiter",
+            text="▶",
             font_name=_font(),
-            font_size="25sp",
+            font_size="42sp",
             bold=True,
-            size_hint_x=None,
-            width=120,
+            size_hint=(None, None),
+            size=(nav_btn_size, nav_btn_size),
+            pos_hint={"right": 0.98, "center_y": 0.5},
             background_color=Colors.ACCENT,
-            background_normal="",
         )
         next_btn.bind(on_release=self._learn_next)
-        nav.add_widget(back_btn)
-        nav.add_widget(next_btn)
-        layout.add_widget(nav)
-        self._learn_back_btn = back_btn
+        _style_icon_arrow_button(next_btn)
+        layout.add_widget(next_btn)
         self._learn_next_btn = next_btn
 
         hint = Label(
-            text="Blättere mit Vor und Zurück durch die Sternbilder.",
+            text="Blättere mit den Pfeilen oder durch Wischen nach links bzw. rechts.",
             font_name=_font(),
             font_size="12sp",
             color=Colors.TEXT_SECONDARY,
@@ -549,8 +598,8 @@ class SternbilderApp(AstroApp):
             self._learn_note.text = ""
             self._learn_note.opacity = 0
 
-        self._learn_back_btn.text = "Zurück"
-        self._learn_next_btn.text = "Quiz" if idx == len(self.session_constellations) - 1 else "Weiter"
+        self._learn_back_btn.text = "◀"
+        self._learn_next_btn.text = "▶"
 
         self.star_map.display_only_constellation = const_key
         self.star_map.highlight_asterism_pairs = const_key == "Große Bärin"
