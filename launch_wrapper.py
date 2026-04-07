@@ -58,8 +58,8 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
 
     # Pause: DRM/KMS needs time to release display after launcher exit.
     # Too short → app sees black screen / starts only on second try.
-    if sys.platform == "linux":
-        time.sleep(0.5)
+    # if sys.platform == "linux":
+    #     time.sleep(0.5)
 
     ready_file = tempfile.NamedTemporaryFile(delete=False, suffix=".ready").name
     ready_path = Path(ready_file)
@@ -133,7 +133,7 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
                 log_file.write(f"[Wrapper] App beendet (Exit {proc.returncode}) ohne Ready-Signal\n")
                 log_file.flush()
             break
-        time.sleep(0.1)
+        # time.sleep(0.1)
 
     proc.wait()
     end_time = time.time()
