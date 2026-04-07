@@ -206,6 +206,9 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# Local launcher config (optional override; defaults come from config_default.yaml)
+/config.yaml
+
 # Astro puzzle: images too large for GitHub
 apps/astro_puzzle/images/*
 !apps/astro_puzzle/images/.gitkeep

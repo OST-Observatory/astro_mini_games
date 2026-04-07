@@ -148,7 +148,7 @@ class StarfieldBackground(Widget):
         self.bind(size=self._on_resize)
 
     def apply_config(self, config: dict):
-        """Applies configuration from config.yaml."""
+        """Applies launcher background section from resolved config."""
         self._fps = max(10, min(60, config.get("fps", 30)))
         self.star_count = config.get("star_count", 200)
         self.drift_star_count = config.get("drift_stars", 50)

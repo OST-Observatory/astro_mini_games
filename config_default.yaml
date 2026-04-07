@@ -1,4 +1,5 @@
-# Astro Launcher configuration
+# Default launcher configuration (versioned in the repo).
+# For production, copy to config.yaml and adjust; config.yaml overrides this file when present.
 
 inactivity:
   enabled: true

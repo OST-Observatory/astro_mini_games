@@ -7,6 +7,8 @@ import os
 import sys
 from pathlib import Path
 
+from shared.config_path import get_launcher_config_path
+
 PROJECT_ROOT = Path(__file__).resolve().parent
 
 # ============================================
@@ -24,7 +26,7 @@ def _use_wrapper():
     """Checks if wrapper mode is active (option C)."""
     try:
         import yaml
-        config_path = PROJECT_ROOT / "config.yaml"
+        config_path = get_launcher_config_path(PROJECT_ROOT)
         with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
         return data.get("launcher", {}).get("use_wrapper", False)

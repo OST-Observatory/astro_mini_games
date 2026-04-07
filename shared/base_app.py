@@ -14,6 +14,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 
+from shared.config_path import get_launcher_config_path
 from shared.debug_keys import try_debug_tty2
 from shared.usage_stats import write_usage_stats
 
@@ -26,8 +27,8 @@ def signal_ready():
 
 
 def _load_inactivity_config():
-    """Loads inactivity config from config.yaml."""
-    config_path = Path(__file__).resolve().parent.parent / "config.yaml"
+    """Loads inactivity config from config.yaml or config_default.yaml."""
+    config_path = get_launcher_config_path()
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)

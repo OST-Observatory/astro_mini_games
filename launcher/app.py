@@ -20,6 +20,7 @@ from kivy.uix.widget import Widget
 from launcher.widgets.background import StarfieldBackground
 from launcher.widgets.stats_overlay import StatsOverlay
 from launcher.widgets.tile import AppTile
+from shared.config_path import get_launcher_config_path
 from shared.debug_keys import try_debug_tty2
 
 
@@ -150,8 +151,8 @@ class AstroLauncherApp(App):
         self._schedule_wiggle()
 
     def load_config(self):
-        """Loads configuration from config.yaml."""
-        config_path = Path(__file__).parent.parent / "config.yaml"
+        """Loads configuration from config.yaml or config_default.yaml."""
+        config_path = get_launcher_config_path()
 
         try:
             with open(config_path, "r", encoding="utf-8") as f:
@@ -160,10 +161,13 @@ class AstroLauncherApp(App):
             all_apps = self.config_data.get("apps", [])
             self.apps = [app for app in all_apps if app.get("enabled", True)]
 
-            print(f"✓ {len(self.apps)} apps loaded")
+            print(f"✓ {len(self.apps)} apps loaded (from {config_path.name})")
 
         except FileNotFoundError:
-            print(f"⚠ config.yaml not found: {config_path}")
+            print(
+                f"⚠ No launcher config found: expected config.yaml or "
+                f"config_default.yaml next to main.py ({config_path})"
+            )
             self.apps = []
         except Exception as e:
             print(f"✗ Error loading config: {e}")

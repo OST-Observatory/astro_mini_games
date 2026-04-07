@@ -99,7 +99,8 @@ astro_mini_games/
 ├── README.md
 ├── main.py                 # Main entry point (Launcher)
 ├── launch_wrapper.py       # Wrapper for Pi (use_wrapper: true)
-├── config.yaml             # Launcher configuration
+├── config_default.yaml     # Default launcher config (versioned)
+├── config.yaml             # Optional local override (not in repo; overrides default)
 ├── requirements.txt
 ├── LICENSE
 ├── fonts/
@@ -114,6 +115,7 @@ astro_mini_games/
 │   ├── bootstrap.py        # Log redirect
 │   ├── debug_keys.py       # Ctrl+Alt+O+P → tty2
 │   ├── usage_stats.py      # Usage statistics
+│   ├── config_path.py      # Resolves config.yaml vs config_default.yaml
 │   └── console_utils.py    # Console clear
 ├── contrib/
 │   └── astro-launcher.service   # systemd for autostart
@@ -186,7 +188,7 @@ With KMS/DRM (no X11), no `DISPLAY` variable needs to be set. If needed: add `En
 
 ## ⚙️ Configuration
 
-The central configuration is in `config.yaml`:
+The launcher reads **`config.yaml`** if it exists next to `main.py`; otherwise it uses **`config_default.yaml`** from the repository. For production or kiosk setups, copy `config_default.yaml` to `config.yaml` and customize—updates will not overwrite your local `config.yaml` (it is listed in `.gitignore`).
 
 | Section | Option | Description |
 | ------- | ------ | ----------- |
