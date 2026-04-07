@@ -197,6 +197,8 @@ The launcher reads **`config.yaml`** if it exists next to `main.py`; otherwise i
 | **launcher** | `target_resolution`, `grid`, `wiggle`, `background` | Layout and display |
 | **apps** | `id`, `name`, `icon`, `command`, `enabled` | App entries (Python or native binaries) |
 
+**Disable inactivity timeout when testing:** Run an app with `--no-idle-timeout` (e.g. `python apps/quiz/main.py --no-idle-timeout`) so it does not return to the launcher after idle time. Alternatively set `ASTRO_NO_IDLE_TIMEOUT=1` in the environment (useful if the launcher does not forward CLI arguments).
+
 ---
 
 ## Future Ideas

@@ -2,6 +2,7 @@
 # For production, copy to config.yaml and adjust; config.yaml overrides this file when present.
 
 inactivity:
+  # Disable for local testing: run app with --no-idle-timeout or ASTRO_NO_IDLE_TIMEOUT=1
   enabled: true
   timeout_sec: 180
   warning_sec: 10

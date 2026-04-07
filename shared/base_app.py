@@ -3,6 +3,7 @@ Base class for Astro apps with ready signal, inactivity timeout, and usage stati
 """
 
 import os
+import sys
 import time
 import yaml
 from pathlib import Path
@@ -26,6 +27,19 @@ def signal_ready():
         Path(path).touch()
 
 
+def is_idle_timeout_disabled() -> bool:
+    """
+    True when inactivity return-to-launcher should be off (local testing).
+
+    - CLI: ``--no-idle-timeout`` (works with ``KIVY_NO_ARGS``; Kivy does not consume it.)
+    - Env: ``ASTRO_NO_IDLE_TIMEOUT=1`` (or ``true`` / ``yes``) when the launcher cannot pass args.
+    """
+    env = os.environ.get("ASTRO_NO_IDLE_TIMEOUT", "").strip().lower()
+    if env in ("1", "true", "yes", "on"):
+        return True
+    return "--no-idle-timeout" in sys.argv
+
+
 def _load_inactivity_config():
     """Loads inactivity config from config.yaml or config_default.yaml."""
     config_path = get_launcher_config_path()
@@ -33,13 +47,17 @@ def _load_inactivity_config():
         with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
         inc = data.get("inactivity", {})
-        return {
+        cfg = {
             "enabled": inc.get("enabled", False),
             "timeout_sec": inc.get("timeout_sec", 120),
             "warning_sec": inc.get("warning_sec", 10),
         }
     except (OSError, yaml.YAMLError):
-        return {"enabled": False, "timeout_sec": 120, "warning_sec": 10}
+        cfg = {"enabled": False, "timeout_sec": 120, "warning_sec": 10}
+
+    if is_idle_timeout_disabled():
+        cfg = {**cfg, "enabled": False}
+    return cfg
 
 
 class AstroApp(App):
