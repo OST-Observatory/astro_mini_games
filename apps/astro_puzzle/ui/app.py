@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 from shared.base_app import AstroApp
-from shared.i18n import tr
+from shared.i18n import get_locale, tr
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
@@ -43,6 +43,12 @@ class AstroPuzzleApp(AstroApp):
             self._back_btn.text = tr("astro_puzzle.back_launcher")
         if getattr(self, "success_overlay", None):
             self.success_overlay.apply_i18n()
+        if getattr(self, "info_box", None) and getattr(self, "images_dir", None):
+            self.info_box.update_from_image(
+                self.images_dir,
+                getattr(self, "_last_image_path", None),
+                locale=get_locale(),
+            )
 
     def build(self):
         """Build the puzzle UI: board, difficulty selector, info box, buttons."""

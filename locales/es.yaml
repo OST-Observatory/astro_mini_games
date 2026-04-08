@@ -58,6 +58,7 @@ sternbilder:
   mode_mc: "Opción múltiple"
   back_home: "Volver al inicio"
   swipe_hint: "Usa las flechas o desliza a izquierda o derecha."
+  find_label: "Encuentra:"
   big_dipper_note: "El Carro Mayor es solo parte de la constelación Osa Mayor."
   quiz_done_title: "¡Cuestionario terminado!"
   quiz_score: "{points} de {max_points} puntos"

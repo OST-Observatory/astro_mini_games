@@ -482,6 +482,9 @@ class SonnensystemApp(AstroApp):
         self._bg_rect.size = instance.size
 
     def _on_planet_tap(self, planet_name: str):
+        if self._legend_panel and self._legend_panel.parent:
+            self.root.remove_widget(self._legend_panel)
+            self.legend_btn.text = tr("sonnensystem.legend")
         self.info_panel.show(planet_name, self.renderer.sim_date)
 
     def _toggle_pause(self, instance):

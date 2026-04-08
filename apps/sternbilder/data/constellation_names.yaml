@@ -1,0 +1,1944 @@
+constellations:
+  - latin: Andromeda
+    english: Andromeda
+    arabic: المرأة المسلسلة
+    chinese: 仙女座
+    czech: Andromeda
+    estonian: Andromeeda
+    finnish: Andromeda
+    french: Andromède
+    german: Andromeda
+    greek: Ανδρομέδα
+    hebrew: אנדרומדה
+    italian: Andromeda
+    japanese: アンドロメダ座
+    korean: 안드로메다자리
+    marathi: देवयानी
+    persian: زن به زنجیر بسته
+    polish: Andromeda
+    portuguese: Andrômeda
+    russian: Андромеда
+    spanish: Andrómeda
+    swedish: Andromeda
+    turkish: Andromeda
+    ukrainian: Андромеда
+
+  - latin: Antlia
+    english: Air Pump
+    arabic: مفرغة الهواء
+    chinese: 唧筒座
+    czech: Vývěva
+    estonian: Pump
+    finnish: Ilmapumppu
+    french: Machine Pneumatique
+    german: Luftpumpe
+    greek: Αντλία
+    hebrew: משאבה
+    italian: Macchina Pneumatica
+    japanese: ポンプ座
+    korean: 공기펌프자리
+    marathi: वाताकर्षक
+    persian: تلمبه
+    polish: Pompa
+    portuguese: Bomba de Ar
+    russian: Насос
+    spanish: Máquina Neumática
+    swedish: Luftpumpen
+    turkish: Pompa
+    ukrainian: Насос
+
+  - latin: Apus
+    english: Bird of Paradise
+    arabic: طائر الفردوس
+    chinese: 天燕座
+    czech: Rajka
+    estonian: Paradiisilind
+    finnish: Paratiisilintu
+    french: Oiseau de Paradis
+    german: Paradiesvogel
+    greek: Πτηνόν
+    hebrew: ציפור גן עדן
+    italian: Uccello del Paradiso
+    japanese: ふうちょう座
+    korean: 극락조자리
+    marathi: कपोत
+    persian: مرغ بهشتی
+    polish: Ptak Rasjki
+    portuguese: Ave do Paraíso
+    russian: Райская Птица
+    spanish: Ave del Paraíso
+    swedish: Paradisfågeln
+    turkish: Cennetkuşu
+    ukrainian: Райський Птах
+
+  - latin: Aquarius
+    english: Aquarius
+    arabic: الدلو
+    chinese: 寶瓶座
+    czech: Vodnář
+    estonian: Veevalaja
+    finnish: Vesimies
+    french: Verseau
+    german: Wassermann
+    greek: Υδροχόος
+    hebrew: דלי
+    italian: Acquario
+    japanese: みずがめ座
+    korean: 물병자리
+    marathi: कुंभ
+    persian: آب‌ریز
+    polish: Wodnik
+    portuguese: Aquário
+    russian: Водолей
+    spanish: Acuario
+    swedish: Vattumannen
+    turkish: Kova
+    ukrainian: Водолій
+
+  - latin: Aquila
+    english: Eagle
+    arabic: العقاب
+    chinese: 天鷹座
+    czech: Orel
+    estonian: Kotkas
+    finnish: Kotka
+    french: Aigle
+    german: Adler
+    greek: Αετός
+    hebrew: נשר
+    italian: Aquila
+    japanese: わし座
+    korean: 독수리자리
+    marathi: गरुड
+    persian: شاهین
+    polish: Orzeł
+    portuguese: Águia
+    russian: Орёл
+    spanish: Águila
+    swedish: Örnen
+    turkish: Kartal
+    ukrainian: Орел
+
+  - latin: Ara
+    english: Altar
+    arabic: المجمرة
+    chinese: 天壇座
+    czech: Oltář
+    estonian: Altar
+    finnish: Alttari
+    french: Autel
+    german: Altar
+    greek: Βωμός
+    hebrew: מזבח
+    italian: Altare
+    japanese: さいだん座
+    korean: 제단자리
+    marathi: पीठ
+    persian: آتش‌دان
+    polish: Ołtarz
+    portuguese: Altar
+    russian: Жертвенник
+    spanish: Altar
+    swedish: Altaret
+    turkish: Sunak
+    ukrainian: Жертівник
+
+  - latin: Aries
+    english: Ram
+    arabic: الحمل
+    chinese: 白羊座
+    czech: Beran
+    estonian: Jäär
+    finnish: Oinas
+    french: Bélier
+    german: Widder
+    greek: Κριός
+    hebrew: טלה
+    italian: Ariete
+    japanese: おひつじ座
+    korean: 양자리
+    marathi: मेष
+    persian: بره
+    polish: Baran
+    portuguese: Áries
+    russian: Овен
+    spanish: Carnero
+    swedish: Väduren
+    turkish: Koç
+    ukrainian: Овен
+
+  - latin: Auriga
+    english: Charioteer
+    arabic: ممسك الأعنة
+    chinese: 御夫座
+    czech: Vozka
+    estonian: Veomees
+    finnish: Ajomies
+    french: Cocher
+    german: Fuhrmann
+    greek: Ηνίοχος
+    hebrew: עגלון
+    italian: Auriga
+    japanese: ぎょしゃ座
+    korean: 마차부자리
+    marathi: सारथी
+    persian: ارّابه‌ران
+    polish: Woźnica
+    portuguese: Cocheiro
+    russian: Возничий
+    spanish: Cochero
+    swedish: Kusken
+    turkish: Arabacı
+    ukrainian: Візничий
+
+  - latin: Bootes
+    english: Herdsman
+    arabic: العواء
+    chinese: 牧夫座
+    czech: Pastýř
+    estonian: Karjane
+    finnish: Karhunvartija
+    french: Bouvier
+    german: Bärenhüter
+    greek: Βοώτης
+    hebrew: רועה דובים
+    italian: Boote
+    japanese: うしかい座
+    korean: 목동자리
+    marathi: भूतप
+    persian: مَتراک
+    polish: Wolarz
+    portuguese: Pastor
+    russian: Волопас
+    spanish: Boyero
+    swedish: Björnvaktaren
+    turkish: Çoban
+    ukrainian: Волопас
+
+  - latin: Caelum
+    english: Graving tool
+    arabic: آلة النقاش
+    chinese: 雕具座
+    czech: Rydlo
+    estonian: Uurits
+    finnish: Veistotaltta
+    french: Burin
+    german: Grabstichel
+    greek: Γλυφείον
+    hebrew: מפסלת
+    italian: Bulino dello Incisore
+    japanese: ちょうこくぐ座
+    korean: 조각칼자리
+    marathi: टंक
+    persian: اِسکِنِه
+    polish: Rylec
+    portuguese: Buril de Escultor
+    russian: Резец
+    spanish: Cincel
+    swedish: Gravstickeln
+    turkish: Çelikkalem
+    ukrainian: Різець
+
+  - latin: Camelopardalis
+    english: Giraffe
+    arabic: الزرافة
+    chinese: 鹿豹座
+    czech: Žirafa
+    estonian: Kaelkirjak
+    finnish: Kirahvi
+    french: Girafe
+    german: Giraffe
+    greek: Καμηλοπάρδαλις
+    hebrew: ג'ירף
+    italian: Giraffa
+    japanese: きりん座
+    korean: 기린자리
+    marathi: करभ
+    persian: زرّافه
+    polish: Żyrafa
+    portuguese: Girafa
+    russian: Жираф
+    spanish: Jirafa
+    swedish: Giraffen
+    turkish: Zürafa
+    ukrainian: Жирафа
+
+  - latin: Cancer
+    english: Crab
+    arabic: السرطان
+    chinese: 巨蟹座
+    czech: Rak
+    estonian: Vähk
+    finnish: Krapu
+    french: Cancer
+    german: Krebs
+    greek: Καρκίνος
+    hebrew: סרטן
+    italian: Cancro
+    japanese: かに座
+    korean: 게자리
+    marathi: कर्क
+    persian: خرچنگ
+    polish: Krab
+    portuguese: Câncer
+    russian: Рак
+    spanish: Cangrejo
+    swedish: Kräftan
+    turkish: Yengeç
+    ukrainian: Рак
+
+  - latin: Canes Venatici
+    english: Hunting Dogs
+    arabic: السلوقيان
+    chinese: 獵犬座
+    czech: Honicí psi
+    estonian: Jahipenid
+    finnish: Ajokoirat
+    french: Chiens de Chasse
+    german: Jagdhunde
+    greek: Κύνες Θηρευτικοί
+    hebrew: כלבי ציד
+    italian: Cani da Caccia
+    japanese: りょうけん座
+    korean: 사냥개자리
+    marathi: श्याम शबल
+    persian: تازی‌ها
+    polish: Psy Gończe
+    portuguese: Cães de Caça
+    russian: Гончие Псы
+    spanish: Lebreles, Perros de Caza
+    swedish: Jakthundarna
+    turkish: Av Köpekleri
+    ukrainian: Гончі пси
+
+  - latin: Canis Major
+    english: Great Dog
+    arabic: الكلب الأكبر
+    chinese: 大犬座
+    czech: Velký pes
+    estonian: Suur Peni
+    finnish: Iso koira
+    french: Grand Chien
+    german: Großer Hund
+    greek: Κύων Μέγας
+    hebrew: כלב גדול
+    italian: Cane Maggiore
+    japanese: おおいぬ座
+    korean: 큰개자리
+    marathi: बृहद् लुब्धक
+    persian: سگِ مِهتَر
+    polish: Wielki Pies
+    portuguese: Cão Maior
+    russian: Большой Пёс
+    spanish: Perro Mayor
+    swedish: Stora hunden
+    turkish: Büyük Köpek
+    ukrainian: Великий Пес
+
+  - latin: Canis Minor
+    english: Little Dog
+    arabic: الكلب الأصغر
+    chinese: 小犬座
+    czech: Malý pes
+    estonian: Väike Peni
+    finnish: Pieni koira
+    french: Petit Chien
+    german: Kleiner Hund
+    greek: Κύων Μικρός
+    hebrew: כלב קטן
+    italian: Cane Minore
+    japanese: こいぬ座
+    korean: 작은개자리
+    marathi: लघु लुब्धक
+    persian: سگِ کِهتَر
+    polish: Mały Pies
+    portuguese: Cão Menor
+    russian: Малый Пёс
+    spanish: Perro Menor, Perro Pequeño
+    swedish: Lilla hunden
+    turkish: Küçük Köpek
+    ukrainian: Малий Пес
+
+  - latin: Capricornus
+    english: Capricorn
+    arabic: الجدي
+    chinese: 摩羯座
+    czech: Kozoroh
+    estonian: Kaljukits
+    finnish: Kauris
+    french: Capricorne
+    german: Steinbock
+    greek: Αιγόκερως
+    hebrew: גדי
+    italian: Capricorno
+    japanese: やぎ座
+    korean: 염소자리
+    marathi: मकर
+    persian: بُزماهی
+    polish: Koziorożec
+    portuguese: Capricórnio
+    russian: Козерог
+    spanish: Capricornio
+    swedish: Stenbocken
+    turkish: Oğlak
+    ukrainian: Козоріг
+
+  - latin: Carina
+    english: Keel
+    arabic: القاعدة
+    chinese: 船底座
+    czech: Lodní kýl
+    estonian: Kiil
+    finnish: Köli
+    french: Carène
+    german: Kiel des Schiffs
+    greek: Τρόπις
+    hebrew: שדרית
+    italian: Carena (della Nave)
+    japanese: りゅうこつ座
+    korean: 용골자리
+    marathi: नौकातल
+    persian: شاه‌تخته
+    polish: Kil
+    portuguese: Quilha
+    russian: Киль
+    spanish: Carina
+    swedish: Kölen
+    turkish: Karina
+    ukrainian: Кіль
+
+  - latin: Cassiopeia
+    english: Cassiopeia
+    arabic: الكرسي
+    chinese: 仙后座
+    czech: Kasiopeja
+    estonian: Kassiopeia
+    finnish: Kassiopeia
+    french: Cassiopée
+    german: Kassiopeia
+    greek: Κασσιόπη
+    hebrew: קסיופאה
+    italian: Cassiopeia
+    japanese: カシオペヤ座
+    korean: 카시오페이아자리
+    marathi: शर्मिष्ठा
+    persian: خداوندِ اورُنگ
+    polish: Kasjopeja
+    portuguese: Cassiopéia
+    russian: Кассиопея
+    spanish: Casiopea
+    swedish: Cassiopeja
+    turkish: Koltuk
+    ukrainian: Кассіопея
+
+  - latin: Centaurus
+    english: Centaur
+    arabic: قنطور
+    chinese: 半人馬座
+    czech: Kentaur
+    estonian: Kentaur
+    finnish: Kentauri
+    french: Centaure
+    german: Zentaur
+    greek: Κένταυρος
+    hebrew: קנטאור
+    italian: Centauro
+    japanese: ケンタウルス座
+    korean: 센타우루스자리
+    marathi: नरतुरंग
+    persian: قنطورُس
+    polish: Centaur
+    portuguese: Centauro
+    russian: Центавр
+    spanish: Centauro, Quirón
+    swedish: Kentauren
+    turkish: Erboğa
+    ukrainian: Центавр
+
+  - latin: Cepheus
+    english: Cepheus
+    arabic: الملتهب
+    chinese: 仙王座
+    czech: Kefeus
+    estonian: Kefeus
+    finnish: Kefeus
+    french: Céphée
+    german: Kepheus
+    greek: Κηφεύς
+    hebrew: קפאוס
+    italian: Cefeo
+    japanese: ケフェウス座
+    korean: 세페우스자리
+    marathi: वृषपर्वा
+    persian: کیکاوُس
+    polish: Cefeusz
+    portuguese: Cefeu
+    russian: Цефей
+    spanish: Cefeo
+    swedish: Cepheus
+    turkish: Kral
+    ukrainian: Цефей
+
+  - latin: Cetus
+    english: Whale
+    arabic: قيطس
+    chinese: 鯨魚座
+    czech: Velryba
+    estonian: Vaal
+    finnish: Valaskala
+    french: Baleine
+    german: Walfisch
+    greek: Κήτος
+    hebrew: לווייתן
+    italian: Balena
+    japanese: くじら座
+    korean: 고래자리
+    marathi: तिमिंगिल
+    persian: وال
+    polish: Wieloryb
+    portuguese: Baleia
+    russian: Кит
+    spanish: Ballena
+    swedish: Valfisken
+    turkish: Balina
+    ukrainian: Кит
+
+  - latin: Chamaeleon
+    english: Chamaeleon
+    arabic: الحرباء
+    chinese: 蝘蜒座
+    czech: Chameleón
+    estonian: Kameeleon
+    finnish: Kameleontti
+    french: Caméléon
+    german: Chamäleon
+    greek: Χαμαιλέων
+    hebrew: זיקית
+    italian: Camaleonte
+    japanese: カメレオン座
+    korean: 카멜레온자리
+    marathi: वायुभक्ष
+    persian: هورپا
+    polish: Kameleon
+    portuguese: Camaleão
+    russian: Хамелеон
+    spanish: Camaleón
+    swedish: Kameleonten
+    turkish: Bukalemun
+    ukrainian: Хамелеон
+
+  - latin: Circinus
+    english: Compass (draftsman's)
+    arabic: البيكار
+    chinese: 圓規座
+    czech: Kružítko
+    estonian: Sirkel
+    finnish: Harppi
+    french: Compas
+    german: Zirkel
+    greek: Διαβήτης
+    hebrew: מחוגה
+    italian: Compasso
+    japanese: コンパス座
+    korean: 컴퍼스자리
+    marathi: कर्काटक
+    persian: دوپَرگار
+    polish: Cyrkiel
+    portuguese: Compasso
+    russian: Циркуль
+    spanish: Compás
+    swedish: Ormen
+    turkish: Pergel
+    ukrainian: Циркуль
+
+  - latin: Columba
+    english: Dove
+    arabic: الحمامة
+    chinese: 天鴿座
+    czech: Holubice
+    estonian: Tuvi
+    finnish: Kyyhkynen
+    french: Colombe
+    german: Taube
+    greek: Περιστερά
+    hebrew: יונה
+    italian: Colomba
+    japanese: はと座
+    korean: 비둘기자리
+    marathi: पारावत
+    persian: کبوتر
+    polish: Gołąb
+    portuguese: Pomba
+    russian: Голубь
+    spanish: Paloma
+    swedish: Duvan
+    turkish: Güvercin
+    ukrainian: Голуб
+
+  - latin: Coma Berenices
+    english: Berenice's Hair
+    arabic: الهلبة
+    chinese: 后髮座
+    czech: Vlasy Bereniky
+    estonian: Berenike Juuksed
+    finnish: Bereniken hiukset
+    french: Chevelure de Bérénice
+    german: Haar der Berenike
+    greek: Κόμη Βερενίκης
+    hebrew: שיערות ברניקי
+    italian: Chioma di Berenice
+    japanese: かみのけ座
+    korean: 머리털자리
+    marathi: अरुंधती केश
+    persian: گیسویِ بِرِنیسه
+    polish: Warkocz Bereniki
+    portuguese: Cabeleira
+    russian: Волосы Вероники
+    spanish: Pelo de Berenice
+    swedish: Berenikes hår
+    turkish: Berenis'in Saçı
+    ukrainian: Волосся
+
+  - latin: Corona Australis
+    english: Southern Crown
+    arabic: الإكليل الجنوبي
+    chinese: 南冕座
+    czech: Jižní koruna
+    estonian: Lõunakroon
+    finnish: Etelän kruunu
+    french: Couronne Australe
+    german: Südliche Krone
+    greek: Στέφανος Νότιος
+    hebrew: כתר דרומי
+    italian: Corona Australe
+    japanese: みなみのかんむり座
+    korean: 남쪽왕관자리
+    marathi: दक्षिण मुकुट
+    persian: افسرِ نیم‌روز
+    polish: Korona Południowa
+    portuguese: Coroa Austral
+    russian: Южная Корона
+    spanish: Corona Austral
+    swedish: Sydliga kronan
+    turkish: Güneytacı
+    ukrainian: Південна Корона
+
+  - latin: Corona Borealis
+    english: Northern Crown
+    arabic: الإكليل الشمالي
+    chinese: 北冕座
+    czech: Severní koruna
+    estonian: Põhjakroon
+    finnish: Pohjan kruunu
+    french: Couronne Boréale
+    german: Nördliche Krone
+    greek: Στέφανος Βόρειος
+    hebrew: כתר צפוני
+    italian: Corona Boreale
+    japanese: かんむり座
+    korean: 북쪽왕관자리
+    marathi: उत्तर मुकुट
+    persian: افسرِ شمالی
+    polish: Korona Północna
+    portuguese: Coroa Boreal
+    russian: Северная Корона
+    spanish: Corona Boreal
+    swedish: Nordliga kronan
+    turkish: Kuzeytacı
+    ukrainian: Північна Корона
+
+  - latin: Corvus
+    english: Crow
+    arabic: الغراب
+    chinese: 烏鴉座
+    czech: Havran
+    estonian: Kaaren
+    finnish: Korppi
+    french: Corbeau
+    german: Rabe
+    greek: Κόραξ
+    hebrew: עורב
+    italian: Corvo
+    japanese: からす座
+    korean: 남십자자리
+    marathi: ध्वांक्ष
+    persian: کلاغ
+    polish: Kruk
+    portuguese: Corvo
+    russian: Ворон
+    spanish: Cuervo
+    swedish: Korpen
+    turkish: Karga
+    ukrainian: Ворон
+
+  - latin: Crater
+    english: Cup
+    arabic: الباطية
+    chinese: 巨爵座
+    czech: Pohár
+    estonian: Karikas
+    finnish: Malja
+    french: Coupe
+    german: Becher
+    greek: Κρατήρ
+    hebrew: גביע
+    italian: Coppa
+    japanese: コップ座
+    korean: 컵자리
+    marathi: चषक
+    persian: پیاله
+    polish: Puchar
+    portuguese: Taça
+    russian: Чаша
+    spanish: Copa, Cratera
+    swedish: Bägaren
+    turkish: Kupa
+    ukrainian: Чаша
+
+  - latin: Crux
+    english: Cross
+    arabic: صليب الجنوب
+    chinese: 南十字座
+    czech: Jižní kříž
+    estonian: Lõunarist
+    finnish: Etelän risti
+    french: Croix du Sud
+    german: Kreuz des Südens
+    greek: Σταυρός Νότιος
+    hebrew: הצלב הדרומי
+    italian: Croce del Sud
+    japanese: みなみじゅうじ座
+    korean: 남십자자리
+    marathi: त्रिशंकु
+    persian: چَلیپا
+    polish: Krzyż Południa
+    portuguese: Cruzeiro do Sul
+    russian: Южный Крест
+    spanish: Cruz del Sur
+    swedish: Södra korset
+    turkish: Haç
+    ukrainian: Південний Хрест
+
+  - latin: Cygnus
+    english: Swan
+    arabic: الدجاجة
+    chinese: 天鵝座
+    czech: Labuť
+    estonian: Luik
+    finnish: Joutsen
+    french: Cygne
+    german: Schwan
+    greek: Κύκνος
+    hebrew: ברבור
+    italian: Cigno
+    japanese: はくちょう座
+    korean: 고니자리
+    marathi: हंस
+    persian: قو
+    polish: Łabędź
+    portuguese: Cisne
+    russian: Лебедь
+    spanish: Cisne
+    swedish: Svanen
+    turkish: Kuğu
+    ukrainian: Лебідь
+
+  - latin: Delphinus
+    english: Dolphin
+    arabic: الدلفين
+    chinese: 海豚座
+    czech: Delfín
+    estonian: Delfiin
+    finnish: Delfiini
+    french: Dauphin
+    german: Delphin
+    greek: Δελφίν
+    hebrew: דולפין
+    italian: Delfino
+    japanese: いるか座
+    korean: 돌고래자리
+    marathi: तिमि
+    persian: دُلفین
+    polish: Dalfin
+    portuguese: Delfim
+    russian: Дельфин
+    spanish: Delfín
+    swedish: Delfinen
+    turkish: Yunus
+    ukrainian: Дельфін
+
+  - latin: Dorado
+    english: Goldfish
+    arabic: أبو سيف
+    chinese: 劍魚座
+    czech: Mečoun
+    estonian: Kuldkala
+    finnish: Kultakala
+    french: Dorade
+    german: Goldfisch
+    greek: Δοράς
+    hebrew: דג זהב
+    italian: Pesce Dorato
+    japanese: かじき座
+    korean: 황새치자리
+    marathi: असिदंष्ट्र
+    persian: زَرماهی
+    polish: Złota Ryba
+    portuguese: Dourado
+    russian: Золотая Рыба
+    spanish: Pez dorado
+    swedish: Svärdfisken
+    turkish: Kılıçbalığı
+    ukrainian: Золота Риба
+
+  - latin: Draco
+    english: Dragon
+    arabic: التنين
+    chinese: 天龍座
+    czech: Drak
+    estonian: Lohe
+    finnish: Lohikäärme
+    french: Dragon
+    german: Drache
+    greek: Δράκων
+    hebrew: דרקון
+    italian: Dragone
+    japanese: りゅう座
+    korean: 용자리
+    marathi: कालेय
+    persian: اژدها
+    polish: Smok
+    portuguese: Dragão
+    russian: Дракон
+    spanish: Dragón
+    swedish: Draken
+    turkish: Ejderha
+    ukrainian: Дракон
+
+  - latin: Equuleus
+    english: Colt
+    arabic: قطعة الفرس
+    chinese: 小馬座
+    czech: Koníček
+    estonian: Hobu
+    finnish: Pieni hevonen
+    french: Petit Cheval
+    german: Füllen
+    greek: Ιππάριον
+    hebrew: סוסון
+    italian: Cavallo
+    japanese: こうま座
+    korean: 조랑말자리
+    marathi: अश्वमुख
+    persian: پاره‌یِ اسب
+    polish: Źrebię
+    portuguese: Cabeça de Cavalo
+    russian: Малый Конь
+    spanish: Caballito
+    swedish: Lilla hästen
+    turkish: Tay
+    ukrainian: Малий Кінь
+
+  - latin: Eridanus
+    english: Eridanus
+    arabic: النهر
+    chinese: 波江座
+    czech: Eridanus
+    estonian: Eriidanus
+    finnish: Eridanus
+    french: Eridan
+    german: Eridanus
+    greek: Ηριδανός
+    hebrew: ארידנוס
+    italian: Fiume Eridano
+    japanese: エリダヌス座
+    korean: 에리다누스자리
+    marathi: यमुना
+    persian: رودخانه
+    polish: Erydan
+    portuguese: Eridano
+    russian: Эридан
+    spanish: Erídano
+    swedish: Floden
+    turkish: Irmak
+    ukrainian: Ерідан
+
+  - latin: Fornax
+    english: Furnace
+    arabic: الكور
+    chinese: 天爐座
+    czech: Pec
+    estonian: Ahi
+    finnish: Sulatusuuni
+    french: Fourneau
+    german: Chemischer Ofen
+    greek: Κάμινος
+    hebrew: תנור
+    italian: Fornace
+    japanese: ろ座
+    korean: 화로자리
+    marathi: अश्मंत
+    persian: کوره
+    polish: Piec
+    portuguese: Forno
+    russian: Печь
+    spanish: Horno
+    swedish: Ugnen
+    turkish: Ocak
+    ukrainian: Піч
+
+  - latin: Gemini
+    english: Twins
+    arabic: التوأمان
+    chinese: 雙子座
+    czech: Blíženci
+    estonian: Kaksikud
+    finnish: Kaksoset
+    french: Gémeaux
+    german: Zwillinge
+    greek: Δίδυμοι
+    hebrew: תאומים
+    italian: Gemelli
+    japanese: ふたご座
+    korean: 쌍둥이자리
+    marathi: मिथुन
+    persian: دوپیِکَر
+    polish: Bliźnięta
+    portuguese: Gêmeos
+    russian: Близнецы
+    spanish: Géminis, Gemelos
+    swedish: Tvillingarna
+    turkish: İkizler
+    ukrainian: Близнюки
+
+  - latin: Grus
+    english: Crane
+    arabic: الكركي
+    chinese: 天鶴座
+    czech: Jeřáb
+    estonian: Kurg
+    finnish: Kurki
+    french: Grue
+    german: Kranich
+    greek: Γερανός
+    hebrew: עגור
+    italian: Gru
+    japanese: つる座
+    korean: 두루미자리
+    marathi: बक
+    persian: دُرنا
+    polish: Żuraw
+    portuguese: Grou
+    russian: Журавль
+    spanish: Grulla
+    swedish: Tranan
+    turkish: Turna
+    ukrainian: Журавель
+
+  - latin: Hercules
+    english: Hercules
+    arabic: الجاثي
+    chinese: 武仙座
+    czech: Herkules
+    estonian: Herkules
+    finnish: Herkules
+    french: Hercule
+    german: Herkules
+    greek: Ηρακλής
+    hebrew: הרקולס
+    italian: Ercole
+    japanese: ヘルクレス座
+    korean: 허큘리스자리
+    marathi: शौरि
+    persian: بر زانو نشسته
+    polish: Herkules
+    portuguese: Hércules
+    russian: Геркулес
+    spanish: Hércules
+    swedish: Herkules
+    turkish: Herkül
+    ukrainian: Геркулес
+
+  - latin: Lepus
+    english: Hare
+    arabic: الأرنب
+    chinese: 天兔座
+    czech: Zajíc
+    estonian: Jänes
+    finnish: Jänis
+    french: Lièvre
+    german: Hase
+    greek: Λαγωός
+    hebrew: ארנבת
+    italian: Lepre
+    japanese: うさぎ座
+    korean: 토끼자리
+    marathi: ششک
+    persian: خرگوش
+    polish: Zając
+    portuguese: Lebre
+    russian: Заяц
+    spanish: Conejo
+    swedish: Haren
+    turkish: Tavşan
+    ukrainian: Заєць
+
+  - latin: Libra
+    english: Balance
+    arabic: الميزان
+    chinese: 天秤座
+    czech: Váhy
+    estonian: Kaalud
+    finnish: Vaaka
+    french: Balance
+    german: Waage
+    greek: Ζυγός
+    hebrew: מאזניים
+    italian: Bilancia
+    japanese: てんびん座
+    korean: 천칭자리
+    marathi: तुळ
+    persian: ترازو
+    polish: Waga
+    portuguese: Libra
+    russian: Весы
+    spanish: Balanza
+    swedish: Vågen
+    turkish: Terazi
+    ukrainian: Терези
+
+  - latin: Lupus
+    english: Wolf
+    arabic: السبع
+    chinese: 豺狼座
+    czech: Vlk
+    estonian: Hunt
+    finnish: Susi
+    french: Loup
+    german: Wolf
+    greek: Λύκος
+    hebrew: זאב
+    italian: Lupo
+    japanese: おおかみ座
+    korean: 이리자리
+    marathi: वृक
+    persian: گُرگ
+    polish: Wilk
+    portuguese: Lobo
+    russian: Волк
+    spanish: Lobo
+    swedish: Vargen
+    turkish: Kurt
+    ukrainian: Вовк
+
+  - latin: Lynx
+    english: Lynx
+    arabic: الوشق
+    chinese: 天貓座
+    czech: Rys
+    estonian: Ilves
+    finnish: Ilves
+    french: Lynx
+    german: Luchs
+    greek: Λυγξ
+    hebrew: לינקס
+    italian: Lince
+    japanese: やまねこ座
+    korean: 살쾡이자리
+    marathi: गवय
+    persian: سیاه‌گوش
+    polish: Ryś
+    portuguese: Lince
+    russian: Рысь
+    spanish: Lince
+    swedish: Lodjuret
+    turkish: Vaşak
+    ukrainian: Рись
+
+  - latin: Lyra
+    english: Lyre
+    arabic: القيثارة
+    chinese: 天琴座
+    czech: Lyra
+    estonian: Lüüra
+    finnish: Lyyra
+    french: Lyre
+    german: Leier
+    greek: Λύρα
+    hebrew: נבל
+    italian: Lira
+    japanese: こと座
+    korean: 거문고자리
+    marathi: स्वरमंडळ
+    persian: چَنگِ رومی
+    polish: Lutnia
+    portuguese: Lira
+    russian: Лира
+    spanish: Lira
+    swedish: Lyran
+    turkish: Çalgı
+    ukrainian: Ліра
+
+  - latin: Mensa
+    english: Mensa
+    arabic: الجبل
+    chinese: 山案座
+    czech: Tabulová hora
+    estonian: Lavamägi
+    finnish: Pöytävuori
+    french: Table
+    german: Tafelberg
+    greek: Τράπεζα
+    hebrew: הר השולחן
+    italian: Mensa
+    japanese: テーブルさん座
+    korean: 테이블산자리
+    marathi: त्रिकुट
+    persian: کوه‌میز
+    polish: Góra Stołowa
+    portuguese: Montanha da Mesa
+    russian: Столовая Гора
+    spanish: Mesa
+    swedish: Taffelberget
+    turkish: Masa
+    ukrainian: Столова Гора
+
+  - latin: Microscopium
+    english: Microscope
+    arabic: المجهر
+    chinese: 顯微鏡座
+    czech: Mikroskop
+    estonian: Mikroskoop
+    finnish: Mikroskooppi
+    french: Microscope
+    german: Mikroskop
+    greek: Μικροσκόπιον
+    hebrew: מיקרוסקופ
+    italian: Microscopio
+    japanese: けんびきょう座
+    korean: 현미경자리
+    marathi: सूक्ष्मदर्शी
+    persian: ریزبین
+    polish: Mikroskop
+    portuguese: Microscópio
+    russian: Микроскоп
+    spanish: Microscopio
+    swedish: Mikroskopet
+    turkish: Mikroskop
+    ukrainian: Мікроскоп
+
+  - latin: Monoceros
+    english: Unicorn
+    arabic: وحيد القرن
+    chinese: 麒麟座
+    czech: Jednorožec
+    estonian: Ükssarvik
+    finnish: Yksisarvinen
+    french: Licorne
+    german: Einhorn
+    greek: Μονόκερως
+    hebrew: חד קרן
+    italian: Unicorno
+    japanese: いっかくじゅう座
+    korean: 외뿔소자리
+    marathi: शृंगाश्व
+    persian: تک‌شاخ
+    polish: Jednorożec
+    portuguese: Unicórnio
+    russian: Единорог
+    spanish: Unicornio
+    swedish: Enhörningen
+    turkish: Tekboynuz
+    ukrainian: Одноріг
+
+  - latin: Musca
+    english: Fly
+    arabic: الذبابة
+    chinese: 蒼蠅座
+    czech: Moucha
+    estonian: Kärbes
+    finnish: Kärpänen
+    french: Mouche
+    german: Fliege
+    greek: Μυία
+    hebrew: זבוב
+    italian: Mosca
+    japanese: はえ座
+    korean: 파리자리
+    marathi: मक्षिका
+    persian: مَگَس
+    polish: Mucha
+    portuguese: Mosca
+    russian: Муха
+    spanish: Mosca, Abeja
+    swedish: Flugan
+    turkish: Sinek
+    ukrainian: Муха
+
+  - latin: Norma
+    english: Level
+    arabic: مربع النجار
+    chinese: 矩尺座
+    czech: Pravítko
+    estonian: Vinkel
+    finnish: Kulmaviivoitin
+    french: Règle
+    german: Winkelmaß
+    greek: Γνώμων
+    hebrew: סרגל
+    italian: Squadra
+    japanese: じょうぎ座
+    korean: 직각자자리
+    marathi: रेखाटणी
+    persian: چارگوش
+    polish: Węgielnica
+    portuguese: Régua
+    russian: Наугольник
+    spanish: Escuadra, Regla
+    swedish: Vinkelhaken
+    turkish: Cetvel
+    ukrainian: Косинець
+
+  - latin: Octans
+    english: Octant
+    arabic: الثمن
+    chinese: 南極座
+    czech: Oktant
+    estonian: Oktant
+    finnish: Oktantti
+    french: Octant
+    german: Oktant
+    greek: Οκτάς
+    hebrew: אוקטנט
+    italian: Ottante
+    japanese: はちぶんぎ座
+    korean: 팔분의자리
+    marathi: अष्टक
+    persian: هَشتَک
+    polish: Oktant
+    portuguese: Octante
+    russian: Октант
+    spanish: Octante, Bastón
+    swedish: Oktanten
+    turkish: Sekizlik
+    ukrainian: Октант
+
+  - latin: Ophiuchus
+    english: Ophiuchus
+    arabic: الحواء
+    chinese: 蛇夫座
+    czech: Hadonoš
+    estonian: Maokandja
+    finnish: Käärmeen-kantaja
+    french: Ophiuchus
+    german: Schlangen-träger
+    greek: Οφιούχος
+    hebrew: נושא הנחש
+    italian: Ofiucho
+    japanese: へびつかい座
+    korean: 뱀주인자리
+    marathi: भुजंगधारी
+    persian: ماراَفسای
+    polish: Wężownik
+    portuguese: Ofiúco
+    russian: Змееносец
+    spanish: Ofiuco, Serpentario
+    swedish: Ormbäraren
+    turkish: Yılancı
+    ukrainian: Змієносець
+
+  - latin: Orion
+    english: Orion
+    arabic: الجبار
+    chinese: 獵戶座
+    czech: Orion
+    estonian: Orion
+    finnish: Orion
+    french: Orion
+    german: Orion
+    greek: Ωρίων
+    hebrew: אוריון
+    italian: Orione
+    japanese: オリオン座
+    korean: 오리온자리
+    marathi: मृग
+    persian: شکارچی
+    polish: Orion
+    portuguese: Órion
+    russian: Орион
+    spanish: Orión
+    swedish: Orion
+    turkish: Avcı
+    ukrainian: Оріон
+
+  - latin: Pavo
+    english: Peacock
+    arabic: الطاووس
+    chinese: 孔雀座
+    czech: Páv
+    estonian: Paabulind
+    finnish: Riikinkukko
+    french: Paon
+    german: Pfau
+    greek: Ταώς
+    hebrew: טווס
+    italian: Pavone
+    japanese: くじゃく座
+    korean: 공작자리
+    marathi: मयुर
+    persian: طاووس
+    polish: Paw
+    portuguese: Pavão
+    russian: Павлин
+    spanish: Pavo
+    swedish: Påfågeln
+    turkish: Tavus
+    ukrainian: Павич
+
+  - latin: Pegasus
+    english: Flying Horse
+    arabic: الفرس الأعظم
+    chinese: 飛馬座
+    czech: Pegas
+    estonian: Pegasus
+    finnish: Pegasus
+    french: Pégase
+    german: Pegasus
+    greek: Πήγασος
+    hebrew: פגסוס
+    italian: Pegaso
+    japanese: ペガスス座
+    korean: 페가수스자리
+    marathi: उच्चै:श्रवा
+    persian: اسب بال‌دار
+    polish: Pegaz
+    portuguese: Pégaso
+    russian: Пегас
+    spanish: Pegaso
+    swedish: Pegasus
+    turkish: Kanatlıat
+    ukrainian: Пегас
+
+  - latin: Perseus
+    english: Perseus
+    arabic: حامل رأس الغول
+    chinese: 英仙座
+    czech: Perseus
+    estonian: Perseus
+    finnish: Perseus
+    french: Persée
+    german: Perseus
+    greek: Περσεύς
+    hebrew: פרסאוס
+    italian: Perseo
+    japanese: ペルセウス座
+    korean: 페르세우스자리
+    marathi: ययाती
+    persian: پَرساوُش
+    polish: Perseusz
+    portuguese: Perseu
+    russian: Персей
+    spanish: Perseo
+    swedish: Perseus
+    turkish: Kahraman
+    ukrainian: Персей
+
+  - latin: Phoenix
+    english: Phoenix
+    arabic: العنقاء
+    chinese: 鳳凰座
+    czech: Fénix
+    estonian: Fööniks
+    finnish: Feeniks
+    french: Phénix
+    german: Phoenix
+    greek: Φοίνιξ
+    hebrew: עוף החול
+    italian: Fenice
+    japanese: ほうおう座
+    korean: 봉황자리
+    marathi: जटायू
+    persian: سیمرغ
+    polish: Feniks
+    portuguese: Fênix
+    russian: Феникс
+    spanish: Fénix
+    swedish: Fenix
+    turkish: Anka
+    ukrainian: Фенікс
+
+  - latin: Pictor
+    english: Painter
+    arabic: آلة الرسام
+    chinese: 繪架座
+    czech: Malíř
+    estonian: Maalija
+    finnish: Maalari
+    french: Peintre
+    german: Maler
+    greek: Οκρίβας
+    hebrew: כן ציור
+    italian: Pittore
+    japanese: がか座
+    korean: 화가자리
+    marathi: चित्रफलक
+    persian: سه‌پایه
+    polish: Malarz
+    portuguese: Cavalete do Pintor
+    russian: Живописец
+    spanish: Paleta del Pintor
+    swedish: Målaren
+    turkish: Ressam
+    ukrainian: Живописець
+
+  - latin: Pisces
+    english: Fishes
+    arabic: الحوت
+    chinese: 雙魚座
+    czech: Ryby
+    estonian: Kalad
+    finnish: Kalat
+    french: Poissons
+    german: Fische
+    greek: Ιχθύες
+    hebrew: דגים
+    italian: Pesci
+    japanese: うお座
+    korean: 물고기자리
+    marathi: मीन
+    persian: دوماهی
+    polish: Ryby
+    portuguese: Peixes
+    russian: Рыбы
+    spanish: Peces
+    swedish: Fiskarna
+    turkish: Balık
+    ukrainian: Риби
+
+  - latin: Piscis Austrinus
+    english: Southern Fish
+    arabic: الحوت الجنوبي
+    chinese: 南魚座
+    czech: Jižní ryba
+    estonian: Lõunakala
+    finnish: Etelän kala
+    french: Poisson Austral
+    german: Südlicher Fisch
+    greek: Ιχθύς Νότιος
+    hebrew: דג דרומי
+    italian: Pesce Australe
+    japanese: みなみのうお座
+    korean: 남쪽물고기자리
+    marathi: दक्षिण मत्स्य
+    persian: ماهیِ نیم‌روزی
+    polish: Ryba Południowa
+    portuguese: Peixe Austral
+    russian: Южная Рыба
+    spanish: Pez Austral
+    swedish: Södra fisken
+    turkish: Güneybalığı
+    ukrainian: Південна Риба
+
+  - latin: Puppis
+    english: Poop Deck
+    arabic: الكوثل
+    chinese: 船尾座
+    czech: Lodní záď
+    estonian: Ahter
+    finnish: Peräkeula
+    french: Poupe
+    german: Achterdeck
+    greek: Πρύμνη
+    hebrew: ירכתי הספינה
+    italian: Poppa
+    japanese: とも座
+    korean: 고물자리
+    marathi: नौका अरित्र
+    persian: کشتی‌دُم
+    polish: Rufa
+    portuguese: Popa
+    russian: Корма
+    spanish: Popa
+    swedish: Akterskeppet
+    turkish: Pupa
+    ukrainian: Корма
+
+  - latin: Pyxis
+    english: Compass (mariner's)
+    arabic: بيت الإبرة
+    chinese: 羅盤座
+    czech: Kompas
+    estonian: Kompass
+    finnish: Kompassi
+    french: Boussole
+    german: Schiffs-kompass
+    greek: Πυξίς
+    hebrew: מצפן
+    italian: Bussola
+    japanese: らしんばん座
+    korean: 나침반자리
+    marathi: दिग्दर्शक
+    persian: قطب‌نما
+    polish: Kompas
+    portuguese: Bússola
+    russian: Компас
+    spanish: Brújula
+    swedish: Kompassen
+    turkish: Kumpas
+    ukrainian: Компас
+
+  - latin: Reticulum
+    english: Net
+    arabic: الشبكة
+    chinese: 網罟座
+    czech: Síť
+    estonian: Võrk
+    finnish: Verkko
+    french: Réticule
+    german: Netz
+    greek: Δίκτυον
+    hebrew: רשת
+    italian: Reticolo
+    japanese: レチクル座
+    korean: 그물자리
+    marathi: जाल
+    persian: تاربَست
+    polish: Sieć
+    portuguese: Retículo
+    russian: Сетка
+    spanish: Retículo, Árbol
+    swedish: Romboidska nätet
+    turkish: Ağcık
+    ukrainian: Сітка
+
+  - latin: Sagitta
+    english: Arrow
+    arabic: السهم
+    chinese: 天箭座
+    czech: Šíp
+    estonian: Nool
+    finnish: Nuoli
+    french: Flèche
+    german: Pfeil
+    greek: Βέλος
+    hebrew: חץ
+    italian: Freccia
+    japanese: や座
+    korean: 화살자리
+    marathi: शर
+    persian: پیکان
+    polish: Strzała
+    portuguese: Flecha
+    russian: Стрела
+    spanish: Flecha, Saeta
+    swedish: Pilen
+    turkish: Okçuk
+    ukrainian: Стріла
+
+  - latin: Sagittarius
+    english: Archer
+    arabic: الرامي
+    chinese: 人馬座
+    czech: Střelec
+    estonian: Ambur
+    finnish: Jousimies
+    french: Sagittaire
+    german: Schütze
+    greek: Τοξότης
+    hebrew: קשת
+    italian: Sagittario
+    japanese: いて座
+    korean: 궁수자리
+    marathi: धनु
+    persian: نیم‌اسب
+    polish: Strzelec
+    portuguese: Sagitário
+    russian: Стрелец
+    spanish: Sagitario, Arquero
+    swedish: Skytten
+    turkish: Yay
+    ukrainian: Стрілець
+
+  - latin: Scorpius
+    english: Scorpion
+    arabic: العقرب
+    chinese: 天蠍座
+    czech: Štír
+    estonian: Skorpion
+    finnish: Skorpioni
+    french: Scorpion
+    german: Skorpion
+    greek: Σκορπιός
+    hebrew: עקרב
+    italian: Scorpione
+    japanese: さそり座
+    korean: 전갈자리
+    marathi: वृश्चिक
+    persian: کَژدُم
+    polish: Skorpion
+    portuguese: Escorpião
+    russian: Скорпион
+    spanish: Escorpio, Escorpión
+    swedish: Skorpionen
+    turkish: Akrep
+    ukrainian: Скорпіон
+
+  - latin: Sculptor
+    english: Sculptor
+    arabic: معمل النحات
+    chinese: 玉夫座
+    czech: Sochař
+    estonian: Kujur
+    finnish: Kuvan-veistäjä
+    french: Sculpteur
+    german: Bildhauer
+    greek: Γλύπτης
+    hebrew: פסל
+    italian: Scultore
+    japanese: ちょうこくしつ座
+    korean: 조각가자리
+    marathi: पाषाणकुट्टक
+    persian: سنگ‌تراش
+    polish: Rzeźbiarz
+    portuguese: Escultor
+    russian: Скульптор
+    spanish: Escultor
+    swedish: Bildhuggaren
+    turkish: Heykeltraş
+    ukrainian: Скульптор
+
+  - latin: Scutum
+    english: Shield
+    arabic: الترس
+    chinese: 盾牌座
+    czech: Štít
+    estonian: Kilp
+    finnish: Kilpi
+    french: Écu de Sobieski
+    german: Schild
+    greek: Ασπίς
+    hebrew: מגן
+    italian: Scudo
+    japanese: たて座
+    korean: 방패자리
+    marathi: फलक
+    persian: سِپَر
+    polish: Tarcza
+    portuguese: Escudo
+    russian: Щит
+    spanish: Escudo
+    swedish: Sobieskis sköld
+    turkish: Kalkan
+    ukrainian: Щит
+
+  - latin: Serpens
+    english: Serpent
+    arabic: الحية
+    chinese: 巨蛇座 (头)
+    czech: Had
+    estonian: Madu
+    finnish: Käärme
+    french: Serpent
+    german: Schlange
+    greek: Όφις
+    hebrew: נחש
+    italian: Serpente
+    japanese: へび座
+    korean: 뱀자리
+    marathi: भुजंग
+    persian: افعی
+    polish: Wąż
+    portuguese: Serpente
+    russian: Змея
+    spanish: Serpiente
+    swedish: Ormen
+    turkish: Yılan
+    ukrainian: Змія
+
+  - latin: Sextans
+    english: Sextant
+    arabic: السدس
+    chinese: 六分儀座
+    czech: Sextant
+    estonian: Sekstant
+    finnish: Sekstantti
+    french: Sextant
+    german: Sextant
+    greek: Εξάς
+    hebrew: סקסטנט
+    italian: Sestante
+    japanese: ろくぶんぎ座
+    korean: 육분의자리
+    marathi: षडंश
+    persian: سِکِستان
+    polish: Sekstant
+    portuguese: Sextante
+    russian: Секстант
+    spanish: Sextante
+    swedish: Sextanten
+    turkish: Altılık
+    ukrainian: Секстант
+
+  - latin: Taurus
+    english: Bull
+    arabic: الثور
+    chinese: 金牛座
+    czech: Býk
+    estonian: Sõnn
+    finnish: Härkä
+    french: Taureau
+    german: Stier
+    greek: Ταύρος
+    hebrew: שור
+    italian: Toro
+    japanese: おうし座
+    korean: 황소자리
+    marathi: वृषभ
+    persian: گاو
+    polish: Byk
+    portuguese: Touro
+    russian: Телец
+    spanish: Tauro, Toro
+    swedish: Oxen
+    turkish: Boğa
+    ukrainian: Телець
+
+  - latin: Telescopium
+    english: Telescope
+    arabic: المرقب
+    chinese: 望遠鏡座
+    czech: Dalekohled
+    estonian: Teleskoop
+    finnish: Kaukoputki
+    french: Télescope
+    german: Teleskop
+    greek: Τηλεσκόπιον
+    hebrew: טלסקופ
+    italian: Telescopio
+    japanese: ぼうえんきょう座
+    korean: 망원경자리
+    marathi: दूरदर्शी
+    persian: تِلِسکوپ
+    polish: Teleskop
+    portuguese: Telescópio
+    russian: Телескоп
+    spanish: Telescopio
+    swedish: Kikaren
+    turkish: Dürbün
+    ukrainian: Телескоп
+
+  - latin: Triangulum
+    english: Triangle
+    arabic: المثلث
+    chinese: 三角座
+    czech: Trojúhelník
+    estonian: Kolmnurk
+    finnish: Kolmio
+    french: Triangle
+    german: Dreieck
+    greek: Τρίγωνον
+    hebrew: משולש
+    italian: Triangolo
+    japanese: さんかく座
+    korean: 삼각형자리
+    marathi: त्रिकोण
+    persian: سه‌گوش
+    polish: Trójkąt
+    portuguese: Triângulo
+    russian: Треугольник
+    spanish: Triángulo
+    swedish: Triangeln
+    turkish: Üçgen
+    ukrainian: Трикутник
+
+  - latin: Triangulum Australe
+    english: Southern Triangle
+    arabic: المثلث الجنوبي
+    chinese: 南三角座
+    czech: Jižní trojúhelník
+    estonian: Lõunakolmnurk
+    finnish: Etelän kolmio
+    french: Triangle Austral
+    german: Südliches Dreieck
+    greek: Τρίγωνον Νότιον
+    hebrew: משולש צפוני
+    italian: Triangolo Australe
+    japanese: みなみのさんかく座
+    korean: 남쪽삼각형자리
+    marathi: दक्षिण त्रिकोण
+    persian: سه‌گوشِ جنوبی
+    polish: Trójkąt Południowy
+    portuguese: Triângulo Austral
+    russian: Южный Треугольник
+    spanish: Triángulo Austral
+    swedish: Södra triangeln
+    turkish: Güney Üçgeni
+    ukrainian: Південний Трикутник
+
+  - latin: Tucana
+    english: Toucan
+    arabic: الطوقان
+    chinese: 杜鵑座
+    czech: Tukan
+    estonian: Tuukan
+    finnish: Tukaani
+    french: Toucan
+    german: Tukan
+    greek: Τουκάνα
+    hebrew: טוקאן
+    italian: Tucano
+    japanese: きょしちょう座
+    korean: 큰부리새자리
+    marathi: कारंडव
+    persian: توکایی
+    polish: Tukan
+    portuguese: Tucano
+    russian: Тукан
+    spanish: Tucán
+    swedish: Tukanen
+    turkish: Tukan
+    ukrainian: Тукан
+
+  - latin: Ursa Maior
+    english: Big Dipper, Great Bear, Plough
+    arabic: الدب الأكبر
+    chinese: 大熊座
+    czech: Velká medvědice
+    estonian: Suur Vanker
+    finnish: Iso karhu
+    french: Grande Ourse
+    german: Großer Bär
+    greek: Άρκτος Μεγάλη
+    hebrew: הדובה הגדולה
+    italian: Orsa Maggiore
+    japanese: おおぐま座
+    korean: 큰곰자리
+    marathi: सप्तर्षी
+    persian: خِرسِ مِهتَر
+    polish: Wielka Niedźwiedzica
+    portuguese: Ursa Maior
+    russian: Большая Медведица
+    spanish: Osa Mayor
+    swedish: Stora björnen
+    turkish: Büyük Ayı
+    ukrainian: Велика Ведмедиця
+
+  - latin: Ursa Minor
+    english: Little Bear, Little Dipper
+    arabic: الدب الأصغر
+    chinese: 小熊座
+    czech: Malý medvěd
+    estonian: Väike Vanker
+    finnish: Pieni karhu
+    french: Petite Ourse
+    german: Kleiner Bär
+    greek: Άρκτος Μικρή
+    hebrew: הדובה הקטנה
+    italian: Orsa Minore
+    japanese: こぐま座
+    korean: 작은곰자리
+    marathi: लघु ऋक्ष
+    persian: خِرسِ کِهتَر
+    polish: Mała Niedźwiedzica
+    portuguese: Ursa Menor
+    russian: Малая Медведица
+    spanish: Osa Pequeño, Osa Menor
+    swedish: Lilla björnen
+    turkish: Küçük Ayı
+    ukrainian: Мала Ведмедиця
+
+  - latin: Vela
+    english: Sails
+    arabic: الشجاع
+    chinese: 船帆座
+    czech: Plachty
+    estonian: Purjed
+    finnish: Purje
+    french: Voiles
+    german: Segel
+    greek: Ιστία
+    hebrew: מפרש
+    italian: Vela
+    japanese: ほ座
+    korean: 돛자리
+    marathi: नौ-शीर्ष
+    persian: بادبان‌ها
+    polish: Żagiel
+    portuguese: Vela
+    russian: Паруса
+    spanish: Velamen
+    swedish: Seglet
+    turkish: Yelken
+    ukrainian: Паруси
+
+  - latin: Virgo
+    english: Virgin
+    arabic: العذراء
+    chinese: 處女座
+    czech: Panna
+    estonian: Neitsi
+    finnish: Neitsyt
+    french: Vierge
+    german: Jungfrau
+    greek: Παρθένος
+    hebrew: בתולה
+    italian: Vergine
+    japanese: おとめ座
+    korean: 처녀자리
+    marathi: कन्या
+    persian: خوشه
+    polish: Panna
+    portuguese: Virgem
+    russian: Дева
+    spanish: Virgen
+    swedish: Jungfrun
+    turkish: Başak
+    ukrainian: Діва
+
+  - latin: Volans
+    english: Flying Fish
+    arabic: السمكة الطائرة
+    chinese: 飛鱼座
+    czech: Létající ryba
+    estonian: Lendkala
+    finnish: Lentokala
+    french: Poisson Volant
+    german: Fliegender Fisch
+    greek: Ιχθύς Ιπτάμενος
+    hebrew: דג מעופף
+    italian: Pesce volante
+    japanese: とびうお座
+    korean: 날치자리
+    marathi: तिमि
+    persian: ماهیِ پرنده
+    polish: Ryba Latająca
+    portuguese: Peixe Voador
+    russian: Летучая Рыба
+    spanish: Pez Volador
+    swedish: Flygfisken
+    turkish: Uçanbalık
+    ukrainian: Летюча Риба
+
+  - latin: Vulpecula
+    english: Little Fox
+    arabic: الثعلب
+    chinese: 狐狸座
+    czech: Lištička
+    estonian: Rebane
+    finnish: Kettu
+    french: Petit Renard
+    german: Fuchs
+    greek: Αλώπηξ
+    hebrew: שועלון
+    italian: Volpetta
+    japanese: こぎつね座
+    korean: 작은여우자리
+    marathi: जंबुक
+    persian: روباه
+    polish: Lisek
+    portuguese: Raposa
+    russian: Лисичка
+    spanish: Zorro
+    swedish: Räven
+    turkish: Tilkicik
+    ukrainian: Лисичка

@@ -21,6 +21,7 @@ from star_map.data_loader import (
     format_constellation_name,
 )
 from star_map.hit_test import find_constellation_at
+from shared.widgets.confetti import ConfettiOverlay
 from ui.theme import Colors, MIN_TOUCH_TARGET, RADIUS_MD
 from ui.rounded_button import RoundedButton
 from visualization.renderer import StarMapRenderer
@@ -33,7 +34,7 @@ def _font():
 
 
 def _style_icon_arrow_button(btn):
-    """Zentriert einzeilige Pfeil-Glyphen (Kivy-Label: valign default ist 'bottom')."""
+    """Center single-line arrow glyphs (Kivy Label defaults valign to 'bottom')."""
     btn.halign = "center"
     btn.valign = "middle"
     btn.padding = [0, 0, 0, 5]
@@ -41,7 +42,7 @@ def _style_icon_arrow_button(btn):
 
 
 class LearnSwipeLayer(Widget):
-    """Volle Fläche unter den UI-Elementen: horizontales Wischen = vor/zurück."""
+    """Full-area layer below other UI; horizontal swipe = next / previous page."""
 
     def __init__(self, on_swipe_next, on_swipe_prev, **kwargs):
         super().__init__(**kwargs)
@@ -96,6 +97,27 @@ class SternbilderApp(AstroApp):
         super()._apply_locale()
         self._sync_sternbilder_texts()
 
+    def _refresh_constellation_labels_for_locale(self):
+        """Refresh constellation display strings after the UI language changes."""
+        if getattr(self, "screen", None) == "learn" and self.session_constellations:
+            self._update_learn_page()
+        if (
+            getattr(self, "screen", None) == "quiz_tap"
+            and getattr(self, "quiz_target", None)
+            and self.session_constellations
+        ):
+            c = load_constellations()
+            display = format_constellation_name(c.get(self.quiz_target, {}))
+            self.quiz_label.text = f"{tr('sternbilder.find_label')} {display}"
+        if getattr(self, "screen", None) == "quiz_mc" and getattr(
+            self, "quiz_mc_options", None
+        ):
+            c = load_constellations()
+            for i, btn in enumerate(self._mc_buttons):
+                if i < len(self.quiz_mc_options):
+                    key = self.quiz_mc_options[i]
+                    btn.text = format_constellation_name(c.get(key, {}))
+
     def _sync_sternbilder_texts(self):
         if getattr(self, "_sb_start_heading", None):
             self._sb_start_heading.text = tr("sternbilder.heading_learn")
@@ -117,6 +139,7 @@ class SternbilderApp(AstroApp):
         if getattr(self, "_sb_mode_tap2", None):
             self._sb_mode_tap2.text = tr("sternbilder.mode_map_tap")
             self._sb_mode_mc2.text = tr("sternbilder.mode_mc")
+        self._refresh_constellation_labels_for_locale()
 
     def _get_config(self):
         cfg = load_config()
@@ -124,7 +147,8 @@ class SternbilderApp(AstroApp):
         return {
             "learn_count": session.get("learn_count", 7),
             "quiz_count": session.get("quiz_count", 7),
-            "always_include": session.get("always_include", "Große Bärin (Ursa Major)"),
+            "always_include_iau": session.get("always_include_iau", "Ursa Major"),
+            "always_include": session.get("always_include"),
         }
 
     def build(self):
@@ -356,6 +380,21 @@ class SternbilderApp(AstroApp):
         self._quiz_end_label.size_hint_x = 0.9
         self.star_map.opacity = 0
         self._show_screen("quiz_end")
+        self._start_quiz_end_confetti(max_points)
+
+    def _start_quiz_end_confetti(self, max_points: int) -> None:
+        layout = self._widgets["quiz_end"]
+        for w in list(layout.children):
+            if isinstance(w, ConfettiOverlay):
+                layout.remove_widget(w)
+        if max_points <= 0:
+            return
+        ratio = self.points / max_points
+        if ratio < 0.3:
+            return
+        confetti = ConfettiOverlay(on_done=None)
+        layout.add_widget(confetti)
+        confetti.start(ratio=max(0.3, min(1.0, ratio)))
 
     def _build_learn_ui(self):
         layout = FloatLayout(size_hint=(1, 1))
@@ -545,8 +584,11 @@ class SternbilderApp(AstroApp):
         self.screen = name
 
         for child in self.root.children[:]:
-            if child is not self.star_map and child is not self.feedback:
-                self.root.remove_widget(child)
+            if child is self.star_map or child is self.feedback:
+                continue
+            if self._keep_when_clearing_root_overlays(child):
+                continue
+            self.root.remove_widget(child)
 
         overlay = self._widgets.get(name)
         if overlay and overlay not in self.root.children:
@@ -579,12 +621,15 @@ class SternbilderApp(AstroApp):
             self._quiz_variant_box.opacity = 0
             self._mc_options_box.opacity = 0
 
+        self.ensure_lang_switcher_on_top()
         self.star_map._draw()
 
     def _start_learn(self, *args):
         cfg = self._get_config()
         self.session_constellations = get_session_constellations(
-            cfg["learn_count"], cfg["always_include"]
+            cfg["learn_count"],
+            cfg.get("always_include"),
+            cfg.get("always_include_iau"),
         )
         self.learn_page = 0
         self.star_map.session_constellations = self.session_constellations
@@ -641,7 +686,9 @@ class SternbilderApp(AstroApp):
         """From start screen: load session and show quiz intro."""
         cfg = self._get_config()
         self.session_constellations = get_session_constellations(
-            cfg["quiz_count"], cfg["always_include"]
+            cfg["quiz_count"],
+            cfg.get("always_include"),
+            cfg.get("always_include_iau"),
         )
         self.star_map.session_constellations = self.session_constellations
         self._show_quiz_intro()
@@ -677,7 +724,7 @@ class SternbilderApp(AstroApp):
         self.quiz_target = self.quiz_remaining.pop()
         constellations = load_constellations()
         display = format_constellation_name(constellations.get(self.quiz_target, {}))
-        self.quiz_label.text = f"Finde: {display}"
+        self.quiz_label.text = f"{tr('sternbilder.find_label')} {display}"
         self.star_map.highlighted_constellation = None
         self._show_screen("quiz_tap")
 

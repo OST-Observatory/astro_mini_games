@@ -7,27 +7,27 @@
 
 categories:
   - id: sonnensystem
-    name: "Sonnensystem"
+    name: "Sistema Solar"
   - id: sternbilder
-    name: "Sternbilder"
+    name: "Constelaciones"
   - id: allgemein
-    name: "Allgemein"
+    name: "General"
   - id: astronomische_phanomene
-    name: "Astronomische Phänomene"
+    name: "Fenómenos Astronómicos"
   - id: raumsonden_teleskope
-    name: "Raumsonden & Teleskope"
+    name: "Sondas Espaciales & Telescopios"
   - id: nebel_galaxien
-    name: "Nebel & Galaxien"
+    name: "Nebulosas & Galaxias"
   - id: himmelsmechanik
-    name: "Himmelsmechanik"
+    name: "Mecánica Celeste"
   - id: kosmologie
-    name: "Kosmologie"
+    name: "Cosmología"
   - id: entfernungsbestimmung_helligkeit
-    name: "Entfernungsbestimmung & Helligkeit"
+    name: "Determinación de Distancias & Brillo"
   - id: exotische_objekte
-    name: "Exotische Objekte"
+    name: "Objetos Exóticos"
   - id: sterne
-    name: "Sterne"
+    name: "Estrellas"
 
 questions:
   - id: q1
@@ -1148,4 +1148,3 @@ questions:
     difficulty: amateur
     image: "data/images/Comparison_of_Hubble_and_Webb_views_of_a_Cepheid_variable_star_(weic2408b).jpg"
     image_credit: "NASA, ESA, CSA, STScI, A. Riess (JHU/STScI), CC BY 4.0, via Wikimedia Commons"
-    

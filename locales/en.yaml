@@ -58,6 +58,7 @@ sternbilder:
   mode_mc: "Multiple choice"
   back_home: "Back to home"
   swipe_hint: "Use the arrows or swipe left or right."
+  find_label: "Find:"
   big_dipper_note: "The Big Dipper is only part of the constellation Ursa Major."
   quiz_done_title: "Quiz finished!"
   quiz_score: "{points} of {max_points} points"

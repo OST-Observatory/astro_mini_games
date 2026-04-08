@@ -210,7 +210,7 @@ class ResultScreen(FloatLayout):
 
         # Confetti when >30% correct, amount scales with score
         if total > 0 and correct / total >= 0.3:
-            from ui.confetti import ConfettiOverlay
+            from shared.widgets.confetti import ConfettiOverlay
             confetti = ConfettiOverlay(on_done=None)
             self.add_widget(confetti)
             confetti.start(ratio=correct / total)

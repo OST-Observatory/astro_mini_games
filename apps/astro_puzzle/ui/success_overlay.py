@@ -78,7 +78,7 @@ class SuccessOverlay(FloatLayout):
 
     def show(self, root_layout):
         """Show overlay and start confetti."""
-        from ui.confetti import ConfettiOverlay
+        from shared.widgets.confetti import ConfettiOverlay
         self.opacity = 1
         self.disabled = False
         confetti = ConfettiOverlay(on_done=None)

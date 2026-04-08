@@ -1,0 +1,90 @@
+Latin	English	Arabic	Chinese	Czech	Estonian	Finnish	French	German	Greek	Hebrew	Italian	Japanese	Korean	Marathi	Persian	Polish	Portugese	Russian	Spanish	Swedish	Turkish	Ukranian
+constellatio	Constellation	كوكبة	星座	souhvězdí	Tähtkuju	Tähdistö	constellation	Sternbild	Αστερισμός	קבוצת כוכבים	costellazione	星座 (せいざ)	별자리	नक्षत्र	پیکر آسمانی	Konstelacja	constelação	созвездие	constelación	konstellation	Takımyıldız	сузір'я
+Andromeda	Andromeda	المرأة المسلسلة	仙女座	Andromeda	Andromeeda	Andromeda	Andromède	Andromeda	Ανδρομέδα	אנדרומדה	Andromeda	アンドロメダ座	안드로메다자리	देवयानी	زن به زنجیر بسته	Andromeda	Andrômeda	Андромеда	Andrómeda	Andromeda	Andromeda	Андромеда
+Antlia	Air Pump	مفرغة الهواء	唧筒座	Vývěva	Pump	Ilmapumppu	Machine Pneumatique	Luftpumpe	Αντλία	משאבה	Macchina Pneumatica	ポンプ座	공기펌프자리	वाताकर्षक	تلمبه	Pompa	Bomba de Ar	Насос	Máquina Neumática	Luftpumpen	Pompa	Насос
+Apus	Bird of Paradise	طائر الفردوس	天燕座	Rajka	Paradiisilind	Paratiisilintu	Oiseau de Paradis	Paradiesvogel	Πτηνόν	ציפור גן עדן	Uccello del Paradiso	ふうちょう座	극락조자리	कपोत	مرغ بهشتی	Ptak Rasjki	Ave do Paraíso	Райская Птица	Ave del Paraíso	Paradisfågeln	Cennetkuşu	Райський Птах
+Aquarius	Aquarius	الدلو	寶瓶座	Vodnář	Veevalaja	Vesimies	Verseau	Wassermann	Υδροχόος	דלי	Acquario	みずがめ座	물병자리	कुंभ	آب‌ریز	Wodnik	Aquário	Водолей	Acuario	Vattumannen	Kova	Водолій
+Aquila	Eagle	العقاب	天鷹座	Orel	Kotkas	Kotka	Aigle	Adler	Αετός	נשר	Aquila	わし座	독수리자리	गरुड	شاهین	Orzeł	Águia	Орёл	Águila	Örnen	Kartal	Орел
+Ara	Altar	المجمرة	天壇座	Oltář	Altar	Alttari	Autel	Altar	Βωμός	מזבח	Altare	さいだん座	제단자리	पीठ	آتش‌دان	Ołtarz	Altar	Жертвенник	Altar	Altaret	Sunak	Жертівник
+Aries	Ram	الحمل	白羊座	Beran	Jäär	Oinas	Bélier	Widder	Κριός	טלה	Ariete	おひつじ座	양자리	मेष	بره	Baran	Áries	Овен	Carnero	Väduren	Koç	Овен
+Auriga	Charioteer	ممسك الأعنة	御夫座	Vozka	Veomees	Ajomies	Cocher	Fuhrmann	Ηνίοχος	עגלון	Auriga	ぎょしゃ座	마차부자리	सारथी	ارّابه‌ران	Woźnica	Cocheiro	Возничий	Cochero	Kusken	Arabacı	Візничий
+Bootes	Herdsman	العواء	牧夫座	Pastýř	Karjane	Karhunvartija	Bouvier	Bärenhüter	Βοώτης	רועה דובים	Boote	うしかい座	목동자리	भूतप	مَتراک	Wolarz	Pastor	Волопас	Boyero	Björnvaktaren	Çoban	Волопас
+Caelum	Graving tool	آلة النقاش	雕具座	Rydlo	Uurits	Veistotaltta	Burin	Grabstichel	Γλυφείον	מפסלת	Bulino dello Incisore	ちょうこくぐ座	조각칼자리	टंक	اِسکِنِه	Rylec	Buril de Escultor	Резец	Cincel	Gravstickeln	Çelikkalem	Різець
+Camelopardalis	Giraffe	الزرافة	鹿豹座	Žirafa	Kaelkirjak	Kirahvi	Girafe	Giraffe	Καμηλοπάρδαλις	ג'ירף	Giraffa	きりん座	기린자리	करभ	زرّافه	Żyrafa	Girafa	Жираф	Jirafa	Giraffen	Zürafa	Жирафа
+Cancer	Crab	السرطان	巨蟹座	Rak	Vähk	Krapu	Cancer	Krebs	Καρκίνος	סרטן	Cancro	かに座	게자리	कर्क	خرچنگ	Krab	Câncer	Рак	Cangrejo	Kräftan	Yengeç	Рак
+Canes Venatici	Hunting Dogs	السلوقيان	獵犬座	Honicí psi	Jahipenid	Ajokoirat	Chiens de Chasse	Jagdhunde	Κύνες Θηρευτικοί	כלבי ציד	Cani da Caccia	りょうけん座	사냥개자리	श्याम शबल	تازی‌ها	Psy Gończe	Cães de Caça	Гончие Псы	Lebreles, Perros de Caza	Jakthundarna	Av Köpekleri	Гончі пси
+Canis Major	Great Dog	الكلب الأكبر	大犬座	Velký pes	Suur Peni	Iso koira	Grand Chien	Großer Hund	Κύων Μέγας	כלב גדול	Cane Maggiore	おおいぬ座	큰개자리	बृहद् लुब्धक	سگِ مِهتَر	Wielki Pies	Cão Maior	Большой Пёс	Perro Mayor	Stora hunden	Büyük Köpek	Великий Пес
+Canis Minor	Little Dog	الكلب الأصغر	小犬座	Malý pes	Väike Peni	Pieni koira	Petit Chien	Kleiner Hund	Κύων Μικρός	כלב קטן	Cane Minore	こいぬ座	작은개자리	लघु लुब्धक	سگِ کِهتَر	Mały Pies	Cão Menor	Малый Пёс	Perro Menor, Perro Pequeño	Lilla hunden	Küçük Köpek	Малий Пес
+Capricornus	Capricorn	الجدي	摩羯座	Kozoroh	Kaljukits	Kauris	Capricorne	Steinbock	Αιγόκερως	גדי	Capricorno	やぎ座	염소자리	मकर	بُزماهی	Koziorożec	Capricórnio	Козерог	Capricornio	Stenbocken	Oğlak	Козоріг
+Carina	Keel	القاعدة	船底座	Lodní kýl	Kiil	Köli	Carène	Kiel des Schiffs	Τρόπις	שדרית	Carena (della Nave)	りゅうこつ座	용골자리	नौकातल	شاه‌تخته	Kil	Quilha	Киль	Carina	Kölen	Karina	Кіль
+Cassiopeia	Cassiopeia	الكرسي	仙后座	Kasiopeja	Kassiopeia	Kassiopeia	Cassiopée	Kassiopeia	Κασσιόπη	קסיופאה	Cassiopeia	カシオペヤ座	카시오페이아자리	शर्मिष्ठा	خداوندِ اورُنگ	Kasjopeja	Cassiopéia	Кассиопея	Casiopea	Cassiopeja	Koltuk	Кассіопея
+Centaurus	Centaur	قنطور	半人馬座	Kentaur	Kentaur	Kentauri	Centaure	Zentaur	Κένταυρος	קנטאור	Centauro	ケンタウルス座	센타우루스자리	नरतुरंग	قنطورُس	Centaur	Centauro	Центавр	Centauro, Quirón	Kentauren	Erboğa	Центавр
+Cepheus	Cepheus	الملتهب	仙王座	Kefeus	Kefeus	Kefeus	Céphée	Kepheus	Κηφεύς	קפאוס	Cefeo	ケフェウス座	세페우스자리	वृषपर्वा	کیکاوُس	Cefeusz	Cefeu	Цефей	Cefeo	Cepheus	Kral	Цефей
+Cetus	Whale	قيطس	鯨魚座	Velryba	Vaal	Valaskala	Baleine	Walfisch	Κήτος	לווייתן	Balena	くじら座	고래자리	तिमिंगिल	وال	Wieloryb	Baleia	Кит	Ballena	Valfisken	Balina	Кит
+Chamaeleon	Chamaeleon	الحرباء	蝘蜒座	Chameleón	Kameeleon	Kameleontti	Caméléon	Chamäleon	Χαμαιλέων	זיקית	Camaleonte	カメレオン座	카멜레온자리	वायुभक्ष	هورپا	Kameleon	Camaleão	Хамелеон	Camaleón	Kameleonten	Bukalemun	Хамелеон
+Circinus	Compass (draftsman's)	البيكار	圓規座	Kružítko	Sirkel	Harppi	Compas	Zirkel	Διαβήτης	מחוגה	Compasso	コンパス座	컴퍼스자리	कर्काटक	دوپَرگار	Cyrkiel	Compasso	Циркуль	Compás	Ormen	Pergel	Циркуль
+Columba	Dove	الحمامة	天鴿座	Holubice	Tuvi	Kyyhkynen	Colombe	Taube	Περιστερά	יונה	Colomba	はと座	비둘기자리	पारावत	کبوتر	Gołąb	Pomba	Голубь	Paloma	Duvan	Güvercin	Голуб
+Coma Berenices	Berenice's Hair	الهلبة	后髮座	Vlasy Bereniky	Berenike Juuksed	Bereniken hiukset	Chevelure de Bérénice	Haar der Berenike	Κόμη Βερενίκης	שיערות ברניקי	Chioma di Berenice	かみのけ座	머리털자리	अरुंधती केश	گیسویِ بِرِنیسه	Warkocz Bereniki	Cabeleira	Волосы Вероники	Pelo de Berenice	Berenikes hår	Berenis'in Saçı	Волосся
+Corona Australis	Southern Crown	الإكليل الجنوبي	南冕座	Jižní koruna	Lõunakroon	Etelän kruunu	Couronne Australe	Südliche Krone	Στέφανος Νότιος	כתר דרומי	Corona Australe	みなみのかんむり座	남쪽왕관자리	दक्षिण मुकुट	افسرِ نیم‌روز	Korona Południowa	Coroa Austral	Южная Корона	Corona Austral	Sydliga kronan	Güneytacı	Південна Корона
+Corona Borealis	Northern Crown	الإكليل الشمالي	北冕座	Severní koruna	Põhjakroon	Pohjan kruunu	Couronne Boréale	Nördliche Krone	Στέφανος Βόρειος	כתר צפוני	Corona Boreale	かんむり座	북쪽왕관자리	उत्तर मुकुट	افسرِ شمالی	Korona Północna	Coroa Boreal	Северная Корона	Corona Boreal	Nordliga kronan	Kuzeytacı	Північна Корона
+Corvus	Crow	الغراب	烏鴉座	Havran	Kaaren	Korppi	Corbeau	Rabe	Κόραξ	עורב	Corvo	からす座	남십자자리	ध्वांक्ष	کلاغ	Kruk	Corvo	Ворон	Cuervo	Korpen	Karga	Ворон
+Crater	Cup	الباطية	巨爵座	Pohár	Karikas	Malja	Coupe	Becher	Κρατήρ	גביע	Coppa	コップ座	컵자리	चषक	پیاله	Puchar	Taça	Чаша	Copa, Cratera	Bägaren	Kupa	Чаша
+Crux	Cross	صليب الجنوب	南十字座	Jižní kříž	Lõunarist	Etelän risti	Croix du Sud	Kreuz des Südens	Σταυρός Νότιος	הצלב הדרומי	Croce del Sud	みなみじゅうじ座	남십자자리	त्रिशंकु	چَلیپا	Krzyż Południa	Cruzeiro do Sul	Южный Крест	Cruz del Sur	Södra korset	Haç	Південний Хрест
+Cygnus	Swan	الدجاجة	天鵝座	Labuť	Luik	Joutsen	Cygne	Schwan	Κύκνος	ברבור	Cigno	はくちょう座	고니자리	हंस	قو	Łabędź	Cisne	Лебедь	Cisne	Svanen	Kuğu	Лебідь
+Delphinus	Dolphin	الدلفين	海豚座	Delfín	Delfiin	Delfiini	Dauphin	Delphin	Δελφίν	דולפין	Delfino	いるか座	돌고래자리	तिमि	دُلفین	Dalfin	Delfim	Дельфин	Delfín	Delfinen	Yunus	Дельфін
+Dorado	Goldfish	أبو سيف	劍魚座	Mečoun	Kuldkala	Kultakala	Dorade	Goldfisch	Δοράς	דג זהב	Pesce Dorato	かじき座	황새치자리	असिदंष्ट्र	زَرماهی	Złota Ryba	Dourado	Золотая Рыба	Pez dorado	Svärdfisken	Kılıçbalığı	Золота Риба
+Draco	Dragon	التنين	天龍座	Drak	Lohe	Lohikäärme	Dragon	Drache	Δράκων	דרקון	Dragone	りゅう座	용자리	कालेय	اژدها	Smok	Dragão	Дракон	Dragón	Draken	Ejderha	Дракон
+Equuleus	Colt	قطعة الفرس	小馬座	Koníček	Hobu	Pieni hevonen	Petit Cheval	Füllen	Ιππάριον	סוסון	Cavallo	こうま座	조랑말자리	अश्वमुख	پاره‌یِ اسب	Źrebię	Cabeça de Cavalo	Малый Конь	Caballito	Lilla hästen	Tay	Малий Кінь
+Eridanus	Eridanus	النهر	波江座	Eridanus	Eriidanus	Eridanus	Eridan	Eridanus	Ηριδανός	ארידנוס	Fiume Eridano	エリダヌス座	에리다누스자리	यमुना	رودخانه	Erydan	Eridano	Эридан	Erídano	Floden	Irmak	Ерідан
+Fornax	Furnace	الكور	天爐座	Pec	Ahi	Sulatusuuni	Fourneau	Chemischer Ofen	Κάμινος	תנור	Fornace	ろ座	화로자리	अश्मंत	کوره	Piec	Forno	Печь	Horno	Ugnen	Ocak	Піч
+Gemini	Twins	التوأمان	雙子座	Blíženci	Kaksikud	Kaksoset	Gémeaux	Zwillinge	Δίδυμοι	תאומים	Gemelli	ふたご座	쌍둥이자리	मिथुन	دوپیِکَر	Bliźnięta	Gêmeos	Близнецы	Géminis, Gemelos	Tvillingarna	İkizler	Близнюки
+Grus	Crane	الكركي	天鶴座	Jeřáb	Kurg	Kurki	Grue	Kranich	Γερανός	עגור	Gru	つる座	두루미자리	बक	دُرنا	Żuraw	Grou	Журавль	Grulla	Tranan	Turna	Журавель
+Hercules	Hercules	الجاثي	武仙座	Herkules	Herkules	Herkules	Hercule	Herkules	Ηρακλής	הרקולס	Ercole	ヘルクレス座	허큘리스자리	शौरि	بر زانو نشسته	Herkules	Hércules	Геркулес	Hércules	Herkules	Herkül	Геркулес
+Horologium	Clock	الساعة	時鐘座	Hodiny	Kell	Heilurikello	Horloge	Pendeluhr	Ωρολόγιον	שעון מטוטלת	Orologio	とけい座	시계자리	कालयंत्र	ساعت	Zegar	Relógio	Часы	Reloj	Uret	Saat	Годинник
+Hydra	Sea Serpent	الحية	長蛇座	Hydra	Hüdra	Vesikäärme	Hydre Femelle	(Nördliche) Wasser-schlange	Ύδρα	נחש מים	Idra femmina	うみへび座	바다뱀자리	वासुकि	آب‌مار	Hydra	Cobra Fêmea	Гидра	Hidra	Vattenormen	Suyılanı	Гідра
+Hydrus	Hydrus	ثعبان البحر	水蛇座	Malý vodní had	Lõunahüdra	Etelän vesikäärme	Hydre Mâle	Kleine (Südliche, Männliche) Wasser-schlange	Ύδρος	נחש מים קטן	Idra maschio	みずへび座	물뱀자리	अलगर्द	نَرمار	Wąż Wodny	Cobra macho	Южная Гидра	Hidra Macho, Serpiente marina	Lilla vattenormen	Küçük-suyılanı	Південна Гідра
+Indus	Indian	الهندي	印第安座	Indián	Indiaanlane	Intiaani	Indien	Indianer, Inder	Ινδός	אינדיאני	Indiano	インディアン座	인디언자리	यम	هندی	Indianin	Índio	Индеец	Indio	Indianen	Hintli	Індієць
+Lacerta	Lizard	العظاءة	蠍虎座	Ještěrka	Sisalik	Sisilisko	Lézard	Eidechse	Σαύρα	לטאה	Lucertola	とかげ座	도마뱀자리	सरठ	چَلپاسه	Jaszczurka	Lagarto	Ящерица	Lagarto	Ödlan	Kertenkele	Ящірка
+Leo	Lion	الأسد	獅子座	Lev	Lõvi	Leijona	Lion	Löwe	Λέων	אריה	Leone	しし座	사자자리	सिंह	شیر	Lew	Leão	Лев	León	Lejonet	Aslan	Лев
+Leo Minor	Little Lion	الأسد الأصغر	小獅座	Malý lev	Väike Lõvi	Pieni leijona	Petit Lion	Kleiner Löwe	Λέων Μικρός	אריה קטן	Leone Minore	こじし座	작은사자자리	लघु सिंह	شیرِ کِهتَر	Mały Lew	Leão Menor	Малый Лев	León Menor, León Pequeño	Lilla lejonet	Küçük Aslan	Малий Лев
+Lepus	Hare	الأرنب	天兔座	Zajíc	Jänes	Jänis	Lièvre	Hase	Λαγωός	ארנבת	Lepre	うさぎ座	토끼자리	शशक	خرگوش	Zając	Lebre	Заяц	Conejo	Haren	Tavşan	Заєць
+Libra	Balance	الميزان	天秤座	Váhy	Kaalud	Vaaka	Balance	Waage	Ζυγός	מאזניים	Bilancia	てんびん座	천칭자리	तुळ	ترازو	Waga	Libra	Весы	Balanza	Vågen	Terazi	Терези
+Lupus	Wolf	السبع	豺狼座	Vlk	Hunt	Susi	Loup	Wolf	Λύκος	זאב	Lupo	おおかみ座	이리자리	वृक	گُرگ	Wilk	Lobo	Волк	Lobo	Vargen	Kurt	Вовк
+Lynx	Lynx	الوشق	天貓座	Rys	Ilves	Ilves	Lynx	Luchs	Λυγξ	לינקס	Lince	やまねこ座	살쾡이자리	गवय	سیاه‌گوش	Ryś	Lince	Рысь	Lince	Lodjuret	Vaşak	Рись
+Lyra	Lyre	القيثارة	天琴座	Lyra	Lüüra	Lyyra	Lyre	Leier	Λύρα	נבל	Lira	こと座	거문고자리	स्वरमंडळ	چَنگِ رومی	Lutnia	Lira	Лира	Lira	Lyran	Çalgı	Ліра
+Mensa	Mensa	الجبل	山案座	Tabulová hora	Lavamägi	Pöytävuori	Table	Tafelberg	Τράπεζα	הר השולחן	Mensa	テーブルさん座	테이블산자리	त्रिकुट	کوه‌میز	Góra Stołowa	Montanha da Mesa	Столовая Гора	Mesa	Taffelberget	Masa	Столова Гора
+Microscopium	Microscope	المجهر	顯微鏡座	Mikroskop	Mikroskoop	Mikroskooppi	Microscope	Mikroskop	Μικροσκόπιον	מיקרוסקופ	Microscopio	けんびきょう座	현미경자리	सूक्ष्मदर्शी	ریزبین	Mikroskop	Microscópio	Микроскоп	Microscopio	Mikroskopet	Mikroskop	Мікроскоп
+Monoceros	Unicorn	وحيد القرن	麒麟座	Jednorožec	Ükssarvik	Yksisarvinen	Licorne	Einhorn	Μονόκερως	חד קרן	Unicorno	いっかくじゅう座	외뿔소자리	शृंगाश्व	تک‌شاخ	Jednorożec	Unicórnio	Единорог	Unicornio	Enhörningen	Tekboynuz	Одноріг
+Musca	Fly	الذبابة	蒼蠅座	Moucha	Kärbes	Kärpänen	Mouche	Fliege	Μυία	זבוב	Mosca	はえ座	파리자리	मक्षिका	مَگَس	Mucha	Mosca	Муха	Mosca, Abeja	Flugan	Sinek	Муха
+Norma	Level	مربع النجار	矩尺座	Pravítko	Vinkel	Kulmaviivoitin	Règle	Winkelmaß	Γνώμων	סרגל	Squadra	じょうぎ座	직각자자리	रेखाटणी	چارگوش	Węgielnica	Régua	Наугольник	Escuadra, Regla	Vinkelhaken	Cetvel	Косинець
+Octans	Octant	الثمن	南極座	Oktant	Oktant	Oktantti	Octant	Oktant	Οκτάς	אוקטנט	Ottante	はちぶんぎ座	팔분의자리	अष्टक	هَشتَک	Oktant	Octante	Октант	Octante, Bastón	Oktanten	Sekizlik	Октант
+Ophiuchus	Ophiuchus	الحواء	蛇夫座	Hadonoš	Maokandja	Käärmeen-kantaja	Ophiuchus	Schlangen-träger	Οφιούχος	נושא הנחש	Ofiucho	へびつかい座	뱀주인자리	भुजंगधारी	ماراَفسای	Wężownik	Ofiúco	Змееносец	Ofiuco, Serpentario	Ormbäraren	Yılancı	Змієносець
+Orion	Orion	الجبار	獵戶座	Orion	Orion	Orion	Orion	Orion	Ωρίων	אוריון	Orione	オリオン座	오리온자리	मृग	شکارچی	Orion	Órion	Орион	Orión	Orion	Avcı	Оріон
+Pavo	Peacock	الطاووس	孔雀座	Páv	Paabulind	Riikinkukko	Paon	Pfau	Ταώς	טווס	Pavone	くじゃく座	공작자리	मयुर	طاووس	Paw	Pavão	Павлин	Pavo	Påfågeln	Tavus	Павич
+Pegasus	Flying Horse	الفرس الأعظم	飛馬座	Pegas	Pegasus	Pegasus	Pégase	Pegasus	Πήγασος	פגסוס	Pegaso	ペガスス座	페가수스자리	उच्चै:श्रवा	اسب بال‌دار	Pegaz	Pégaso	Пегас	Pegaso	Pegasus	Kanatlıat	Пегас
+Perseus	Perseus	حامل رأس الغول	英仙座	Perseus	Perseus	Perseus	Persée	Perseus	Περσεύς	פרסאוס	Perseo	ペルセウス座	페르세우스자리	ययाती	پَرساوُش	Perseusz	Perseu	Персей	Perseo	Perseus	Kahraman	Персей
+Phoenix	Phoenix	العنقاء	鳳凰座	Fénix	Fööniks	Feeniks	Phénix	Phoenix	Φοίνιξ	עוף החול	Fenice	ほうおう座	봉황자리	जटायू	سیمرغ	Feniks	Fênix	Феникс	Fénix	Fenix	Anka	Фенікс
+Pictor	Painter	آلة الرسام	繪架座	Malíř	Maalija	Maalari	Peintre	Maler	Οκρίβας	כן ציור	Pittore	がか座	화가자리	चित्रफलक	سه‌پایه	Malarz	Cavalete do Pintor	Живописец	Paleta del Pintor	Målaren	Ressam	Живописець
+Pisces	Fishes	الحوت	雙魚座	Ryby	Kalad	Kalat	Poissons	Fische	Ιχθύες	דגים	Pesci	うお座	물고기자리	मीन	دوماهی	Ryby	Peixes	Рыбы	Peces	Fiskarna	Balık	Риби
+Piscis Austrinus	Southern Fish	الحوت الجنوبي	南魚座	Jižní ryba	Lõunakala	Etelän kala	Poisson Austral	Südlicher Fisch	Ιχθύς Νότιος	דג דרומי	Pesce Australe	みなみのうお座	남쪽물고기자리	दक्षिण मत्स्य	ماهیِ نیم‌روزی	Ryba Południowa	Peixe Austral	Южная Рыба	Pez Austral	Södra fisken	Güneybalığı	Південна Риба
+Puppis	Poop Deck	الكوثل	船尾座	Lodní záď	Ahter	Peräkeula	Poupe	Achterdeck	Πρύμνη	ירכתי הספינה	Poppa	とも座	고물자리	नौका अरित्र	کشتی‌دُم	Rufa	Popa	Корма	Popa	Akterskeppet	Pupa	Корма
+Pyxis	Compass (mariner's)	بيت الإبرة	羅盤座	Kompas	Kompass	Kompassi	Boussole	Schiffs-kompass	Πυξίς	מצפן	Bussola	らしんばん座	나침반자리	दिग्दर्शक	قطب‌نما	Kompas	Bússola	Компас	Brújula	Kompassen	Kumpas	Компас
+Reticulum	Net	الشبكة	網罟座	Síť	Võrk	Verkko	Réticule	Netz	Δίκτυον	רשת	Reticolo	レチクル座	그물자리	जाल	تاربَست	Sieć	Retículo	Сетка	Retículo, Árbol	Romboidska nätet	Ağcık	Сітка
+Sagitta	Arrow	السهم	天箭座	Šíp	Nool	Nuoli	Flèche	Pfeil	Βέλος	חץ	Freccia	や座	화살자리	शर	پیکان	Strzała	Flecha	Стрела	Flecha, Saeta	Pilen	Okçuk	Стріла
+Sagittarius	Archer	الرامي	人馬座	Střelec	Ambur	Jousimies	Sagittaire	Schütze	Τοξότης	קשת	Sagittario	いて座	궁수자리	धनु	نیم‌اسب	Strzelec	Sagitário	Стрелец	Sagitario, Arquero	Skytten	Yay	Стрілець
+Scorpius	Scorpion	العقرب	天蠍座	Štír	Skorpion	Skorpioni	Scorpion	Skorpion	Σκορπιός	עקרב	Scorpione	さそり座	전갈자리	वृश्चिक	کَژدُم	Skorpion	Escorpião	Скорпион	Escorpio, Escorpión	Skorpionen	Akrep	Скорпіон
+Sculptor	Sculptor	معمل النحات	玉夫座	Sochař	Kujur	Kuvan-veistäjä	Sculpteur	Bildhauer	Γλύπτης	פסל	Scultore	ちょうこくしつ座	조각가자리	पाषाणकुट्टक	سنگ‌تراش	Rzeźbiarz	Escultor	Скульптор	Escultor	Bildhuggaren	Heykeltraş	Скульптор
+Scutum	Shield	الترس	盾牌座	Štít	Kilp	Kilpi	Écu de Sobieski	Schild	Ασπίς	מגן	Scudo	たて座	방패자리	फलक	سِپَر	Tarcza	Escudo	Щит	Escudo	Sobieskis sköld	Kalkan	Щит
+Serpens	Serpent	الحية	巨蛇座 (头)	Had	Madu	Käärme	Serpent	Schlange	Όφις	נחש	Serpente	へび座	뱀자리	भुजंग	افعی	Wąż	Serpente	Змея	Serpiente	Ormen	Yılan	Змія
+Sextans	Sextant	السدس	六分儀座	Sextant	Sekstant	Sekstantti	Sextant	Sextant	Εξάς	סקסטנט	Sestante	ろくぶんぎ座	육분의자리	षडंश	سِکِستان	Sekstant	Sextante	Секстант	Sextante	Sextanten	Altılık	Секстант
+Taurus	Bull	الثور	金牛座	Býk	Sõnn	Härkä	Taureau	Stier	Ταύρος	שור	Toro	おうし座	황소자리	वृषभ	گاو	Byk	Touro	Телец	Tauro, Toro	Oxen	Boğa	Телець
+Telescopium	Telescope	المرقب	望遠鏡座	Dalekohled	Teleskoop	Kaukoputki	Télescope	Teleskop	Τηλεσκόπιον	טלסקופ	Telescopio	ぼうえんきょう座	망원경자리	दूरदर्शी	تِلِسکوپ	Teleskop	Telescópio	Телескоп	Telescopio	Kikaren	Dürbün	Телескоп
+Triangulum	Triangle	المثلث	三角座	Trojúhelník	Kolmnurk	Kolmio	Triangle	Dreieck	Τρίγωνον	משולש	Triangolo	さんかく座	삼각형자리	त्रिकोण	سه‌گوش	Trójkąt	Triângulo	Треугольник	Triángulo	Triangeln	Üçgen	Трикутник
+Triangulum Australe	Southern Triangle	المثلث الجنوبي	南三角座	Jižní trojúhelník	Lõunakolmnurk	Etelän kolmio	Triangle Austral	Südliches Dreieck	Τρίγωνον Νότιον	משולש צפוני	Triangolo Australe	みなみのさんかく座	남쪽삼각형자리	दक्षिण त्रिकोण	سه‌گوشِ جنوبی	Trójkąt Południowy	Triângulo Austral	Южный Треугольник	Triángulo Austral	Södra triangeln	Güney Üçgeni	Південний Трикутник
+Tucana	Toucan	الطوقان	杜鵑座	Tukan	Tuukan	Tukaani	Toucan	Tukan	Τουκάνα	טוקאן	Tucano	きょしちょう座	큰부리새자리	कारंडव	توکایی	Tukan	Tucano	Тукан	Tucán	Tukanen	Tukan	Тукан
+Ursa Maior	Big Dipper, Great Bear, Plough	الدب الأكبر	大熊座	Velká medvědice	Suur Vanker	Iso karhu	Grande Ourse	Großer Bär	Άρκτος Μεγάλη	הדובה הגדולה	Orsa Maggiore	おおぐま座	큰곰자리	सप्तर्षी	خِرسِ مِهتَر	Wielka Niedźwiedzica	Ursa Maior	Большая Медведица	Osa Mayor	Stora björnen	Büyük Ayı	Велика Ведмедиця
+Ursa Minor	Little Bear, Little Dipper	الدب الأصغر	小熊座	Malý medvěd	Väike Vanker	Pieni karhu	Petite Ourse	Kleiner Bär	Άρκτος Μικρή	הדובה הקטנה	Orsa Minore	こぐま座	작은곰자리	लघु ऋक्ष	خِرسِ کِهتَر	Mała Niedźwiedzica	Ursa Menor	Малая Медведица	Osa Pequeño, Osa Menor	Lilla björnen	Küçük Ayı	Мала Ведмедиця
+Vela	Sails	الشجاع	船帆座	Plachty	Purjed	Purje	Voiles	Segel	Ιστία	מפרש	Vela	ほ座	돛자리	नौ-शीर्ष	بادبان‌ها	Żagiel	Vela	Паруса	Velamen	Seglet	Yelken	Паруси
+Virgo	Virgin	العذراء	處女座	Panna	Neitsi	Neitsyt	Vierge	Jungfrau	Παρθένος	בתולה	Vergine	おとめ座	처녀자리	कन्या	خوشه	Panna	Virgem	Дева	Virgen	Jungfrun	Başak	Діва
+Volans	Flying Fish	السمكة الطائرة	飛鱼座	Létající ryba	Lendkala	Lentokala	Poisson Volant	Fliegender Fisch	Ιχθύς Ιπτάμενος	דג מעופף	Pesce volante	とびうお座	날치자리	तिमि	ماهیِ پرنده	Ryba Latająca	Peixe Voador	Летучая Рыба	Pez Volador	Flygfisken	Uçanbalık	Летюча Риба
+Vulpecula	Little Fox	الثعلب	狐狸座	Lištička	Rebane	Kettu	Petit Renard	Fuchs	Αλώπηξ	שועלון	Volpetta	こぎつね座	작은여우자리	जंबुक	روباه	Lisek	Raposa	Лисичка	Zorro	Räven	Tilkicik	Лисичка

@@ -3,7 +3,10 @@
 session:
   learn_count: 7      # 5–10, number of constellations in learn mode
   quiz_count: 7      # 5–10, number of constellations per quiz
-  always_include: "Große Bärin (Ursa Major)"  # always in selection
+  # IAU designation as in constellations.json ``iau_name`` (stable across UI languages)
+  always_include_iau: "Ursa Major"
+  # Optional legacy: full display string (any locale) or "Name (IAU)"
+  # always_include: "Große Bärin (Ursa Major)"
 
 display:
   star_size_min: 1

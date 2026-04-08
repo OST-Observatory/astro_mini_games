@@ -111,6 +111,36 @@ class AstroApp(App):
         self._apply_locale()
         self._sync_idle_warning_text()
 
+    def _keep_when_clearing_root_overlays(self, child) -> bool:
+        """
+        Return True for root children that must not be removed when swapping screen overlays.
+
+        :class:`LanguageSwitcher` is added in :meth:`on_start`. Apps that clear most root
+        children must keep it via this hook, or the language bar disappears after the
+        first screen change.
+        """
+        return child is getattr(self, "_lang_switcher", None)
+
+    def _root_clear_screen_overlays(self):
+        """Remove all root widgets except persistent ones (e.g. LanguageSwitcher)."""
+        if not self.root:
+            return
+        for child in self.root.children[:]:
+            if self._keep_when_clearing_root_overlays(child):
+                continue
+            self.root.remove_widget(child)
+
+    def ensure_lang_switcher_on_top(self):
+        """
+        Re-attach the language switcher as the last root child so it receives touches
+        above fullscreen overlays (learn/quiz screens).
+        """
+        sw = getattr(self, "_lang_switcher", None)
+        if not sw or not self.root or sw.parent is not self.root:
+            return
+        self.root.remove_widget(sw)
+        self.root.add_widget(sw)
+
     def _apply_locale(self):
         """Override in subclasses to refresh visible strings after locale change."""
         if self._lang_switcher:

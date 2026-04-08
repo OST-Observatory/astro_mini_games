@@ -103,7 +103,7 @@ class QuizApp(AstroApp):
         self._to_question()
 
     def _to_question(self):
-        self.root.clear_widgets()
+        self._root_clear_screen_overlays()
         q = self.game.current_question
         if not q:
             self._to_result()
@@ -113,6 +113,7 @@ class QuizApp(AstroApp):
         self.question_screen.show_question(q, timer_sec)
         self.question_screen.update_stats(self.game.points, self.game.streak)
         self.root.add_widget(self.question_screen)
+        self.ensure_lang_switcher_on_top()
         self.current_screen = "question"
 
     def _on_answer(self, answer_index=None, elapsed=0, timeout=False):
@@ -124,7 +125,7 @@ class QuizApp(AstroApp):
         self._to_question()
 
     def _to_result(self):
-        self.root.clear_widgets()
+        self._root_clear_screen_overlays()
         self.result_screen.show_result(
             points=self.game.points,
             correct=self.game.correct_count,
@@ -133,11 +134,13 @@ class QuizApp(AstroApp):
             answer_history=self.game.answer_history,
         )
         self.root.add_widget(self.result_screen)
+        self.ensure_lang_switcher_on_top()
         self.current_screen = "result"
 
     def _to_start(self):
-        self.root.clear_widgets()
+        self._root_clear_screen_overlays()
         self.root.add_widget(self.start_screen)
+        self.ensure_lang_switcher_on_top()
         self.current_screen = "start"
 
     def _on_keyboard(self, window, key, scancode, codepoint, modifier):

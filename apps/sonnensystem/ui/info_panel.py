@@ -4,9 +4,12 @@ from datetime import date, datetime
 
 from kivy.animation import Animation
 from kivy.graphics import Color, RoundedRectangle
+from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.widget import Widget
 
 from ui.theme import Colors, SPACING_MD, RADIUS_LG, MIN_TOUCH_TARGET
 from shared.i18n import tr
@@ -47,26 +50,53 @@ class InfoPanel(BoxLayout):
             Color(*Colors.BG_PANEL)
             self._bg_rect = RoundedRectangle(pos=self.pos, size=self.size, radius=[RADIUS_LG] * 4)
         self.bind(pos=self._update_bg, size=self._update_bg)
+
+        self.add_widget(Widget(size_hint_y=1))
+
+        self._body = BoxLayout(
+            orientation="vertical",
+            spacing=6,
+            size_hint_y=None,
+        )
         self.label_name = Label(
             text="",
             font_name=_font(),
-            font_size="28sp",
+            font_size="26sp",
             bold=True,
             color=Colors.ACCENT,
             size_hint_y=None,
-            height=50,
+            height=40,
+            halign="left",
+            valign="bottom",
         )
-        self.add_widget(self.label_name)
+        self.label_name.bind(
+            size=lambda *x: setattr(self.label_name, "text_size", (self.label_name.width, None)),
+            texture_size=lambda lbl, s: setattr(lbl, "height", max(40, s[1])),
+        )
+        self._body.add_widget(self.label_name)
+
+        self._info_scroll = ScrollView(
+            size_hint_y=None,
+            height=dp(400),
+            do_scroll_x=False,
+            bar_width=8,
+        )
         self.label_info = Label(
             text="",
             font_name=_font(),
             font_size="20sp",
             color=Colors.TEXT_SECONDARY,
             halign="left",
-            size_hint_y=1,
+            valign="top",
+            size_hint_y=None,
         )
-        self.label_info.bind(size=lambda *x: setattr(self.label_info, "text_size", (self.label_info.width - 24, None)))
-        self.add_widget(self.label_info)
+        self._info_scroll.bind(width=self._sync_info_text_width)
+        self.label_info.bind(
+            texture_size=lambda lbl, s: setattr(lbl, "height", max(s[1], 1)),
+        )
+        self._info_scroll.add_widget(self.label_info)
+        self._body.add_widget(self._info_scroll)
+
         self.label_sim_time = Label(
             text="",
             font_name=_font(),
@@ -74,8 +104,16 @@ class InfoPanel(BoxLayout):
             color=Colors.TEXT_SECONDARY,
             size_hint_y=None,
             height=24,
+            halign="left",
         )
-        self.add_widget(self.label_sim_time)
+        self.label_sim_time.bind(
+            size=lambda *x: setattr(self.label_sim_time, "text_size", (self.label_sim_time.width, None)),
+        )
+        self._body.add_widget(self.label_sim_time)
+
+        self.add_widget(self._body)
+        self.add_widget(Widget(size_hint_y=1))
+
         self._close_btn = Button(
             text=tr("sonnensystem_info.close"),
             font_name=_font(),
@@ -95,6 +133,11 @@ class InfoPanel(BoxLayout):
         self._close_btn.text = tr("sonnensystem_info.close")
         if self._last_planet_name and self.opacity > 0.01:
             self._populate_content(self._last_planet_name, self._last_sim_date)
+
+    def _sync_info_text_width(self, *_args):
+        w = self._info_scroll.width
+        if w > 8:
+            self.label_info.text_size = (w - 16, None)
 
     def _update_bg(self, *args):
         if hasattr(self, "_bg_rect"):
@@ -128,6 +171,7 @@ class InfoPanel(BoxLayout):
                 if val != field_key:
                     lines.append(key_labels[k] + val)
         self.label_info.text = "\n\n".join(lines) if lines else tr("sonnensystem_info.no_data")
+        self._sync_info_text_width()
 
         if sim_date is not None:
             fmt = tr("sonnensystem_info.sim_date_fmt")

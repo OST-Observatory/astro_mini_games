@@ -58,6 +58,7 @@ sternbilder:
   mode_mc: "Multiple Choice"
   back_home: "Zurück zur Startseite"
   swipe_hint: "Blättere mit den Pfeilen oder durch Wischen nach links bzw. rechts."
+  find_label: "Finde:"
   big_dipper_note: "Der Große Wagen ist lediglich ein Teil des Sternbildes Große Bärin."
   quiz_done_title: "Quiz beendet!"
   quiz_score: "{points} von {max_points} Punkten"
