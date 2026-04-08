@@ -22,6 +22,21 @@ from launcher.widgets.stats_overlay import StatsOverlay
 from launcher.widgets.tile import AppTile
 from shared.config_path import get_launcher_config_path
 from shared.debug_keys import try_debug_tty2
+from shared.i18n import (
+    denormalize_apps_list,
+    ensure_locale_env,
+    get_config_locale,
+    get_locale,
+    register_locale_callback,
+    revert_to_config_locale,
+    tr,
+    unregister_locale_callback,
+)
+from shared.widgets.language_switcher import LanguageSwitcher
+
+# After this many seconds without touch/keyboard on the launcher, revert UI language
+# to ``i18n.locale`` in config when it differs from the current locale (kiosk).
+LOCALE_IDLE_RESET_SEC = 120.0
 
 
 class AstroLauncherApp(App):
@@ -37,6 +52,9 @@ class AstroLauncherApp(App):
         self.process_check_event = None
         self.wiggle_event = None
         self.app_tiles = []  # References to tiles
+        self._lang_switcher = None
+        self._launcher_locale_idle_event = None
+        self._project_root = Path(__file__).resolve().parent.parent
         self.is_dev_mode = (
             "--dev" in sys.argv or os.environ.get("ASTRO_DEV", "0") == "1"
         )
@@ -46,12 +64,12 @@ class AstroLauncherApp(App):
         self.load_config()
 
         kv_path = Path(__file__).parent.parent / "views" / "launcher.kv"
-        print(f"📄 Loading KV file: {kv_path}")
+        print(f"Loading KV: {kv_path}")
 
         if kv_path.exists():
             root = Builder.load_file(str(kv_path))
         else:
-            print(f"✗ KV file not found: {kv_path}")
+            print(f"KV file not found: {kv_path}")
             return None
 
         if Window:
@@ -73,9 +91,9 @@ class AstroLauncherApp(App):
         try:
             grid = self.root.ids.app_grid
             starfield = self.root.ids.starfield
-            print(f"✓ UI elements found")
+            print("Launcher UI elements OK")
         except (AttributeError, KeyError) as e:
-            print(f"⚠ UI elements not found: {e}")
+            print(f"Launcher UI missing: {e}")
             return
 
         # Configure background
@@ -99,7 +117,14 @@ class AstroLauncherApp(App):
             placeholder = Widget(size_hint=(1, 1))
             grid.add_widget(placeholder)
 
-        print(f"✓ {len(self.apps)} App-Kacheln erstellt")
+        print(f"Created {len(self.apps)} app tiles")
+
+        self._lang_switcher = LanguageSwitcher(project_root=self._project_root)
+        # Leave margin so the row is not clipped at the window edge (KMS / window chrome).
+        self._lang_switcher.pos_hint = {"right": 0.97, "top": 0.98}
+        self.root.add_widget(self._lang_switcher)
+        register_locale_callback(self._on_launcher_locale_changed)
+        self._refresh_launcher_i18n()
 
         # Start wiggle timer
         self._schedule_wiggle()
@@ -110,6 +135,59 @@ class AstroLauncherApp(App):
             tap_area.on_activate_callback = self._show_stats_overlay
         except (AttributeError, KeyError):
             pass
+
+        if Window:
+            Window.bind(on_touch_down=self._on_window_touch_for_idle_locale)
+        self._schedule_launcher_locale_idle()
+
+    def _cancel_launcher_locale_idle(self):
+        if self._launcher_locale_idle_event is not None:
+            self._launcher_locale_idle_event.cancel()
+            self._launcher_locale_idle_event = None
+
+    def _schedule_launcher_locale_idle(self):
+        self._cancel_launcher_locale_idle()
+        self._launcher_locale_idle_event = Clock.schedule_once(
+            self._on_launcher_locale_idle, LOCALE_IDLE_RESET_SEC
+        )
+
+    def _bump_launcher_locale_idle(self):
+        if self.current_process is not None:
+            return
+        self._schedule_launcher_locale_idle()
+
+    def _on_window_touch_for_idle_locale(self, window, touch):
+        self._bump_launcher_locale_idle()
+
+    def _on_launcher_locale_idle(self, dt):
+        self._launcher_locale_idle_event = None
+        if self.current_process is not None:
+            self._schedule_launcher_locale_idle()
+            return
+        cfg_loc = get_config_locale(self._project_root)
+        if get_locale() == cfg_loc:
+            self._schedule_launcher_locale_idle()
+            return
+        revert_to_config_locale(self._project_root)
+        print(f"Launcher idle: locale reverted to config default ({cfg_loc})")
+        self._schedule_launcher_locale_idle()
+
+    def _on_launcher_locale_changed(self, code: str):
+        self._refresh_launcher_i18n()
+
+    def _refresh_launcher_i18n(self):
+        """Refresh denormalized apps, tiles, and dev label after locale change."""
+        raw = self.config_data.get("apps", [])
+        enabled = [a for a in raw if a.get("enabled", True)]
+        self.apps = denormalize_apps_list(enabled, get_locale())
+        for tile, cfg in zip(self.app_tiles, self.apps):
+            tile.app_config = cfg
+        try:
+            self.root.ids.dev_label.text = tr("launcher.dev_label")
+        except (AttributeError, KeyError):
+            pass
+        if self._lang_switcher:
+            self._lang_switcher.refresh_highlight()
 
     def _show_stats_overlay(self):
         """Shows the usage statistics overlay."""
@@ -145,46 +223,49 @@ class AstroLauncherApp(App):
             if available_tiles:
                 tile = random.choice(available_tiles)
                 tile.wiggle()
-                print(f"🎯 Wackeln: {tile.app_name}")
+                print(f"Tile wiggle: {tile.app_name}")
 
         # Schedule next wiggle
         self._schedule_wiggle()
 
     def load_config(self):
-        """Loads configuration from config.yaml or config_default.yaml."""
-        config_path = get_launcher_config_path()
+        """Loads the active launcher config file (config.yaml or config_default.yaml)."""
+        config_path = get_launcher_config_path(self._project_root)
 
         try:
             with open(config_path, "r", encoding="utf-8") as f:
-                self.config_data = yaml.safe_load(f)
+                self.config_data = yaml.safe_load(f) or {}
 
             all_apps = self.config_data.get("apps", [])
-            self.apps = [app for app in all_apps if app.get("enabled", True)]
+            enabled = [app for app in all_apps if app.get("enabled", True)]
+            self.apps = denormalize_apps_list(enabled, get_locale())
 
-            print(f"✓ {len(self.apps)} apps loaded (from {config_path.name})")
+            print(f"Loaded {len(self.apps)} apps from {config_path.name}")
 
         except FileNotFoundError:
             print(
-                f"⚠ No launcher config found: expected config.yaml or "
-                f"config_default.yaml next to main.py ({config_path})"
+                f"No launcher config: expected config.yaml or config_default.yaml ({config_path})"
             )
             self.apps = []
         except Exception as e:
-            print(f"✗ Error loading config: {e}")
+            print(f"Error loading config: {e}")
             self.apps = []
 
     def launch_app(self, app_config: dict):
         """Launches an external app."""
         command = app_config.get("command", "")
-        app_name = app_config.get("name", "Unbekannt")
+        app_name = app_config.get("name", "unknown")
         app_id = app_config.get("id", "unknown")
 
         if not command:
-            print(f"⚠ No command defined for {app_name}")
+            print(f"No command for app {app_name}")
             return
 
-        print(f"🚀 Starting: {app_name}")
-        print(f"   Command: {command}")
+        self._cancel_launcher_locale_idle()
+
+        os.environ["ASTRO_LANG"] = get_locale()
+        print(f"Starting app: {app_name}")
+        print(f"  command: {command}")
 
         # Pause wiggle
         if self.wiggle_event:
@@ -196,14 +277,19 @@ class AstroLauncherApp(App):
             # Dev: minimize window, monitor subprocess
             Window.minimize()
             try:
+                env = os.environ.copy()
+                env["ASTRO_LANG"] = get_locale()
                 self.current_process = subprocess.Popen(
-                    command, shell=True, cwd=Path(__file__).parent.parent
+                    command,
+                    shell=True,
+                    cwd=Path(__file__).parent.parent,
+                    env=env,
                 )
                 self.process_check_event = Clock.schedule_interval(
                     self.check_process, 0.5
                 )
             except Exception as e:
-                print(f"✗ Error starting: {e}")
+                print(f"Error starting app: {e}")
                 self.on_app_closed()
         elif from_wrapper:
             # Launcher was started by wrapper: exec to app (like non-wrapper mode).
@@ -318,13 +404,18 @@ class AstroLauncherApp(App):
         Window.restore()
         Window.raise_window()
 
-        print("↩ Back to app overview")
+        print("Back to app overview")
+
+        # App may have called set_locale in another process; re-read locale.yaml and refresh UI.
+        ensure_locale_env(self._project_root, notify=True)
 
         # Restart wiggle
         self._schedule_wiggle()
+        self._schedule_launcher_locale_idle()
 
     def on_keyboard(self, window, key, scancode, codepoint, modifier):
         """Keyboard events."""
+        self._bump_launcher_locale_idle()
         if try_debug_tty2(key, modifier):
             return True
         if key == 27:  # ESC
@@ -338,6 +429,13 @@ class AstroLauncherApp(App):
 
     def on_stop(self):
         """Cleanup on exit."""
+        self._cancel_launcher_locale_idle()
+        if Window:
+            try:
+                Window.unbind(on_touch_down=self._on_window_touch_for_idle_locale)
+            except Exception:
+                pass
+        unregister_locale_callback(self._on_launcher_locale_changed)
         if self.wiggle_event:
             self.wiggle_event.cancel()
         if self.process_check_event:

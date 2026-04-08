@@ -6,6 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from ui.theme import Colors, MIN_TOUCH_TARGET
 from ui.rounded_button import RoundedButton
+from shared.i18n import tr
 
 
 def _font():
@@ -22,8 +23,8 @@ class SuccessOverlay(FloatLayout):
         self.opacity = 0
         self.disabled = True
 
-        title = Label(
-            text="Fertig!",
+        self._title_lbl = Label(
+            text=tr("astro_puzzle.done"),
             font_name=_font(),
             font_size="48sp",
             bold=True,
@@ -31,11 +32,11 @@ class SuccessOverlay(FloatLayout):
             size_hint=(0.5, 0.3),
             pos_hint={"center_x": 0.5, "center_y": 0.65},
         )
-        self.add_widget(title)
+        self.add_widget(self._title_lbl)
 
         btn_h = MIN_TOUCH_TARGET + 16
-        restart_btn = RoundedButton(
-            text="Nochmal spielen",
+        self._restart_btn = RoundedButton(
+            text=tr("astro_puzzle.play_again"),
             font_name=_font(),
             font_size="24sp",
             size_hint=(None, None),
@@ -43,8 +44,12 @@ class SuccessOverlay(FloatLayout):
             pos_hint={"center_x": 0.5, "center_y": 0.4},
             background_color=Colors.ACCENT,
         )
-        restart_btn.bind(on_release=lambda x: self._do_restart())
-        self.add_widget(restart_btn)
+        self._restart_btn.bind(on_release=lambda x: self._do_restart())
+        self.add_widget(self._restart_btn)
+
+    def apply_i18n(self):
+        self._title_lbl.text = tr("astro_puzzle.done")
+        self._restart_btn.text = tr("astro_puzzle.play_again")
 
     def collide_point(self, x, y):
         """Pass through touch when disabled (hidden)."""

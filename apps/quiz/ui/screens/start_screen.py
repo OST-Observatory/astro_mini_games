@@ -11,19 +11,11 @@ from kivy.uix.spinner import Spinner, SpinnerOption
 from ui.theme import Colors, SPACING_LG, SPACING_MD, SPACING_SM, MIN_TOUCH_TARGET, RADIUS_LG
 from ui.rounded_button import RoundedButton
 from quiz.question_loader import get_categories_for_difficulty
+from shared.i18n import tr
 
-DIFFICULTY_OPTIONS = [
-    ("laie", "Laie"),
-    ("amateur", "Amateur"),
-    ("astronom", "Astronom"),
-]
+DIFFICULTY_IDS = ("laie", "amateur", "astronom")
 
 ROUND_OPTIONS = ["5", "10", "15", "20"]
-
-INTRO_TEXT = (
-    "Bereit? Wähle deine Einstellungen und teste dein Wissen – "
-    "bei schnellen Antworten gibt's extra Punkte."
-)
 
 
 class QuizSpinnerOption(SpinnerOption):
@@ -80,12 +72,25 @@ class StartScreen(FloatLayout):
         self.on_exit_callback = on_exit
         self.categories = categories
         self._category_difficulty_map = category_difficulty_map or {}
-        self._difficulty_ids = [id_ for id_, _ in DIFFICULTY_OPTIONS]
+        self._difficulty_ids = list(DIFFICULTY_IDS)
         self._selected_difficulty = "laie"
         self._selected_rounds = "10"
         self._difficulty_buttons = []
         self._round_buttons = []
         self._build_ui()
+
+    def apply_locale(self):
+        """Refresh visible strings (categories may be updated separately)."""
+        self._title_label.text = tr("quiz.title")
+        self._intro_label.text = tr("quiz.intro")
+        self._difficulty_caption.text = tr("quiz.difficulty_label")
+        self._round_caption.text = tr("quiz.rounds_label")
+        self._category_caption.text = tr("quiz.category_label")
+        self._start_btn.text = tr("quiz.start")
+        self._exit_btn.text = tr("quiz.back_launcher")
+        for btn in self._difficulty_buttons:
+            btn.text = tr(f"quiz.diff_{btn._value}")
+        self._update_category_spinner()
 
     def _build_ui(self):
         f = _font()
@@ -107,20 +112,20 @@ class StartScreen(FloatLayout):
             size_hint_y=None,
             height=95,
         )
-        title_label = Label(
-            text="Astro-Quiz",
+        self._title_label = Label(
+            text=tr("quiz.title"),
             font_size="44sp",
             bold=True,
             **font_kw,
             color=Colors.TEXT_PRIMARY,
             size_hint_x=None,
         )
-        title_anchor.add_widget(title_label)
+        title_anchor.add_widget(self._title_label)
         box.add_widget(title_anchor)
 
         # Intro text
-        intro = Label(
-            text=INTRO_TEXT,
+        self._intro_label = Label(
+            text=tr("quiz.intro"),
             **font_kw,
             font_size="22sp",
             color=Colors.TEXT_SECONDARY,
@@ -128,11 +133,11 @@ class StartScreen(FloatLayout):
             halign="center",
             valign="middle",
         )
-        intro.bind(
+        self._intro_label.bind(
             texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 24),
             size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
         )
-        box.add_widget(intro)
+        box.add_widget(self._intro_label)
 
         # Spacer between intro and settings
         box.add_widget(BoxLayout(size_hint_y=None, height=SPACING_LG * 20))
@@ -152,22 +157,22 @@ class StartScreen(FloatLayout):
         card.bind(pos=self._update_card_rect, size=self._update_card_rect)
 
         # Difficulty as chips
-        diff_label = Label(
-            text="Schwierigkeitsstufe:",
+        self._difficulty_caption = Label(
+            text=tr("quiz.difficulty_label"),
             **font_kw,
             font_size="17sp",
             color=Colors.TEXT_SECONDARY,
             size_hint_y=None,
             height=36,
         )
-        card.add_widget(diff_label)
+        card.add_widget(self._difficulty_caption)
 
         diff_row = BoxLayout(orientation="horizontal", spacing=SPACING_SM, size_hint_y=None, height=MIN_TOUCH_TARGET)
-        for i, (diff_id, diff_label_text) in enumerate(DIFFICULTY_OPTIONS):
+        for diff_id in DIFFICULTY_IDS:
             btn = _ChipButton(
                 diff_id,
                 is_active=(diff_id == self._selected_difficulty),
-                text=diff_label_text,
+                text=tr(f"quiz.diff_{diff_id}"),
                 **font_kw,
                 font_size="17sp",
                 size_hint_x=1,
@@ -180,15 +185,15 @@ class StartScreen(FloatLayout):
         card.add_widget(diff_row)
 
         # Questions per round as chips
-        round_label = Label(
-            text="Fragen pro Runde:",
+        self._round_caption = Label(
+            text=tr("quiz.rounds_label"),
             **font_kw,
             font_size="17sp",
             color=Colors.TEXT_SECONDARY,
             size_hint_y=None,
             height=36,
         )
-        card.add_widget(round_label)
+        card.add_widget(self._round_caption)
 
         round_row = BoxLayout(orientation="horizontal", spacing=SPACING_SM, size_hint_y=None, height=MIN_TOUCH_TARGET)
         for r in ROUND_OPTIONS:
@@ -208,15 +213,15 @@ class StartScreen(FloatLayout):
         card.add_widget(round_row)
 
         # Category (spinner stays, as it's dynamic)
-        cat_label = Label(
-            text="Kategorie:",
+        self._category_caption = Label(
+            text=tr("quiz.category_label"),
             **font_kw,
             font_size="17sp",
             color=Colors.TEXT_SECONDARY,
             size_hint_y=None,
             height=70,
         )
-        card.add_widget(cat_label)
+        card.add_widget(self._category_caption)
 
         self._update_category_spinner()
         card.add_widget(self.category_spinner)
@@ -227,8 +232,8 @@ class StartScreen(FloatLayout):
         box.add_widget(BoxLayout(size_hint_y=None, height=SPACING_LG * 20))
 
         # Start button (prominent)
-        start_btn = RoundedButton(
-            text="Quiz starten",
+        self._start_btn = RoundedButton(
+            text=tr("quiz.start"),
             **font_kw,
             font_size="26sp",
             size_hint_y=None,
@@ -237,11 +242,11 @@ class StartScreen(FloatLayout):
             color=Colors.TEXT_PRIMARY,
             radius=RADIUS_LG,
         )
-        start_btn.bind(on_release=self._on_start)
-        box.add_widget(start_btn)
+        self._start_btn.bind(on_release=self._on_start)
+        box.add_widget(self._start_btn)
 
-        exit_btn = RoundedButton(
-            text="Zurück zur App-Übersicht",
+        self._exit_btn = RoundedButton(
+            text=tr("quiz.back_launcher"),
             **font_kw,
             font_size="15sp",
             size_hint_y=None,
@@ -249,8 +254,8 @@ class StartScreen(FloatLayout):
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )
-        exit_btn.bind(on_release=self._on_exit)
-        box.add_widget(exit_btn)
+        self._exit_btn.bind(on_release=self._on_exit)
+        box.add_widget(self._exit_btn)
 
         scroll = ScrollView(
             size_hint=(0.9, 0.9),
@@ -287,16 +292,17 @@ class StartScreen(FloatLayout):
             self._category_difficulty_map,
             min_questions=min_questions,
         )
-        cat_values = ["Alle"] + [c.get("name", c.get("id", "")) for c in allowed]
+        all_label = tr("quiz.category_all")
+        cat_values = [all_label] + [c.get("name", c.get("id", "")) for c in allowed]
         cat_ids = [None] + [c.get("id") for c in allowed]
         f = _font()
         font_kw = {"font_name": f} if f else {}
         if hasattr(self, "category_spinner") and self.category_spinner:
             self.category_spinner.values = cat_values
-            self.category_spinner.text = cat_values[0] if cat_values else "Alle"
+            self.category_spinner.text = cat_values[0] if cat_values else all_label
         else:
             self.category_spinner = Spinner(
-                text=cat_values[0] if cat_values else "Alle",
+                text=cat_values[0] if cat_values else all_label,
                 values=cat_values,
                 **font_kw,
                 font_size="17sp",

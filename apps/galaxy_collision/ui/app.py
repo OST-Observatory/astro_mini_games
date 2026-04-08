@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -68,7 +69,7 @@ class StatusOverlay(FloatLayout):
             self.label.text = f"t={t:.1f}  N={n}"
             self.label.color = (0.4, 0.8, 1, 0.95)
         elif is_merged:
-            self.label.text = f"t={t:.1f}  N={n}\n{S.STAR} Merged (t={merge_time:.1f})"
+            self.label.text = f"t={t:.1f}  N={n}\n{S.STAR} {tr('galaxy.overlay_merged_short', t=merge_time)}"
             self.label.color = (0.9, 0.7, 1, 0.95)
         else:
             self.label.text = f"t={t:.1f}  d={d:.1f}  N={n}"
@@ -280,6 +281,14 @@ class GalaxyView(Widget):
 
 class GalaxyCollisionApp(AstroApp):
     """Main application."""
+
+    # Left side: control panel / drawer is on the right; top-left has status overlay.
+    language_switcher_pos_hint = {"x": 0.03, "top": 0.98}
+
+    def _apply_locale(self):
+        super()._apply_locale()
+        if getattr(self, "panel", None):
+            self.panel.apply_i18n()
 
     def build(self):
         """Build the galaxy collision UI: view, drawer, controls, status overlay."""

@@ -1,6 +1,9 @@
 # Default launcher configuration (versioned in the repo).
 # For production, copy to config.yaml and adjust; config.yaml overrides this file when present.
 
+i18n:
+  locale: de  # de | en | es — user changes are saved to config.yaml
+
 inactivity:
   # Disable for local testing: run app with --no-idle-timeout or ASTRO_NO_IDLE_TIMEOUT=1
   enabled: true
@@ -37,83 +40,142 @@ launcher:
       speed: 1.5 # Speed (1.0 = normal, 2.0 = fast)
 
 apps:
-  # Demo app first for testing
   - id: demo
-    name: "Demo App"
+    name:
+      de: "Demo-App"
+      en: "Demo app"
+      es: "App demo"
     icon: ">"
     command: "python apps/demo/main.py"
-    description: "Test des Launch-Mechanismus"
+    description:
+      de: "Test des Launch-Mechanismus"
+      en: "Tests the launch mechanism"
+      es: "Prueba el mecanismo de lanzamiento"
     color: "#2e7d32"
     enabled: false
 
   - id: quiz
-    name: "Astro-Quiz"
+    name:
+      de: "Astro-Quiz"
+      en: "Astro Quiz"
+      es: "Astro cuestionario"
     icon: "?"
     command: "python apps/quiz/main.py"
-    description: "Teste dein Wissen"
+    description:
+      de: "Teste dein Wissen"
+      en: "Test your knowledge"
+      es: "Pon a prueba tus conocimientos"
     color: "#006064"
     enabled: true
 
   - id: sonnensystem
-    name: "Sonnensystem"
+    name:
+      de: "Sonnensystem"
+      en: "Solar System"
+      es: "Sistema solar"
     icon: "md:public"
     command: "python apps/sonnensystem/main.py"
-    description: "Reise durch unser Sonnensystem"
+    description:
+      de: "Reise durch unser Sonnensystem"
+      en: "Journey through our solar system"
+      es: "Viaje por nuestro sistema solar"
     color: "#4a148c"
     enabled: true
 
   - id: mondphasen
-    name: "Mondphasen"
+    name:
+      de: "Mondphasen"
+      en: "Moon phases"
+      es: "Fases lunares"
     icon: "md:nights_stay"
     command: "python apps/demo/main.py"
-    description: "Placeholder"
+    description:
+      de: "Platzhalter"
+      en: "Placeholder"
+      es: "Marcador de posición"
     color: "#37474f"
     enabled: true
 
   - id: sternbilder
-    name: "Sternbilder"
+    name:
+      de: "Sternbilder"
+      en: "Constellations"
+      es: "Constelaciones"
     icon: "md:stars"
     command: "python apps/sternbilder/main.py"
-    description: "Entdecke und erkenne Sternbilder"
+    description:
+      de: "Entdecke und erkenne Sternbilder"
+      en: "Discover and recognize constellations"
+      es: "Descubre y reconoce constelaciones"
     color: "#1b5e20"
     enabled: true
 
   - id: galaxy_collision
-    name: "Galaxien-Kollision"
+    name:
+      de: "Galaxien-Kollision"
+      en: "Galaxy collision"
+      es: "Colisión de galaxias"
     icon: "md:hub"
     command: "python apps/galaxy_collision/main.py"
-    description: "Simulation verschmelzender Galaxien"
+    description:
+      de: "Simulation verschmelzender Galaxien"
+      en: "Simulation of merging galaxies"
+      es: "Simulación de galaxias en fusión"
     color: "#1a237e"
     enabled: true
 
   - id: starlink_tracker
-    name: "StarLink Tracker"
+    name:
+      de: "StarLink Tracker"
+      en: "StarLink Tracker"
+      es: "StarLink Tracker"
     icon: "md:satellite_alt"
     command: "python apps/demo/main.py"
-    description: "Placeholder"
+    description:
+      de: "Platzhalter"
+      en: "Placeholder"
+      es: "Marcador de posición"
     color: "#37474f"
     enabled: true
 
   - id: hr_diagramm
-    name: "HR-Diagramm"
+    name:
+      de: "HR-Diagramm"
+      en: "HR diagram"
+      es: "Diagrama HR"
     icon: "md:scatter_plot"
     command: "python apps/hr_diagramm/main.py"
-    description: "Sterne: Leuchtkraft und Temperatur (not completely implemented)"
+    description:
+      de: "Sterne: Leuchtkraft und Temperatur (not completely implemented)"
+      en: "Stars: luminosity and temperature (not completely implemented)"
+      es: "Estrellas: luminosidad y temperatura (no completamente implementado)"
     color: "#37474f"
     enabled: true
 
   - id: exoplanet
-    name: "Exoplanet-Entdecker"
+    name:
+      de: "Exoplanet-Entdecker"
+      en: "Exoplanet explorer"
+      es: "Explorador de exoplanetas"
     icon: "md:travel_explore"
     command: "python apps/demo/main.py"
-    description: "Placeholder"
+    description:
+      de: "Platzhalter"
+      en: "Placeholder"
+      es: "Marcador de posición"
     color: "#0d47a1"
     enabled: true
 
   - id: astro_puzzle
-    name: "Astro-Puzzle"
+    name:
+      de: "Astro-Puzzle"
+      en: "Astro puzzle"
+      es: "Astro puzzle"
     icon: "md:extension"
     command: "python apps/astro_puzzle/main.py"
-    description: "Setze ein Astro-Bild zusammen"
+    description:
+      de: "Setze ein Astro-Bild zusammen"
+      en: "Piece together an astro image"
+      es: "Completa una imagen astronómica"
     color: "#6a1b9a"
     enabled: true

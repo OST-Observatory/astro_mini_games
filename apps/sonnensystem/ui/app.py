@@ -4,6 +4,7 @@ from pathlib import Path
 
 import yaml
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
@@ -20,14 +21,6 @@ from ui.date_picker import DatePickerPopup
 from visualization.renderer import SolarSystemRenderer
 
 
-INTRO_TEXT = (
-    "Echtes Sonnensystem mit echten Positionen (Skyfield/NASA). "
-    "Reine Draufsicht auf die Ekliptik-Ebene. Startet mit dem heutigen Datum - "
-    "du kannst ein anderes Datum wählen. Buttons: ↶↷ drehen, -/+ zoomen, "
-    "1x-100x Zeit, Legende für Planeten-Namen. Tippe auf einen Planeten für Infos."
-)
-
-
 def _font():
     from shared.fonts import get_safe_font
     return get_safe_font()
@@ -40,6 +33,29 @@ class SonnensystemApp(AstroApp):
         super().__init__(**kwargs)
         self.config_path = Path(__file__).parent.parent / "config.yaml"
         self.screen = "intro"  # intro | explore
+
+    def _apply_locale(self):
+        super()._apply_locale()
+        if getattr(self, "_intro_heading", None):
+            self._intro_heading.text = tr("sonnensystem.title")
+            self._intro_label.text = tr("sonnensystem.intro")
+            self._intro_start.text = tr("sonnensystem.lets_go")
+            self._intro_exit.text = tr("sonnensystem.back_launcher")
+        if getattr(self, "_settings_heading", None):
+            self._settings_heading.text = tr("sonnensystem.settings")
+            self._date_btn.text = tr("sonnensystem.date")
+            self.legend_btn.text = tr("sonnensystem.legend")
+            self.namen_btn.text = (
+                tr("sonnensystem.names_off")
+                if self.renderer.show_planet_labels
+                else tr("sonnensystem.names_on")
+            )
+            self.vergroessert_btn.text = tr("sonnensystem.planets_large")
+            self.massstab_btn.text = tr("sonnensystem.planets_scale")
+            self._back_btn.text = tr("sonnensystem.back_launcher")
+            self._reset_btn.text = tr("sonnensystem.reset")
+        if getattr(self, "info_panel", None):
+            self.info_panel.apply_i18n()
 
     def build(self):
         """Build the solar system UI: renderer, intro, info panel, controls."""
@@ -141,8 +157,8 @@ class SonnensystemApp(AstroApp):
         )
         zoom_in_btn.bind(on_release=lambda x: self._zoom(1.1))
         ctrl_box.add_widget(zoom_in_btn)
-        reset_btn = RoundedButton(
-            text="Reset",
+        self._reset_btn = RoundedButton(
+            text=tr("sonnensystem.reset"),
             font_name=_font(),
             font_size="16sp",
             size_hint=(None, None),
@@ -150,14 +166,14 @@ class SonnensystemApp(AstroApp):
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )
-        reset_btn.bind(on_release=lambda x: self._reset_view())
-        ctrl_box.add_widget(reset_btn)
+        self._reset_btn.bind(on_release=lambda x: self._reset_view())
+        ctrl_box.add_widget(self._reset_btn)
         self._ctrl_box = ctrl_box
         ctrl_box.opacity = 0
         root.add_widget(ctrl_box)
 
-        back_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._back_btn = RoundedButton(
+            text=tr("sonnensystem.back_launcher"),
             font_name=_font(),
             font_size="14sp",
             size_hint=(None, None),
@@ -166,10 +182,9 @@ class SonnensystemApp(AstroApp):
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )
-        back_btn.bind(on_release=lambda x: self.stop())
-        back_btn.opacity = 0
-        root.add_widget(back_btn)
-        self._back_btn = back_btn
+        self._back_btn.bind(on_release=lambda x: self.stop())
+        self._back_btn.opacity = 0
+        root.add_widget(self._back_btn)
 
         # Settings (top left) – frame and label
         settings_outer = BoxLayout(
@@ -189,8 +204,8 @@ class SonnensystemApp(AstroApp):
         settings_outer.bind(pos=lambda b, v: setattr(b._bg, "pos", v))
         settings_outer.bind(size=lambda b, v: setattr(b._bg, "size", v))
 
-        settings_label = Label(
-            text="Einstellungen",
+        self._settings_heading = Label(
+            text=tr("sonnensystem.settings"),
             font_name=_font(),
             font_size="14sp",
             bold=True,
@@ -198,7 +213,7 @@ class SonnensystemApp(AstroApp):
             size_hint_y=None,
             height=28,
         )
-        settings_outer.add_widget(settings_label)
+        settings_outer.add_widget(self._settings_heading)
 
         time_box = BoxLayout(
             orientation="vertical",
@@ -236,8 +251,8 @@ class SonnensystemApp(AstroApp):
             ts_row.add_widget(btn)
         time_box.add_widget(ts_row)
         row2 = BoxLayout(orientation="horizontal", size_hint_y=None, height=btn_h, spacing=6)
-        date_btn = RoundedButton(
-            text="Datum",
+        self._date_btn = RoundedButton(
+            text=tr("sonnensystem.date"),
             font_name=_font(),
             font_size="16sp",
             size_hint_x=None,
@@ -245,11 +260,11 @@ class SonnensystemApp(AstroApp):
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )
-        date_btn.bind(on_release=self._open_date_picker)
-        row2.add_widget(date_btn)
+        self._date_btn.bind(on_release=self._open_date_picker)
+        row2.add_widget(self._date_btn)
 
         self.legend_btn = RoundedButton(
-            text="Legende",
+            text=tr("sonnensystem.legend"),
             font_name=_font(),
             font_size="15sp",
             size_hint_x=None,
@@ -260,7 +275,7 @@ class SonnensystemApp(AstroApp):
         self.legend_btn.bind(on_release=self._toggle_legend)
         row2.add_widget(self.legend_btn)
         self.namen_btn = RoundedButton(
-            text="Namen aus",
+            text=tr("sonnensystem.names_off"),
             font_name=_font(),
             font_size="14sp",
             size_hint_x=None,
@@ -274,7 +289,7 @@ class SonnensystemApp(AstroApp):
 
         row3 = BoxLayout(orientation="horizontal", size_hint_y=None, height=btn_h, spacing=6)
         self.vergroessert_btn = RoundedButton(
-            text="Vergrößerte Planeten",
+            text=tr("sonnensystem.planets_large"),
             font_name=_font(),
             font_size="14sp",
             size_hint_x=None,
@@ -285,7 +300,7 @@ class SonnensystemApp(AstroApp):
         self.vergroessert_btn.bind(on_release=lambda x: self._set_size_mode("vergroessert"))
         row3.add_widget(self.vergroessert_btn)
         self.massstab_btn = RoundedButton(
-            text="Planeten im Maßstab",
+            text=tr("sonnensystem.planets_scale"),
             font_name=_font(),
             font_size="14sp",
             size_hint_x=None,
@@ -337,17 +352,21 @@ class SonnensystemApp(AstroApp):
 
     def _toggle_planet_labels(self, instance):
         self.renderer.show_planet_labels = not self.renderer.show_planet_labels
-        instance.text = "Namen aus" if self.renderer.show_planet_labels else "Namen ein"
+        instance.text = (
+            tr("sonnensystem.names_off")
+            if self.renderer.show_planet_labels
+            else tr("sonnensystem.names_on")
+        )
 
     def _toggle_legend(self, instance):
         if self._legend_panel is None:
             self._build_legend()
         if self._legend_panel.parent:
             self.root.remove_widget(self._legend_panel)
-            instance.text = "Legende"
+            instance.text = tr("sonnensystem.legend")
         else:
             self.root.add_widget(self._legend_panel)
-            instance.text = "Legende ✓"
+            instance.text = tr("sonnensystem.legend_check")
 
     def _build_legend(self):
         from simulation.planet_data import PLANET_ORDER, PLANET_COLORS
@@ -383,8 +402,8 @@ class SonnensystemApp(AstroApp):
 
     def _build_intro(self, root):
         layout = FloatLayout(size_hint=(1, 1))
-        heading = Label(
-            text="Sonnensystem erkunden",
+        self._intro_heading = Label(
+            text=tr("sonnensystem.title"),
             font_name=_font(),
             font_size="50sp",
             bold=True,
@@ -392,12 +411,12 @@ class SonnensystemApp(AstroApp):
             size_hint=(None, None),
             pos_hint={"center_x": 0.5, "top": 0.92},
         )
-        heading.bind(texture_size=heading.setter("size"))
-        layout.add_widget(heading)
+        self._intro_heading.bind(texture_size=self._intro_heading.setter("size"))
+        layout.add_widget(self._intro_heading)
 
         scroll = ScrollView(size_hint=(0.6, 0.4), pos_hint={"center_x": 0.5, "top": 0.82})
-        intro = Label(
-            text=INTRO_TEXT,
+        self._intro_label = Label(
+            text=tr("sonnensystem.intro"),
             font_name=_font(),
             font_size="25sp",
             color=Colors.TEXT_PRIMARY,
@@ -405,15 +424,15 @@ class SonnensystemApp(AstroApp):
             halign="center",
             valign="middle",
         )
-        intro.bind(
+        self._intro_label.bind(
             texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 40),
             size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
         )
-        scroll.add_widget(intro)
+        scroll.add_widget(self._intro_label)
         layout.add_widget(scroll)
 
-        start_btn = RoundedButton(
-            text="Los geht's!",
+        self._intro_start = RoundedButton(
+            text=tr("sonnensystem.lets_go"),
             font_name=_font(),
             font_size="35sp",
             bold=True,
@@ -422,11 +441,11 @@ class SonnensystemApp(AstroApp):
             background_color=Colors.ACCENT,
             color=Colors.TEXT_PRIMARY,
         )
-        start_btn.bind(on_release=self._start_explore)
-        layout.add_widget(start_btn)
+        self._intro_start.bind(on_release=self._start_explore)
+        layout.add_widget(self._intro_start)
 
-        exit_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._intro_exit = RoundedButton(
+            text=tr("sonnensystem.back_launcher"),
             font_name=_font(),
             font_size="16sp",
             size_hint=(0.5, 0.08),
@@ -434,8 +453,8 @@ class SonnensystemApp(AstroApp):
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )
-        exit_btn.bind(on_release=lambda x: self.stop())
-        layout.add_widget(exit_btn)
+        self._intro_exit.bind(on_release=lambda x: self.stop())
+        layout.add_widget(self._intro_exit)
 
         self._intro_layout = layout
         root.add_widget(layout)

@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
 from ui.theme import Colors, SPACING_MD
+from shared.i18n import tr
 
 
 def _font():
@@ -46,18 +47,25 @@ class InfoPanel(BoxLayout):
             size=lambda *x: setattr(self.label_info, "text_size", (self.label_info.width - 20, None))
         )
         self.add_widget(self.label_info)
+        self._last_star = None
 
     def show_star(self, star: dict):
-        self.label_name.text = star.get("name", "Unbekannt")
+        self._last_star = star
+        self.label_name.text = star.get("name", tr("hr_diagramm.unknown"))
         lines = [
-            f"B-V: {star.get('bv', 0):.2f}",
-            f"Abs. Mag: {star.get('absmag', 0):.1f}",
-            f"Spektraltyp: {star.get('spect', '-')}",
-            f"Masse: {star.get('mass', '-')} Sonnenmassen",
-            f"Lebensdauer: {star.get('lifetime', '-')} Mrd. Jahre",
+            tr("hr_diagramm.line_bv", v=star.get("bv", 0)),
+            tr("hr_diagramm.line_absmag", v=star.get("absmag", 0)),
+            tr("hr_diagramm.line_spectral", v=star.get("spect", "-")),
+            tr("hr_diagramm.line_mass", v=star.get("mass", "-")),
+            tr("hr_diagramm.line_lifetime", v=star.get("lifetime", "-")),
         ]
         self.label_info.text = "\n".join(lines)
 
+    def apply_i18n(self):
+        if self._last_star:
+            self.show_star(self._last_star)
+
     def hide(self):
+        self._last_star = None
         self.label_name.text = ""
         self.label_info.text = ""

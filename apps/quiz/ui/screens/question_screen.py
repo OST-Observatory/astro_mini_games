@@ -14,6 +14,7 @@ from ui.theme import Colors, SPACING_XS, SPACING_MD, SPACING_LG, MIN_TOUCH_TARGE
 from ui.rounded_button import RoundedButton
 from ui.widgets.gif_image import GifImage
 from ui.widgets.timer_bar import TimerBar
+from shared.i18n import tr
 
 
 def _font_kw():
@@ -170,9 +171,9 @@ class QuestionScreen(FloatLayout):
     def update_stats(self, points: int, streak: int):
         """Updates the statistics display."""
         if hasattr(self, "stats_label") and self.stats_label:
-            s = f"Punkte: {points}"
+            s = tr("quiz.stats_points", points=points)
             if streak > 1:
-                s += f"  |  Streak: {streak}x"
+                s += tr("quiz.stats_streak", streak=streak)
             self.stats_label.text = s
 
     def _update_timer(self, dt):

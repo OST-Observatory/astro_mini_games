@@ -247,7 +247,7 @@ questions:
     image_credit: "NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington. Edited version of Image: Prockter07.jpg by Papa Lima Whiskey., Public domain, via Wikimedia Commons"
 
   - id: q24
-    text: "Welche Farbe hat unser Sonnensystem-Planet Neptun hauptsächlich?"
+    text: "Welche Farbe hat der Planet Neptun hauptsächlich?"
     answers: ["Blau", "Grün", "Lila", "Orange"]
     correct: 0
     category: sonnensystem
@@ -433,7 +433,7 @@ questions:
     text: "Was ist die Oortsche Wolke?"
     answers: ['Eine Wolke von Sternen, die sich in der gleichen Entwicklungsphase befinden', 
               'Eine Sternentstehungsregion im Orionnebel',
-              'Eine Ansammlung von Asteroiden und Kometen im äußersten Bereich des Sonnensystems. ',
+              'Eine Ansammlung von Asteroiden und Kometen im äußersten Bereich des Sonnensystems ',
               'Eine prominente Wolkenschicht in der Atmosphäre von Jupiter']
     correct: 2
     category: sonnensystem
@@ -444,9 +444,9 @@ questions:
   - id: q44
     text: "Was ist ein Hohmann-Transfer?"
     answers: ['Eine Bahnänderung, die eine Planetenbahn in eine andere Planetenbahn überführt', 
-              'Ein energetisch günstiger Übergang zwischen zwei Bahnen um einen Himmelskörper.',
-              'Ein Mechanismus um Masse von einem Stern zu einem anderen Stern in einem Doppelsternsystem zu übertragen.',
-              'Ein spezieller Übergang von einer Sternentwicklungsphase zur nächsten.']
+              'Ein energetisch günstiger Übergang zwischen zwei Bahnen um einen Himmelskörper',
+              'Ein Mechanismus um Masse von einem Stern zu einem anderen Stern in einem Doppelsternsystem zu übertragen',
+              'Ein spezieller Übergang von einer Sternentwicklungsphase zur nächsten']
     correct: 1
     category: himmelsmechanik
     difficulty: astronom

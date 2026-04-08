@@ -12,6 +12,8 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
+from shared.i18n import tr
+
 
 def _load_usage_data():
     """Loads and aggregates usage.jsonl."""
@@ -69,7 +71,7 @@ class StatsOverlay(FloatLayout):
         )
 
         title = Label(
-            text="Nutzungsstatistik",
+            text=tr("stats.title"),
             font_size="28sp",
             size_hint_y=None,
             height=50,
@@ -83,7 +85,7 @@ class StatsOverlay(FloatLayout):
         stats = _load_usage_data()
         if not stats:
             content.add_widget(
-                Label(text="Noch keine Daten.", font_size="18sp", size_hint_y=None, height=40)
+                Label(text=tr("stats.no_data"), font_size="18sp", size_hint_y=None, height=40)
             )
         else:
             for app_id, data in sorted(stats.items(), key=lambda x: -x[1]["duration"]):
@@ -102,7 +104,7 @@ class StatsOverlay(FloatLayout):
         main_box.add_widget(scroll)
 
         btn = Button(
-            text="Schließen",
+            text=tr("stats.close"),
             size_hint_y=None,
             height=50,
             on_release=lambda _: self._dismiss(),

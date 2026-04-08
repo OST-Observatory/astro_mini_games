@@ -17,6 +17,8 @@ from ui.material_icons import get_icon, get_icon_font
 from ui.theme import Colors, SPACING_SM, SPACING_MD, SPACING_LG, RADIUS_MD, RADIUS_LG
 from ui.theme import SLIDER_CURSOR_SIZE, SLIDER_PADDING, MIN_TOUCH_TARGET
 
+from shared.i18n import tr
+
 
 def _font():
     """Returns the current font name (dynamically)."""
@@ -134,6 +136,47 @@ class ControlPanel(BoxLayout):
 
         self._build_ui()
 
+    _SLIDER_I18N_KEYS = {
+        "total_particles": "galaxy.particles",
+        "mass_ratio": "galaxy.mass_ratio",
+        "total_mass": "galaxy.total_mass",
+        "initial_distance": "galaxy.distance",
+        "velocity_factor": "galaxy.velocity",
+        "impact_parameter": "galaxy.impact_param",
+        "inclination": "galaxy.inclination",
+        "dynamic_friction": "galaxy.friction",
+        "softening": "galaxy.softening",
+    }
+
+    def apply_i18n(self):
+        """Refresh all panel strings for the current locale."""
+        self._title_row.text = f"{S.SETTINGS} {tr('galaxy.settings_title')}"
+        self._sec_sim.text = S.section(tr("galaxy.section_sim_speed"))
+        self.time_slider.lbl.text = tr("galaxy.speed")
+        self._sec_color.text = S.section(tr("galaxy.section_coloring"))
+        self._lbl_colors.text = f"{S.PALETTE} {tr('galaxy.colors_label')}"
+        self._color_btns["distinct"].text = tr("galaxy.color_distinct")
+        self._color_btns["realistic"].text = tr("galaxy.color_position")
+        self._color_btns["velocity"].text = tr("galaxy.color_velocity")
+        self._sec_presets.text = S.section(tr("galaxy.section_presets"))
+        self._preset_btns["classic"].text = tr("galaxy.preset_classic")
+        self._preset_btns["fast"].text = tr("galaxy.preset_fast")
+        self._preset_btns["merge"].text = tr("galaxy.preset_merge")
+        self._sec_galaxy.text = S.section(tr("galaxy.section_galaxy"))
+        self._sec_collision.text = S.section(tr("galaxy.section_collision"))
+        if getattr(self, "_sec_physics", None):
+            self._sec_physics.text = S.section(tr("galaxy.section_physics"))
+        for pkey, tr_key in self._SLIDER_I18N_KEYS.items():
+            sl = self._sliders.get(pkey)
+            if sl:
+                sl.lbl.text = tr(tr_key)
+        deg = S.DEGREE
+        inc_sl = self._sliders.get("inclination")
+        if inc_sl:
+            inc_sl.fmt = "{:.0f}" + deg
+        self._exit_btn.text = tr("galaxy.exit_launcher")
+        self._update_hint(self._pending_reset_changes)
+
     def on_touch_down(self, touch):
         """Consume touches in settings area - prevents rotate/zoom on accidental tap."""
         if self.collide_point(*touch.pos):
@@ -180,30 +223,32 @@ class ControlPanel(BoxLayout):
         # fills the middle, exit button stays at bottom.
 
         # === TOP: Title and content ===
-        self.add_widget(self._lbl(
-            text=f"{S.SETTINGS} Einstellungen",
+        self._title_row = self._lbl(
+            text=f"{S.SETTINGS} {tr('galaxy.settings_title')}",
             font_size="16sp",
             bold=True,
             size_hint_y=None,
             height=32,
             color=Colors.TEXT_PRIMARY,
-        ))
+        )
+        self.add_widget(self._title_row)
 
         # === SIMULATIONSGESCHWINDIGKEIT ===
-        self.add_widget(self._lbl(
-            text=S.section("Simulationsgeschwindigkeit"),
+        self._sec_sim = self._lbl(
+            text=S.section(tr("galaxy.section_sim_speed")),
             font_size="12sp",
             size_hint_y=None,
             height=24,
             color=Colors.ACCENT,
-        ))
+        )
+        self.add_widget(self._sec_sim)
         ts_cfg = self.config.get("simulation", {}).get("time_scale", {})
         ts_default = ts_cfg.get("default", 1.0) if isinstance(ts_cfg, dict) else (ts_cfg or 1.0)
         ts_min = ts_cfg.get("min", 0.1) if isinstance(ts_cfg, dict) else 0.1
         ts_max = ts_cfg.get("max", 30.0) if isinstance(ts_cfg, dict) else 30.0
         ts_step = ts_cfg.get("step", 1.0) if isinstance(ts_cfg, dict) else 1.0
         self.time_slider = ParamSlider(
-            "Geschwindigkeit",
+            tr("galaxy.speed"),
             ts_min, ts_max, ts_default, ts_step, "{:.1f}x",
             callback=self._on_time,
         )
@@ -214,32 +259,34 @@ class ControlPanel(BoxLayout):
         self.add_widget(Widget(size_hint_y=None, height=section_spacing))
 
         # === FARBMODUS ===
-        self.add_widget(self._lbl(
-            text=S.section("Einfärbung"),
+        self._sec_color = self._lbl(
+            text=S.section(tr("galaxy.section_coloring")),
             font_size="12sp",
             size_hint_y=None,
             height=24,
             color=Colors.ACCENT,
-        ))
+        )
+        self.add_widget(self._sec_color)
         color_box = BoxLayout(
             size_hint_y=None,
             height=MIN_TOUCH_TARGET * 3,
             spacing=SPACING_SM,
             padding=[0, SPACING_SM],
         )
-        color_box.add_widget(self._lbl(
-            text=f"{S.PALETTE} Farben:",
+        self._lbl_colors = self._lbl(
+            text=f"{S.PALETTE} {tr('galaxy.colors_label')}",
             size_hint_x=None,
             width=80,
             font_size="14sp",
             color=Colors.ACCENT,
-        ))
+        )
+        color_box.add_widget(self._lbl_colors)
         chips_box = BoxLayout(orientation='vertical', spacing=SPACING_SM)
         self._color_btns = {}
         for label, mode in [
-            ("Galaxien", "distinct"),
-            ("Position", "realistic"),
-            ("Geschwindigkeit", "velocity"),
+            (tr("galaxy.color_distinct"), "distinct"),
+            (tr("galaxy.color_position"), "realistic"),
+            (tr("galaxy.color_velocity"), "velocity"),
         ]:
             btn = self._btn_rect(
                 text=label,
@@ -261,22 +308,24 @@ class ControlPanel(BoxLayout):
         self.add_widget(Widget(size_hint_y=None, height=section_spacing))
 
         # === VOREINSTELLUNGEN ===
-        self.add_widget(self._lbl(
-            text=S.section("Voreinstellungen für Simulationsparameter"),
+        self._sec_presets = self._lbl(
+            text=S.section(tr("galaxy.section_presets")),
             font_size="12sp",
             size_hint_y=None,
             height=24,
             color=Colors.ACCENT,
-        ))
+        )
+        self.add_widget(self._sec_presets)
         presets_box = BoxLayout(
             size_hint_y=None,
             height=MIN_TOUCH_TARGET,
             spacing=SPACING_SM,
         )
+        self._preset_btns = {}
         for label, preset_id in [
-            ("Klassisch", "classic"),
-            ("Schnell", "fast"),
-            ("Direkt", "merge"),
+            (tr("galaxy.preset_classic"), "classic"),
+            (tr("galaxy.preset_fast"), "fast"),
+            (tr("galaxy.preset_merge"), "merge"),
         ]:
             btn = self._btn(
                 text=label,
@@ -286,6 +335,7 @@ class ControlPanel(BoxLayout):
                 height=MIN_TOUCH_TARGET,
             )
             btn.bind(on_release=lambda b, pid=preset_id: self._apply_preset(pid))
+            self._preset_btns[preset_id] = btn
             presets_box.add_widget(btn)
         self.add_widget(presets_box)
 
@@ -296,42 +346,44 @@ class ControlPanel(BoxLayout):
         params.bind(minimum_height=params.setter('height'))
 
         # Galaxies
-        params.add_widget(self._lbl(
-            text=S.section("Galaxienparameter"),
+        self._sec_galaxy = self._lbl(
+            text=S.section(tr("galaxy.section_galaxy")),
             font_size="12sp",
             size_hint_y=None,
             height=24,
             color=Colors.ACCENT,
-        ))
+        )
+        params.add_widget(self._sec_galaxy)
 
         gal = self.config.get("galaxies", {})
         m1, M1, d1, s1 = self._get_slider_cfg(gal, "total_particles", 5000, 30000, 20000, 5000)
-        self._add_slider(params, "Partikel", m1, M1, d1, s1, "{:.0f}", "total_particles")
+        self._add_slider(params, tr("galaxy.particles"), m1, M1, d1, s1, "{:.0f}", "total_particles")
         m2, M2, d2, s2 = self._get_slider_cfg(gal, "mass_ratio", 0.2, 5.0, 1.0, 0.2)
-        self._add_slider(params, "Massenverhältnis", m2, M2, d2, s2, "{:.1f}", "mass_ratio")
+        self._add_slider(params, tr("galaxy.mass_ratio"), m2, M2, d2, s2, "{:.1f}", "mass_ratio")
         m3, M3, d3, s3 = self._get_slider_cfg(gal, "total_mass", 1.0, 4.0, 2.0, 0.5)
-        self._add_slider(params, "Gesamtmasse", m3, M3, d3, s3, "{:.1f}", "total_mass")
+        self._add_slider(params, tr("galaxy.total_mass"), m3, M3, d3, s3, "{:.1f}", "total_mass")
 
         params.add_widget(Widget(size_hint_y=None, height=section_spacing))
 
         # Collision
-        params.add_widget(self._lbl(
-            text=S.section("Kollisionsparameter"),
+        self._sec_collision = self._lbl(
+            text=S.section(tr("galaxy.section_collision")),
             font_size="12sp",
             size_hint_y=None,
             height=24,
             color=Colors.ACCENT,
-        ))
+        )
+        params.add_widget(self._sec_collision)
 
         col = self.config.get("collision", {})
         m4, M4, d4, s4 = self._get_slider_cfg(col, "initial_distance", 30.0, 80.0, 50.0, 5.0)
-        self._add_slider(params, "Abstand", m4, M4, d4, s4, "{:.0f}", "initial_distance")
+        self._add_slider(params, tr("galaxy.distance"), m4, M4, d4, s4, "{:.0f}", "initial_distance")
         m5, M5, d5, s5 = self._get_slider_cfg(col, "velocity_factor", 0.2, 0.9, 0.5, 0.1)
-        self._add_slider(params, "Geschwindigkeit", m5, M5, d5, s5, "{:.1f}", "velocity_factor")
+        self._add_slider(params, tr("galaxy.velocity"), m5, M5, d5, s5, "{:.1f}", "velocity_factor")
         m6, M6, d6, s6 = self._get_slider_cfg(col, "impact_parameter", 0.0, 0.7, 0.3, 0.1)
-        self._add_slider(params, "Stoßparameter", m6, M6, d6, s6, "{:.1f}", "impact_parameter")
+        self._add_slider(params, tr("galaxy.impact_param"), m6, M6, d6, s6, "{:.1f}", "impact_parameter")
         m7, M7, d7, s7 = self._get_slider_cfg(col, "inclination", 0.0, 90.0, 30.0, 10.0)
-        self._add_slider(params, "Neigung zueinander", m7, M7, d7, s7, "{:.0f}" + S.DEGREE, "inclination")
+        self._add_slider(params, tr("galaxy.inclination"), m7, M7, d7, s7, "{:.0f}" + S.DEGREE, "inclination")
 
         params.add_widget(Widget(size_hint_y=None, height=section_spacing))
 
@@ -340,18 +392,20 @@ class ControlPanel(BoxLayout):
         ui_cfg = self.config.get("ui", {})
         show_physics = ui_cfg.get("show_physics_params", False)
         if show_physics:
-            params.add_widget(self._lbl(
-                text=S.section("Physikparameter"),
+            self._sec_physics = self._lbl(
+                text=S.section(tr("galaxy.section_physics")),
                 font_size="12sp",
                 size_hint_y=None,
                 height=24,
                 color=Colors.ACCENT,
-            ))
+            )
+            params.add_widget(self._sec_physics)
             m8, M8, d8, s8 = self._get_slider_cfg(sim, "dynamic_friction", 0.0, 0.05, 0.01, 0.005)
-            self._add_slider(params, "Reibung", m8, M8, d8, s8, "{:.3f}", "dynamic_friction")
+            self._add_slider(params, tr("galaxy.friction"), m8, M8, d8, s8, "{:.3f}", "dynamic_friction")
             m9, M9, d9, s9 = self._get_slider_cfg(sim, "softening_length", 0.5, 3.0, 1.0, 0.5)
-            self._add_slider(params, "Softening", m9, M9, d9, s9, "{:.1f}", "softening")
+            self._add_slider(params, tr("galaxy.softening"), m9, M9, d9, s9, "{:.1f}", "softening")
         else:
+            self._sec_physics = None
             # Values from config for _apply_params (presets can still set them)
             _, _, d8, _ = self._get_slider_cfg(sim, "dynamic_friction", 0.0, 0.05, 0.01, 0.005)
             _, _, d9, _ = self._get_slider_cfg(sim, "softening_length", 0.5, 3.0, 1.0, 0.5)
@@ -362,7 +416,7 @@ class ControlPanel(BoxLayout):
 
         # Hint (dynamic: immediate / reset needed) – text wraps as needed
         self._hint_lbl = self._lbl(
-            text=f"{S.INFO} Parameter {S.ARROW_RIGHT} Reset",
+            text=f"{S.INFO} {tr('galaxy.hint_params')}",
             font_size="11sp",
             size_hint_y=None,
             height=24,
@@ -382,16 +436,16 @@ class ControlPanel(BoxLayout):
         self.add_widget(Widget(size_hint_y=1))
 
         # === BOTTOM: Close button and status label ===
-        exit_btn = self._btn(
-            text=f"Zur App-Übersicht",
+        self._exit_btn = self._btn(
+            text=tr("galaxy.exit_launcher"),
             font_size="14sp",
             size_hint_y=None,
             height=MIN_TOUCH_TARGET,
             background_color=Colors.DANGER,
             background_normal="",
         )
-        exit_btn.bind(on_release=lambda x: App.get_running_app().stop())
-        self.add_widget(exit_btn)
+        self._exit_btn.bind(on_release=lambda x: App.get_running_app().stop())
+        self.add_widget(self._exit_btn)
 
         self.stats_lbl = self._lbl(
             text="",
@@ -530,15 +584,11 @@ class ControlPanel(BoxLayout):
     def _update_hint(self, is_paused):
         """Updates the hint text depending on state."""
         if self._pending_reset_changes:
-            self._hint_lbl.text = (
-                f"{S.WARNING} Simulation neustarten (Reset) um Änderungen zu übernehmen"
-            )
+            self._hint_lbl.text = f"{S.WARNING} {tr('galaxy.hint_need_reset')}"
             self._hint_lbl.color = Colors.ACCENT
             self._hint_lbl.font_size = "14sp"
         else:
-            self._hint_lbl.text = (
-                f"{S.INFO} Parameter werden bei Pause sofort übernommen"
-            )
+            self._hint_lbl.text = f"{S.INFO} {tr('galaxy.hint_live')}"
             self._hint_lbl.color = Colors.TEXT_MUTED
             self._hint_lbl.font_size = "11sp"
         # Update text_size for wrapping
@@ -588,7 +638,7 @@ class ControlPanel(BoxLayout):
             self.stats_lbl.color = (0.8, 0.6, 0.9, 1)  # merged purple
             self.stats_lbl.text = (
                 f"t={t:.1f} | N={n}\n"
-                f"{S.STAR} VERSCHMOLZEN (t={merge_time:.1f})\n"
+                f"{S.STAR} {tr('galaxy.merged', t=merge_time)}\n"
                 f"M={ma:.2f}"
             )
         else:
@@ -596,6 +646,6 @@ class ControlPanel(BoxLayout):
             self.stats_lbl.color = Colors.TEXT_SECONDARY
             self.stats_lbl.text = (
                 f"t={t:.1f} | d={d:.1f} | N={n}\n"
-                f"Passagen: {passages}\n"
+                f"{tr('galaxy.passages')} {passages}\n"
                 f"M: {ma:.2f}/{mb:.2f}"
             )

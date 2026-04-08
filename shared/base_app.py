@@ -17,7 +17,9 @@ from kivy.uix.label import Label
 
 from shared.config_path import get_launcher_config_path
 from shared.debug_keys import try_debug_tty2
+from shared.i18n import register_locale_callback, tr, unregister_locale_callback
 from shared.usage_stats import write_usage_stats
+from shared.widgets.language_switcher import LanguageSwitcher
 
 
 def signal_ready():
@@ -42,10 +44,9 @@ def is_idle_timeout_disabled() -> bool:
 
 def _load_inactivity_config():
     """Loads inactivity config from config.yaml or config_default.yaml."""
-    config_path = get_launcher_config_path()
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+        with open(get_launcher_config_path(), "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
         inc = data.get("inactivity", {})
         cfg = {
             "enabled": inc.get("enabled", False),
@@ -63,6 +64,9 @@ def _load_inactivity_config():
 class AstroApp(App):
     """Base class for all Astro apps. Signals readiness to the wrapper."""
 
+    #: FloatLayout ``pos_hint`` for :class:`LanguageSwitcher` (override per app).
+    language_switcher_pos_hint = {"right": 0.97, "top": 0.98}
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._usage_start_time = None
@@ -71,6 +75,8 @@ class AstroApp(App):
         self._idle_warning_overlay = None
         self._idle_warning_sec_left = 0
         self._idle_countdown_event = None
+        self._lang_switcher = None
+        self._project_root = Path(__file__).resolve().parent.parent
 
     def on_start(self):
         super().on_start()
@@ -84,7 +90,15 @@ class AstroApp(App):
         # Inactivity timeout
         self._setup_idle_timeout()
 
+        if self.root:
+            self._lang_switcher = LanguageSwitcher(project_root=self._project_root)
+            self._lang_switcher.pos_hint = dict(self.language_switcher_pos_hint)
+            self.root.add_widget(self._lang_switcher)
+        register_locale_callback(self._on_app_locale_changed)
+        self._apply_locale()
+
     def on_stop(self):
+        unregister_locale_callback(self._on_app_locale_changed)
         # Finalize usage stats
         app_id = os.environ.get("ASTRO_APP_ID")
         if app_id and self._usage_start_time is not None:
@@ -92,6 +106,25 @@ class AstroApp(App):
 
         self._cancel_idle_timer()
         super().on_stop()
+
+    def _on_app_locale_changed(self, code: str):
+        self._apply_locale()
+        self._sync_idle_warning_text()
+
+    def _apply_locale(self):
+        """Override in subclasses to refresh visible strings after locale change."""
+        if self._lang_switcher:
+            self._lang_switcher.refresh_highlight()
+
+    def _sync_idle_warning_text(self):
+        if not self._idle_warning_overlay or not self._idle_warning_overlay.children:
+            return
+        lbl = self._idle_warning_overlay.children[0]
+        lbl.text = (
+            tr("idle.warning_line1", n=self._idle_warning_sec_left)
+            + "\n"
+            + tr("idle.warning_line2")
+        )
 
     def _setup_idle_timeout(self):
         """Sets up inactivity timer and event handlers."""
@@ -171,7 +204,11 @@ class AstroApp(App):
             overlay._bg_rect = Rectangle(pos=overlay.pos, size=overlay.size)
         overlay.bind(size=lambda o, v: setattr(o._bg_rect, "size", v))
 
-        msg = f"Zurück zum Launcher in {self._idle_warning_sec_left} Sek?\nTippen zum Abbrechen"
+        msg = (
+            tr("idle.warning_line1", n=self._idle_warning_sec_left)
+            + "\n"
+            + tr("idle.warning_line2")
+        )
         lbl = Label(
             text=msg,
             font_size="28sp",
@@ -201,10 +238,10 @@ class AstroApp(App):
             self.stop()
             return
 
-        # Update label
         if self._idle_warning_overlay and self._idle_warning_overlay.children:
             lbl = self._idle_warning_overlay.children[0]
             lbl.text = (
-                f"Zurück zum Launcher in {self._idle_warning_sec_left} Sek?\n"
-                "Tippen zum Abbrechen"
+                tr("idle.warning_line1", n=self._idle_warning_sec_left)
+                + "\n"
+                + tr("idle.warning_line2")
             )

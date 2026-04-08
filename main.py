@@ -8,8 +8,12 @@ import sys
 from pathlib import Path
 
 from shared.config_path import get_launcher_config_path
+from shared.i18n import ensure_locale_env
 
 PROJECT_ROOT = Path(__file__).resolve().parent
+
+# Locale before any Kivy / app imports (catalog + ASTRO_LANG for subprocesses)
+ensure_locale_env(PROJECT_ROOT)
 
 # ============================================
 # IMPORTANT: BEFORE any Kivy imports!
@@ -26,9 +30,10 @@ def _use_wrapper():
     """Checks if wrapper mode is active (option C)."""
     try:
         import yaml
+
         config_path = get_launcher_config_path(PROJECT_ROOT)
         with open(config_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+            data = yaml.safe_load(f) or {}
         return data.get("launcher", {}).get("use_wrapper", False)
     except Exception:
         return False
@@ -72,12 +77,12 @@ if DEV_MODE:
     Config.add_section("input")
     Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
-    print("🔧 Entwicklungsmodus aktiv")
+    print("Development mode")
 else:
     # Pi: fullscreen, hide cursor (touchscreen)
     Config.set("graphics", "fullscreen", "auto")
     Config.set("graphics", "show_cursor", "0")
-    print("🚀 Produktionsmodus aktiv")
+    print("Production mode")
 
 # Now import the app
 from launcher.app import AstroLauncherApp

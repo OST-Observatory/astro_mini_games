@@ -5,6 +5,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 
 from ui.theme import Colors
+from shared.i18n import tr
 
 
 def _font():
@@ -33,13 +34,17 @@ class FeedbackOverlay(FloatLayout):
 
     def show_correct(self, name: str):
         """Show correct answer feedback with constellation name."""
-        self.label.text = f"Richtig!\n{name}"
+        self.label.text = tr("sternbilder_feedback.correct", name=name)
         self.label.color = Colors.CORRECT
         self._animate()
 
     def show_wrong(self, name: str = ""):
         """Show wrong answer feedback, optionally with expected name."""
-        self.label.text = f"Falsch{f': {name}' if name else ''}"
+        self.label.text = (
+            tr("sternbilder_feedback.wrong_name", name=name)
+            if name
+            else tr("sternbilder_feedback.wrong")
+        )
         self.label.color = Colors.WRONG
         self._animate()
 

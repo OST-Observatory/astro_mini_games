@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 
 from shared.usage_stats import write_usage_stats
+from shared.i18n import ensure_locale_env
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 NEXT_APP_FILE = Path("/tmp/astro_next_app.json")
@@ -52,7 +53,7 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
     project_root = Path(project_root).resolve()
 
     use_shell = cmd_list is None
-    print(f"[Wrapper] Starte App: {app_name!r}, cmd={cmd_list or shell_cmd!r}, cwd={project_root}", flush=True)
+    print(f"[Wrapper] Starting app: {app_name!r}, cmd={cmd_list or shell_cmd!r}, cwd={project_root}", flush=True)
 
     _clear_console()
 
@@ -65,6 +66,7 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
     ready_path = Path(ready_file)
     ready_timeout = 45.0
 
+    ensure_locale_env(project_root)
     env = {**os.environ, "ASTRO_READY_FILE": ready_file}
     venv_bin = str(Path(sys.executable).parent)
     env["PATH"] = venv_bin + os.pathsep + env.get("PATH", "")
@@ -79,7 +81,7 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
     try:
         log_file = open(log_path, "a", encoding="utf-8", buffering=1)
         # Header: app terminal output goes to log
-        log_file.write(f"\n[Wrapper] === App stdout/stderr: {app_name!r} (PID folgt) ===\n")
+        log_file.write(f"\n[Wrapper] === App stdout/stderr: {app_name!r} (PID follows) ===\n")
         log_file.flush()
     except OSError:
         log_file = None
@@ -111,12 +113,12 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
                 tty_stdin.close()
             except OSError:
                 pass
-        print(f"[Wrapper] FEHLER beim App-Start: {e}", flush=True)
+        print(f"[Wrapper] Error starting app: {e}", flush=True)
         return
 
-    print(f"[Wrapper] App-Prozess gestartet (PID {proc.pid})", flush=True)
+    print(f"[Wrapper] App process started (PID {proc.pid})", flush=True)
     if log_file:
-        log_file.write(f"[Wrapper] App-Prozess PID {proc.pid} – Terminal-Output der App folgt:\n")
+        log_file.write(f"[Wrapper] App process PID {proc.pid} — app terminal output follows:\n")
         log_file.flush()
 
     # Wait for ready signal, then for app exit (log stays open until then)
@@ -125,12 +127,12 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
     while time.monotonic() < deadline:
         if ready_path.exists():
             if log_file:
-                log_file.write("[Wrapper] App bereit, warte auf Beendigung...\n")
+                log_file.write("[Wrapper] App ready, waiting for exit...\n")
                 log_file.flush()
             break
         if proc.poll() is not None:
             if log_file:
-                log_file.write(f"[Wrapper] App beendet (Exit {proc.returncode}) ohne Ready-Signal\n")
+                log_file.write(f"[Wrapper] App exited (code {proc.returncode}) without ready signal\n")
                 log_file.flush()
             break
         # time.sleep(0.1)
@@ -150,7 +152,8 @@ def run_app_cycle(app_id: str, command: str, app_name: str, project_root: Path):
 
     # Start launcher (without own loading animation)
     _clear_console()
-    print(f"[Wrapper] Starte Launcher...", flush=True)
+    print("[Wrapper] Starting launcher...", flush=True)
+    ensure_locale_env(project_root)
     launcher_env = {**os.environ, "ASTRO_LAUNCHER_FROM_WRAPPER": "1"}
     launcher_env["PATH"] = venv_bin + os.pathsep + launcher_env.get("PATH", "")
     if sys.platform == "linux":
@@ -169,15 +172,16 @@ def _run_launcher_first(project_root: Path):
     Wrapper waits for app exit, writes stats, restarts launcher.
     """
     venv_bin = str(Path(sys.executable).parent)
-    launcher_env = {**os.environ, "ASTRO_LAUNCHER_FROM_WRAPPER": "1"}
-    launcher_env["PATH"] = venv_bin + os.pathsep + launcher_env.get("PATH", "")
-    if sys.platform == "linux":
-        launcher_env.setdefault("SDL_VIDEODRIVER", "kmsdrm")
     launcher_cmd = [sys.executable, str(project_root / "main.py"), "--launcher-only"]
 
     while True:
         _clear_console()
-        print("[Wrapper] Starte Launcher...", flush=True)
+        print("[Wrapper] Starting launcher...", flush=True)
+        ensure_locale_env(project_root)
+        launcher_env = {**os.environ, "ASTRO_LAUNCHER_FROM_WRAPPER": "1"}
+        launcher_env["PATH"] = venv_bin + os.pathsep + launcher_env.get("PATH", "")
+        if sys.platform == "linux":
+            launcher_env.setdefault("SDL_VIDEODRIVER", "kmsdrm")
         proc = subprocess.Popen(
             launcher_cmd,
             cwd=str(project_root),
@@ -215,7 +219,7 @@ def main():
         pass
 
     if "--launcher-first" in sys.argv:
-        print("[Wrapper] Modus: launcher-first", flush=True)
+        print("[Wrapper] Mode: launcher-first", flush=True)
         _run_launcher_first(project_root)
         return
 
@@ -228,7 +232,7 @@ def main():
     command = sys.argv[2]
     app_name = sys.argv[3] if len(sys.argv) > 3 else app_id
 
-    print(f"[Wrapper] Gestartet: app_id={app_id!r}, project_root={project_root}", flush=True)
+    print(f"[Wrapper] Started: app_id={app_id!r}, project_root={project_root}", flush=True)
 
     while True:
         run_app_cycle(app_id, command, app_name, project_root)

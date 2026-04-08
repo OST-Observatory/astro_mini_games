@@ -9,7 +9,13 @@ from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
 
-from quiz.question_loader import load_questions, shuffle_and_limit, get_category_difficulty_map
+from quiz.question_loader import (
+    get_category_difficulty_map,
+    load_categories_from_questions_file,
+    load_questions,
+    shuffle_and_limit,
+)
+from shared.i18n import tr
 from quiz.game_logic import QuizGame
 from ui.screens.start_screen import StartScreen
 from ui.screens.question_screen import QuestionScreen
@@ -32,7 +38,7 @@ class QuizApp(AstroApp):
 
     def build(self):
         """Build the quiz UI: start screen, question screen, result screen."""
-        self.title = "Astro-Quiz"
+        self.title = tr("quiz.title")
         Window.bind(on_keyboard=self._on_keyboard)
         self._load_config()
         # Make quiz images (incl. GIFs) available for resource_find
@@ -46,7 +52,7 @@ class QuizApp(AstroApp):
             self._bg_rect = Rectangle(pos=root.pos, size=root.size)
         root.bind(size=self._update_bg)
 
-        categories = self.config_data.get("categories", [])
+        categories = load_categories_from_questions_file()
         category_difficulty_map = get_category_difficulty_map()
         self.start_screen = StartScreen(
             categories=categories,
@@ -139,3 +145,19 @@ class QuizApp(AstroApp):
             self.stop()
             return True
         return False
+
+    def _apply_locale(self):
+        super()._apply_locale()
+        self.title = tr("quiz.title")
+        cats = load_categories_from_questions_file()
+        cmap = get_category_difficulty_map()
+        if self.start_screen:
+            self.start_screen.categories = cats
+            self.start_screen._category_difficulty_map = cmap
+            self.start_screen.apply_locale()
+        if self.current_screen == "question" and self.game and self.game.current_question:
+            timer_sec = self.config_data.get("game", {}).get("timer_seconds", 20)
+            self.question_screen.show_question(self.game.current_question, timer_sec)
+            self.question_screen.update_stats(self.game.points, self.game.streak)
+        elif self.current_screen == "result" and self.result_screen:
+            self.result_screen.apply_locale()

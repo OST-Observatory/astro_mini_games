@@ -24,6 +24,7 @@ Config.set('graphics', 'resizable', '0')
 
 from kivy.app import App
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
@@ -59,8 +60,13 @@ class DemoWidget(FloatLayout):
         # Create stars
         Clock.schedule_once(self._init_stars, 0)
         
-        # Build UI
         self._build_ui()
+
+    def apply_i18n(self):
+        self._title.text = tr("demo.title")
+        self._info.text = tr("demo.info_full")
+        self._close_btn.text = tr("demo.exit")
+        self._auto_btn.text = tr("demo.auto_close")
         
         # Start animation
         Clock.schedule_interval(self._update, 1/30)
@@ -77,30 +83,25 @@ class DemoWidget(FloatLayout):
     def _build_ui(self):
         """Build UI elements."""
         
-        # Title
-        title = Label(
-            text="Demo App",
+        self._title = Label(
+            text=tr("demo.title"),
             font_size='48sp',
             bold=True,
             size_hint=(None, None),
             pos_hint={'center_x': 0.5, 'top': 0.95}
         )
-        title.bind(texture_size=title.setter('size'))
-        self.add_widget(title)
-        
-        # Info text
-        info = Label(
-            text="Diese App testet den Launch-Mechanismus.\n\n"
-                 "Der Launcher sollte im Hintergrund warten\n"
-                 "und nach dem Schliessen dieser App\n"
-                 "wieder erscheinen.",
+        self._title.bind(texture_size=self._title.setter('size'))
+        self.add_widget(self._title)
+
+        self._info = Label(
+            text=tr("demo.info_full"),
             font_size='18sp',
             halign='center',
             size_hint=(0.8, None),
             pos_hint={'center_x': 0.5, 'center_y': 0.55}
         )
-        info.bind(texture_size=info.setter('size'))
-        self.add_widget(info)
+        self._info.bind(texture_size=self._info.setter('size'))
+        self.add_widget(self._info)
         
         # Countdown label
         self.countdown_label = Label(
@@ -114,28 +115,27 @@ class DemoWidget(FloatLayout):
         self.add_widget(self.countdown_label)
         
         # Close button
-        close_btn = Button(
-            text="App beenden",
+        self._close_btn = Button(
+            text=tr("demo.exit"),
             font_size='22sp',
             size_hint=(None, None),
             size=(250, 60),
             pos_hint={'center_x': 0.5, 'center_y': 0.18},
             background_color=(0.8, 0.2, 0.2, 1)
         )
-        close_btn.bind(on_release=self._close_app)
-        self.add_widget(close_btn)
-        
-        # Auto-close button
-        auto_btn = Button(
-            text="Auto-Close in 10s",
+        self._close_btn.bind(on_release=self._close_app)
+        self.add_widget(self._close_btn)
+
+        self._auto_btn = Button(
+            text=tr("demo.auto_close"),
             font_size='18sp',
             size_hint=(None, None),
             size=(200, 50),
             pos_hint={'center_x': 0.5, 'center_y': 0.08},
             background_color=(0.2, 0.5, 0.8, 1)
         )
-        auto_btn.bind(on_release=self._start_countdown)
-        self.add_widget(auto_btn)
+        self._auto_btn.bind(on_release=self._start_countdown)
+        self.add_widget(self._auto_btn)
         
         self.countdown_active = False
         self.countdown_value = 0
@@ -152,7 +152,7 @@ class DemoWidget(FloatLayout):
     def _countdown_tick(self, dt):
         """Update countdown."""
         self.countdown_value -= 1
-        self.countdown_label.text = f"Schliesse in {self.countdown_value}..."
+        self.countdown_label.text = tr("demo.countdown", n=self.countdown_value)
         
         if self.countdown_value <= 0:
             self._close_app(None)
@@ -192,12 +192,23 @@ class DemoWidget(FloatLayout):
 
 class DemoApp(AstroApp):
     """Demo application."""
-    
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._demo_widget = None
+
     def build(self):
         """Build the demo UI with animated starfield."""
-        self.title = "Astro Demo App"
+        self.title = tr("demo.title")
         Window.bind(on_keyboard=self.on_keyboard)
-        return DemoWidget()
+        self._demo_widget = DemoWidget()
+        return self._demo_widget
+
+    def _apply_locale(self):
+        super()._apply_locale()
+        if self._demo_widget:
+            self._demo_widget.apply_i18n()
+        self.title = tr("demo.title")
     
     def on_keyboard(self, window, key, scancode, codepoint, modifier):
         # ESC to exit

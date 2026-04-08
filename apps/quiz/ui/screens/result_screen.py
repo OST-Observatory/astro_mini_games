@@ -9,6 +9,7 @@ from kivy.uix.textinput import TextInput
 
 from ui.theme import Colors, SPACING_LG, SPACING_SM, MIN_TOUCH_TARGET
 from ui.rounded_button import RoundedButton
+from shared.i18n import tr
 
 
 def _font_kw():
@@ -27,6 +28,11 @@ class ResultScreen(FloatLayout):
         self._current_correct = 0
         self._current_total = 0
         self._already_submitted = False
+        self._last_result_payload = None
+
+    def apply_locale(self):
+        if self._last_result_payload:
+            self.show_result(**self._last_result_payload)
 
     def show_result(
         self,
@@ -42,6 +48,13 @@ class ResultScreen(FloatLayout):
         self._current_correct = correct
         self._current_total = total
         self._already_submitted = False
+        self._last_result_payload = {
+            "points": points,
+            "correct": correct,
+            "total": total,
+            "max_streak": max_streak,
+            "answer_history": answer_history,
+        }
         font_kw = _font_kw()
 
         scroll = ScrollView(size_hint=(1, 1))
@@ -54,7 +67,7 @@ class ResultScreen(FloatLayout):
         box.bind(minimum_height=box.setter("height"))
 
         title = Label(
-            text="Quiz beendet!",
+            text=tr("quiz.finished"),
             **font_kw,
             font_size="32sp",
             bold=True,
@@ -65,7 +78,7 @@ class ResultScreen(FloatLayout):
         box.add_widget(title)
 
         score = Label(
-            text=f"{points} Punkte",
+            text=tr("quiz.score_points", points=points),
             **font_kw,
             font_size="28sp",
             color=Colors.TEXT_PRIMARY,
@@ -75,7 +88,7 @@ class ResultScreen(FloatLayout):
         box.add_widget(score)
 
         stats = Label(
-            text=f"{correct} von {total} richtig\nBester Streak: {max_streak}",
+            text=tr("quiz.stats_lines", correct=correct, total=total, max_streak=max_streak),
             **font_kw,
             font_size="18sp",
             color=Colors.TEXT_SECONDARY,
@@ -89,7 +102,7 @@ class ResultScreen(FloatLayout):
         # Evaluation per question (3 columns)
         if answer_history:
             eval_label = Label(
-                text="Auswertung",
+                text=tr("quiz.evaluation"),
                 **font_kw,
                 font_size="20sp",
                 bold=True,
@@ -116,7 +129,7 @@ class ResultScreen(FloatLayout):
 
         # Leaderboard
         leaderboard_label = Label(
-            text="Bestenliste",
+            text=tr("quiz.leaderboard"),
             **font_kw,
             font_size="20sp",
             bold=True,
@@ -134,13 +147,13 @@ class ResultScreen(FloatLayout):
             height=MIN_TOUCH_TARGET,
             background_color=Colors.BG_CARD,
             foreground_color=Colors.TEXT_PRIMARY,
-            hint_text="Name eingeben…",
+            hint_text=tr("quiz.name_hint"),
             write_tab=False,
         )
         box.add_widget(self._name_input)
 
         submit_btn = RoundedButton(
-            text="In Bestenliste eintragen",
+            text=tr("quiz.submit_score"),
             **font_kw,
             font_size="18sp",
             size_hint_y=None,
@@ -169,7 +182,7 @@ class ResultScreen(FloatLayout):
         box.add_widget(BoxLayout(size_hint_y=None, height=SPACING_LG))
 
         restart_btn = RoundedButton(
-            text="Nochmal spielen",
+            text=tr("quiz.play_again"),
             **font_kw,
             font_size="22sp",
             size_hint_y=None,
@@ -181,7 +194,7 @@ class ResultScreen(FloatLayout):
         box.add_widget(restart_btn)
 
         exit_btn = RoundedButton(
-            text="Zurück zur App-Übersicht",
+            text=tr("quiz.back_launcher"),
             **font_kw,
             font_size="16sp",
             size_hint_y=None,
@@ -240,12 +253,12 @@ class ResultScreen(FloatLayout):
         from quiz.leaderboard import get_top_scores
         scores = get_top_scores()
         if not scores:
-            return "Noch keine Einträge."
+            return tr("quiz.leaderboard_empty")
         lines = []
         for i, s in enumerate(scores, 1):
             name = (s.get("name", "?") or "?")[:20]
             pts = s.get("points", 0)
-            lines.append(f"{i}. {name}: {pts} Punkte")
+            lines.append(tr("quiz.leaderboard_line", i=i, name=name, pts=pts))
         return "\n".join(lines)
 
     def _on_submit_leaderboard(self, instance):
@@ -265,6 +278,5 @@ class ResultScreen(FloatLayout):
         self._leaderboard_label.text = self._format_leaderboard()
         if rank <= 3:
             self._leaderboard_label.text = (
-                f"Glückwunsch! Du bist auf Platz {rank}!\n\n"
-                + self._leaderboard_label.text
+                tr("quiz.congrats_rank", rank=rank) + "\n\n" + self._leaderboard_label.text
             )

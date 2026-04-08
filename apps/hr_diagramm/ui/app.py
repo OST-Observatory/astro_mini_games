@@ -4,6 +4,7 @@ from pathlib import Path
 
 import yaml
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
@@ -21,9 +22,15 @@ class HRDiagrammApp(AstroApp):
         super().__init__(**kwargs)
         self.config_path = Path(__file__).parent.parent / "config.yaml"
 
+    def _apply_locale(self):
+        super()._apply_locale()
+        self.title = tr("hr_diagramm.app_title")
+        if getattr(self, "info_panel", None):
+            self.info_panel.apply_i18n()
+
     def build(self):
         """Build the HR diagram UI: scatter renderer and info panel."""
-        self.title = "HR-Diagramm"
+        self.title = tr("hr_diagramm.app_title")
         Window.bind(on_keyboard=self._on_keyboard)
 
         root = FloatLayout()

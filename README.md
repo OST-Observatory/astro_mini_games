@@ -196,6 +196,9 @@ The launcher reads **`config.yaml`** if it exists next to `main.py`; otherwise i
 | **launcher** | `use_wrapper` | `true` = wrapper mode (exec), `false` = direct subprocess |
 | **launcher** | `target_resolution`, `grid`, `wiggle`, `background` | Layout and display |
 | **apps** | `id`, `name`, `icon`, `command`, `enabled` | App entries (Python or native binaries) |
+| **i18n** | `locale` | Default language in shipped config (`de` / `en` / `es`). In-app or launcher changes are stored separately in `~/.local/share/astro_mini_games/locale.yaml` so production `config.yaml` is never modified for language. |
+
+**Languages:** UI strings are loaded from [`locales/`](locales/) (`de.yaml`, `en.yaml`, `es.yaml`). App tile titles use nested `name` / `description` maps per language in the config (see `config_default.yaml`). Quiz questions use `apps/quiz/data/questions.<locale>.yaml`. **Runtime override:** If `~/.local/share/astro_mini_games/locale.yaml` exists (written when switching language in the launcher or an app), that locale wins so it is not overridden by a stale `ASTRO_LANG` from the parent process. Otherwise use `ASTRO_LANG=de|en|es`, then `i18n.locale` in the active launcher YAML. To force a language with only the environment variable, remove or rename `locale.yaml` first.
 
 **Disable inactivity timeout when testing:** Run an app with `--no-idle-timeout` (e.g. `python apps/quiz/main.py --no-idle-timeout`) so it does not return to the launcher after idle time. Alternatively set `ASTRO_NO_IDLE_TIMEOUT=1` in the environment (useful if the launcher does not forward CLI arguments).
 

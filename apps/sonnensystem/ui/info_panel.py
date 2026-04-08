@@ -1,5 +1,7 @@
 """Slide-in panel with planet info."""
 
+from datetime import date, datetime
+
 from kivy.animation import Animation
 from kivy.graphics import Color, RoundedRectangle
 from kivy.uix.boxlayout import BoxLayout
@@ -7,6 +9,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 
 from ui.theme import Colors, SPACING_MD, RADIUS_LG, MIN_TOUCH_TARGET
+from shared.i18n import tr
 
 
 def _font():
@@ -14,73 +17,14 @@ def _font():
     return get_safe_font()
 
 
-# Extended planet data with description and comparisons
-PLANET_INFO = {
-    "Merkur": {
-        "distance": "0.39x Erde - Sonne",
-        "period": "88 Tage",
-        "mass": "0.06 Erdmassen",
-        "size": "0.38 Erddurchmesser",
-        "type": "Gesteinsplanet",
-        "desc": "Er ist der kleinste Planet und der Sonne am nächsten.",
-    },
-    "Venus": {
-        "distance": "0.72x Erde - Sonne",
-        "period": "225 Tage",
-        "mass": "0.82 Erdmassen",
-        "size": "0.95 Erddurchmesser",
-        "type": "Gesteinsplanet",
-        "desc": "Schwesterplanet der Erde mit einer dichten Atmosphäre und einem galoppierenden Treibhauseffekt.",
-    },
-    "Erde": {
-        "distance": "1.00x Erde - Sonne",
-        "period": "365 Tage",
-        "mass": "1.00 Erdmasse",
-        "size": "1.00 Erddurchmesser",
-        "type": "Gesteinsplanet",
-        "desc": "Unser Heimatplanet und der einzige mit flüssigem Wasser an der Oberfläche.",
-    },
-    "Mars": {
-        "distance": "1.52x Erde - Sonne",
-        "period": "687 Tage",
-        "mass": "0.11 Erdmassen",
-        "size": "0.53 Erddurchmesser",
-        "type": "Gesteinsplanet",
-        "desc": "Der Rote Planet - Er hat den höchsten Vulkan im Sonnensystem, Olympus Mons.",
-    },
-    "Jupiter": {
-        "distance": "5.20x Erde - Sonne",
-        "period": "12 Jahre",
-        "mass": "318 Erdmassen",
-        "size": "11.2 Erddurchmesser",
-        "type": "Gasriese",
-        "desc": "Der größte Planet im Sonnensystem mit einem Sturmsystem größer als die Erde dem Großen Roten Fleck.",
-    },
-    "Saturn": {
-        "distance": "9.54x Erde - Sonne",
-        "period": "29 Jahre",
-        "mass": "95 Erdmassen",
-        "size": "9.45 Erddurchmesser",
-        "type": "Gasriese",
-        "desc": "Berühmt für sein Ringystem aus Eis und Gestein.",
-    },
-    "Uranus": {
-        "distance": "19.2x Erde - Sonne",
-        "period": "84 Jahre",
-        "mass": "14.5 Erdmassen",
-        "size": "4 Erddurchmesser",
-        "type": "Eisriese",
-        "desc": "Ein Eisriese, der seitlich gekippt ist, wahrscheinlich durch einen Stoß mit einem anderen Planeten.",
-    },
-    "Neptun": {
-        "distance": "30.1x Erde - Sonne",
-        "period": "165 Jahre",
-        "mass": "17.1 Erdmassen",
-        "size": "3.9 Erddurchmesser",
-        "type": "Eisriese",
-        "desc": "Der außerste Planet im Sonnensystem. Licht braucht mehr als 4 Stunden von der Sonne bis zum Neptun.",
-    },
-}
+def _planet_field(planet_name: str, field: str) -> str:
+    return tr(f"sonnensystem_info.planet.{planet_name}.{field}")
+
+
+def _planet_display_name(planet_name: str) -> str:
+    key = f"sonnensystem_info.display_name.{planet_name}"
+    s = tr(key)
+    return planet_name if s == key else s
 
 
 class InfoPanel(BoxLayout):
@@ -96,6 +40,8 @@ class InfoPanel(BoxLayout):
             **kwargs
         )
         self.pos_hint = {"right": 1, "top": 1}
+        self._last_planet_name: str | None = None
+        self._last_sim_date = None
         self.bind(parent=self._update_width)
         with self.canvas.before:
             Color(*Colors.BG_PANEL)
@@ -130,8 +76,8 @@ class InfoPanel(BoxLayout):
             height=24,
         )
         self.add_widget(self.label_sim_time)
-        close_btn = Button(
-            text="Schließen",
+        self._close_btn = Button(
+            text=tr("sonnensystem_info.close"),
             font_name=_font(),
             font_size="20sp",
             size_hint_y=None,
@@ -139,10 +85,16 @@ class InfoPanel(BoxLayout):
             background_color=Colors.BG_BUTTON,
             background_normal="",
         )
-        close_btn.bind(on_release=lambda x: self.hide())
-        self.add_widget(close_btn)
+        self._close_btn.bind(on_release=lambda x: self.hide())
+        self.add_widget(self._close_btn)
         self.opacity = 0
         self.disabled = True
+
+    def apply_i18n(self):
+        """Refresh strings after locale change (close button + visible panel only)."""
+        self._close_btn.text = tr("sonnensystem_info.close")
+        if self._last_planet_name and self.opacity > 0.01:
+            self._populate_content(self._last_planet_name, self._last_sim_date)
 
     def _update_bg(self, *args):
         if hasattr(self, "_bg_rect"):
@@ -153,29 +105,51 @@ class InfoPanel(BoxLayout):
         if self.parent and self.parent.width > 0:
             self.width = max(280, min(400, self.parent.width * 0.35))
 
-    def show(self, planet_name: str, sim_date=None):
-        """Display planet info (name, description, distance, period, mass, etc.)."""
-        info = PLANET_INFO.get(planet_name, {})
-        self.label_name.text = planet_name
+    def _populate_content(self, planet_name: str, sim_date):
+        desc = _planet_field(planet_name, "desc")
+        desc_key = f"sonnensystem_info.planet.{planet_name}.desc"
+        has_planet = desc != desc_key
+
+        self.label_name.text = _planet_display_name(planet_name)
         key_labels = {
             "desc": "",
-            "distance": "Abstand: ",
-            "period": "Umlaufzeit: ",
-            "mass": "Masse: ",
-            "type": "Typ: ",
-            "size": "Größe: ",
+            "distance": tr("sonnensystem_info.label_distance"),
+            "period": tr("sonnensystem_info.label_period"),
+            "mass": tr("sonnensystem_info.label_mass"),
+            "type": tr("sonnensystem_info.label_type"),
+            "size": tr("sonnensystem_info.label_size"),
         }
         lines = []
-        if "desc" in info:
-            lines.append(info["desc"])
-        for k in ("distance", "period", "mass", "size", "type"):
-            if k in info:
-                lines.append(key_labels[k] + str(info[k]))
-        self.label_info.text = "\n\n".join(lines) if lines else "Keine Daten"
-        if sim_date:
-            self.label_sim_time.text = sim_date.strftime("Simulation: %d.%m.%Y")
+        if has_planet:
+            lines.append(desc)
+            for k in ("distance", "period", "mass", "size", "type"):
+                val = _planet_field(planet_name, k)
+                field_key = f"sonnensystem_info.planet.{planet_name}.{k}"
+                if val != field_key:
+                    lines.append(key_labels[k] + val)
+        self.label_info.text = "\n\n".join(lines) if lines else tr("sonnensystem_info.no_data")
+
+        if sim_date is not None:
+            fmt = tr("sonnensystem_info.sim_date_fmt")
+            if isinstance(sim_date, datetime):
+                d = sim_date.date()
+            elif isinstance(sim_date, date):
+                d = sim_date
+            else:
+                d = sim_date
+            try:
+                s = d.strftime(fmt)
+            except (ValueError, TypeError):
+                s = str(d)
+            self.label_sim_time.text = tr("sonnensystem_info.sim_time", s=s)
         else:
             self.label_sim_time.text = ""
+
+    def show(self, planet_name: str, sim_date=None):
+        """Display planet info (name, description, distance, period, mass, etc.)."""
+        self._last_planet_name = planet_name
+        self._last_sim_date = sim_date
+        self._populate_content(planet_name, sim_date)
         self.opacity = 1
         self.disabled = False
 

@@ -4,6 +4,7 @@ import random
 from pathlib import Path
 
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, RoundedRectangle
 from kivy.metrics import dp
@@ -24,24 +25,6 @@ from ui.theme import Colors, MIN_TOUCH_TARGET, RADIUS_MD
 from ui.rounded_button import RoundedButton
 from visualization.renderer import StarMapRenderer
 from ui.feedback_overlay import FeedbackOverlay
-
-
-INTRO_TEXT = (
-    "Sternbilder werden je nach Kultur unterschiedlich gedeutet. "
-    "Diese App zeigt die von der Internationalen Astronomischen Union (IAU) "
-    "offiziell festgelegten Sternbilder am nördlichen Nachthimmel. "
-    "Lerne sie kennen und teste dein Wissen im Quiz."
-)
-
-BIG_DIPPER_NOTE = (
-    "Der Große Wagen ist lediglich ein Teil des Sternbildes Große Bärin."
-)
-
-QUIZ_INTRO_TEXT = (
-    "Jetzt kannst du dein Wissen testen! Wähle einen Quiz-Modus:\n\n"
-    "• Auf Karte tippen: Du siehst den Namen eines Sternbilds und tippst es auf der Sternenkarte an.\n\n"
-    "• Multiple Choice: Ein Sternbild wird hervorgehoben. Wähle den richtigen Namen aus drei Antwortmöglichkeiten."
-)
 
 
 def _font():
@@ -109,6 +92,32 @@ class SternbilderApp(AstroApp):
         self.points = 0
         self._widgets = {}
 
+    def _apply_locale(self):
+        super()._apply_locale()
+        self._sync_sternbilder_texts()
+
+    def _sync_sternbilder_texts(self):
+        if getattr(self, "_sb_start_heading", None):
+            self._sb_start_heading.text = tr("sternbilder.heading_learn")
+            self._sb_start_intro.text = tr("sternbilder.intro")
+            self._sb_learn_btn.text = tr("sternbilder.learn_tab")
+            self._sb_quiz_btn.text = tr("sternbilder.to_quiz")
+            self._sb_back_start.text = tr("sternbilder.back_launcher")
+        if getattr(self, "_sb_quiz_title", None):
+            self._sb_quiz_title.text = tr("sternbilder.quiz_heading")
+            self._sb_quiz_intro.text = tr("sternbilder.quiz_intro")
+            self._sb_mode_tap.text = tr("sternbilder.mode_map_tap")
+            self._sb_mode_mc.text = tr("sternbilder.mode_mc")
+            self._sb_back_quiz_choice.text = tr("sternbilder.back_launcher")
+        if getattr(self, "_sb_quiz_end_home", None):
+            self._sb_quiz_end_home.text = tr("sternbilder.back_home")
+            self._sb_quiz_end_launcher.text = tr("sternbilder.back_launcher")
+        if getattr(self, "_sb_swipe_hint", None):
+            self._sb_swipe_hint.text = tr("sternbilder.swipe_hint")
+        if getattr(self, "_sb_mode_tap2", None):
+            self._sb_mode_tap2.text = tr("sternbilder.mode_map_tap")
+            self._sb_mode_mc2.text = tr("sternbilder.mode_mc")
+
     def _get_config(self):
         cfg = load_config()
         session = cfg.get("session", {})
@@ -145,8 +154,8 @@ class SternbilderApp(AstroApp):
     def _build_start_screen(self):
         layout = FloatLayout(size_hint=(1, 1))
 
-        heading = Label(
-            text="Sternbilder entdecken",
+        self._sb_start_heading = Label(
+            text=tr("sternbilder.heading_learn"),
             font_name=_font(),
             font_size="50sp",
             bold=True,
@@ -154,12 +163,12 @@ class SternbilderApp(AstroApp):
             size_hint=(None, None),
             pos_hint={"center_x": 0.5, "top": 0.9},
         )
-        heading.bind(texture_size=heading.setter("size"))
-        layout.add_widget(heading)
+        self._sb_start_heading.bind(texture_size=self._sb_start_heading.setter("size"))
+        layout.add_widget(self._sb_start_heading)
 
         scroll = ScrollView(size_hint=(0.55, 0.4), pos_hint={"center_x": 0.5, "top": 0.84})
-        intro = Label(
-            text=INTRO_TEXT,
+        self._sb_start_intro = Label(
+            text=tr("sternbilder.intro"),
             font_name=_font(),
             font_size="25sp",
             color=Colors.TEXT_PRIMARY,
@@ -167,15 +176,15 @@ class SternbilderApp(AstroApp):
             halign="center",
             valign="middle",
         )
-        intro.bind(
+        self._sb_start_intro.bind(
             texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 40),
             size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
         )
-        scroll.add_widget(intro)
+        scroll.add_widget(self._sb_start_intro)
         layout.add_widget(scroll)
 
-        learn_btn = RoundedButton(
-            text="Sternbilder kennen lernen",
+        self._sb_learn_btn = RoundedButton(
+            text=tr("sternbilder.learn_tab"),
             font_name=_font(),
             font_size="35sp",
             bold=True,
@@ -184,11 +193,11 @@ class SternbilderApp(AstroApp):
             background_color=Colors.ACCENT,
             background_normal="",
         )
-        learn_btn.bind(on_release=self._start_learn)
-        layout.add_widget(learn_btn)
+        self._sb_learn_btn.bind(on_release=self._start_learn)
+        layout.add_widget(self._sb_learn_btn)
 
-        quiz_btn = RoundedButton(
-            text="Zum Quiz",
+        self._sb_quiz_btn = RoundedButton(
+            text=tr("sternbilder.to_quiz"),
             font_name=_font(),
             font_size="35sp",
             bold=True,
@@ -197,19 +206,19 @@ class SternbilderApp(AstroApp):
             background_color=Colors.BG_BUTTON,
             background_normal="",
         )
-        quiz_btn.bind(on_release=self._go_quiz_intro_from_start)
-        layout.add_widget(quiz_btn)
+        self._sb_quiz_btn.bind(on_release=self._go_quiz_intro_from_start)
+        layout.add_widget(self._sb_quiz_btn)
 
-        exit_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._sb_back_start = RoundedButton(
+            text=tr("sternbilder.back_launcher"),
             font_name=_font(),
             font_size="16sp",
             size_hint=(0.5, 0.08),
             pos_hint={"center_x": 0.5, "bottom": 0.04},
             background_color=Colors.BG_BUTTON,
         )
-        exit_btn.bind(on_release=lambda x: self.stop())
-        layout.add_widget(exit_btn)
+        self._sb_back_start.bind(on_release=lambda x: self.stop())
+        layout.add_widget(self._sb_back_start)
 
         self._widgets["start"] = layout
 
@@ -217,8 +226,8 @@ class SternbilderApp(AstroApp):
         """Explanation of quiz modes between learn mode and quiz."""
         layout = FloatLayout(size_hint=(1, 1))
 
-        heading = Label(
-            text="Bereit für das Quiz?",
+        self._sb_quiz_title = Label(
+            text=tr("sternbilder.quiz_heading"),
             font_name=_font(),
             font_size="40sp",
             bold=True,
@@ -226,12 +235,12 @@ class SternbilderApp(AstroApp):
             size_hint=(None, None),
             pos_hint={"center_x": 0.5, "top": 0.92},
         )
-        heading.bind(texture_size=heading.setter("size"))
-        layout.add_widget(heading)
+        self._sb_quiz_title.bind(texture_size=self._sb_quiz_title.setter("size"))
+        layout.add_widget(self._sb_quiz_title)
 
         scroll = ScrollView(size_hint=(0.7, 0.45), pos_hint={"center_x": 0.5, "top": 0.82})
-        intro = Label(
-            text=QUIZ_INTRO_TEXT,
+        self._sb_quiz_intro = Label(
+            text=tr("sternbilder.quiz_intro"),
             font_name=_font(),
             font_size="25sp",
             color=Colors.TEXT_PRIMARY,
@@ -239,15 +248,15 @@ class SternbilderApp(AstroApp):
             halign="left",
             valign="middle",
         )
-        intro.bind(
+        self._sb_quiz_intro.bind(
             texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 40),
             size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
         )
-        scroll.add_widget(intro)
+        scroll.add_widget(self._sb_quiz_intro)
         layout.add_widget(scroll)
 
-        tap_btn = RoundedButton(
-            text="Auf Karte tippen",
+        self._sb_mode_tap = RoundedButton(
+            text=tr("sternbilder.mode_map_tap"),
             font_name=_font(),
             font_size="35sp",
             size_hint=(0.7, 0.1),
@@ -256,11 +265,11 @@ class SternbilderApp(AstroApp):
             background_color=Colors.ACCENT,
             background_normal="",
         )
-        tap_btn.bind(on_release=lambda x: self._start_quiz_from_intro("tap"))
-        layout.add_widget(tap_btn)
+        self._sb_mode_tap.bind(on_release=lambda x: self._start_quiz_from_intro("tap"))
+        layout.add_widget(self._sb_mode_tap)
 
-        mc_btn = RoundedButton(
-            text="Multiple Choice",
+        self._sb_mode_mc = RoundedButton(
+            text=tr("sternbilder.mode_mc"),
             font_name=_font(),
             font_size="35sp",
             size_hint=(0.7, 0.1),
@@ -269,19 +278,19 @@ class SternbilderApp(AstroApp):
             background_color=Colors.ACCENT_2,
             background_normal="",
         )
-        mc_btn.bind(on_release=lambda x: self._start_quiz_from_intro("mc"))
-        layout.add_widget(mc_btn)
+        self._sb_mode_mc.bind(on_release=lambda x: self._start_quiz_from_intro("mc"))
+        layout.add_widget(self._sb_mode_mc)
 
-        exit_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._sb_back_quiz_choice = RoundedButton(
+            text=tr("sternbilder.back_launcher"),
             font_name=_font(),
             font_size="16sp",
             size_hint=(0.5, 0.08),
             pos_hint={"center_x": 0.5, "bottom": 0.04},
             background_color=Colors.BG_BUTTON,
         )
-        exit_btn.bind(on_release=lambda x: self.stop())
-        layout.add_widget(exit_btn)
+        self._sb_back_quiz_choice.bind(on_release=lambda x: self.stop())
+        layout.add_widget(self._sb_back_quiz_choice)
 
         self._widgets["quiz_intro"] = layout
 
@@ -301,8 +310,8 @@ class SternbilderApp(AstroApp):
         self._quiz_end_label.bind(texture_size=self._quiz_end_label.setter("size"))
         layout.add_widget(self._quiz_end_label)
 
-        btn = RoundedButton(
-            text="Zurück zur Startseite",
+        self._sb_quiz_end_home = RoundedButton(
+            text=tr("sternbilder.back_home"),
             font_name=_font(),
             font_size="35sp",
             bold=True,
@@ -311,19 +320,19 @@ class SternbilderApp(AstroApp):
             background_color=Colors.ACCENT,
             background_normal="",
         )
-        btn.bind(on_release=lambda x: self._show_screen("start"))
-        layout.add_widget(btn)
+        self._sb_quiz_end_home.bind(on_release=lambda x: self._show_screen("start"))
+        layout.add_widget(self._sb_quiz_end_home)
 
-        exit_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._sb_quiz_end_launcher = RoundedButton(
+            text=tr("sternbilder.back_launcher"),
             font_name=_font(),
             font_size="16sp",
             size_hint=(0.5, 0.08),
             pos_hint={"center_x": 0.5, "bottom": 0.04},
             background_color=Colors.BG_BUTTON,
         )
-        exit_btn.bind(on_release=lambda x: self.stop())
-        layout.add_widget(exit_btn)
+        self._sb_quiz_end_launcher.bind(on_release=lambda x: self.stop())
+        layout.add_widget(self._sb_quiz_end_launcher)
 
         self._widgets["quiz_end"] = layout
 
@@ -335,13 +344,14 @@ class SternbilderApp(AstroApp):
         else:
             max_points = total * 3
         lines = [
-            "Quiz beendet!",
+            tr("sternbilder.quiz_done_title"),
             "",
-            f"{self.points} von {max_points} Punkten",
-            f"({total} von {total} Sternbilder gefunden)",
+            tr("sternbilder.quiz_score", points=self.points, max_points=max_points),
+            tr("sternbilder.quiz_all_found", n=total),
         ]
         if self.quiz_wrong_attempts > 0:
-            lines.append(f"({self.quiz_wrong_attempts} Fehlversuch{'e' if self.quiz_wrong_attempts > 1 else ''})")
+            wk = "sternbilder.quiz_wrong_many" if self.quiz_wrong_attempts > 1 else "sternbilder.quiz_wrong_one"
+            lines.append(tr(wk, n=self.quiz_wrong_attempts))
         self._quiz_end_label.text = "\n".join(lines)
         self._quiz_end_label.size_hint_x = 0.9
         self.star_map.opacity = 0
@@ -413,16 +423,16 @@ class SternbilderApp(AstroApp):
         layout.add_widget(next_btn)
         self._learn_next_btn = next_btn
 
-        hint = Label(
-            text="Blättere mit den Pfeilen oder durch Wischen nach links bzw. rechts.",
+        self._sb_swipe_hint = Label(
+            text=tr("sternbilder.swipe_hint"),
             font_name=_font(),
             font_size="12sp",
             color=Colors.TEXT_SECONDARY,
             size_hint=(None, None),
             pos_hint={"center_x": 0.5, "bottom": 0.12},
         )
-        hint.bind(texture_size=hint.setter("size"))
-        layout.add_widget(hint)
+        self._sb_swipe_hint.bind(texture_size=self._sb_swipe_hint.setter("size"))
+        layout.add_widget(self._sb_swipe_hint)
 
         self._widgets["learn"] = layout
 
@@ -473,29 +483,29 @@ class SternbilderApp(AstroApp):
             pos_hint={"center_x": 0.5, "bottom": 0.02},
             spacing=15,
         )
-        tap_btn = RoundedButton(
-            text="Auf Karte tippen",
+        self._sb_mode_tap2 = RoundedButton(
+            text=tr("sternbilder.mode_map_tap"),
             font_name=_font(),
             size_hint_x=None,
             width=160,
             background_color=Colors.BG_BUTTON,
             background_normal="",
         )
-        tap_btn.bind(on_release=lambda x: self._set_quiz_variant("tap"))
-        mc_btn = RoundedButton(
-            text="Multiple Choice",
+        self._sb_mode_tap2.bind(on_release=lambda x: self._set_quiz_variant("tap"))
+        self._sb_mode_mc2 = RoundedButton(
+            text=tr("sternbilder.mode_mc"),
             font_name=_font(),
             size_hint_x=None,
             width=160,
             background_color=Colors.BG_BUTTON,
             background_normal="",
         )
-        mc_btn.bind(on_release=lambda x: self._set_quiz_variant("mc"))
-        self._quiz_variant_box.add_widget(tap_btn)
-        self._quiz_variant_box.add_widget(mc_btn)
+        self._sb_mode_mc2.bind(on_release=lambda x: self._set_quiz_variant("mc"))
+        self._quiz_variant_box.add_widget(self._sb_mode_tap2)
+        self._quiz_variant_box.add_widget(self._sb_mode_mc2)
         layout.add_widget(self._quiz_variant_box)
-        self._quiz_tap_btn = tap_btn
-        self._quiz_mc_btn = mc_btn
+        self._quiz_tap_btn = self._sb_mode_tap2
+        self._quiz_mc_btn = self._sb_mode_mc2
 
         mc_options = BoxLayout(
             orientation="vertical",
@@ -592,7 +602,7 @@ class SternbilderApp(AstroApp):
         self._learn_title.text = display
 
         if const_key == "Große Bärin":
-            self._learn_note.text = BIG_DIPPER_NOTE
+            self._learn_note.text = tr("sternbilder.big_dipper_note")
             self._learn_note.opacity = 1
         else:
             self._learn_note.text = ""

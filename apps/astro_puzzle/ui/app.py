@@ -5,6 +5,7 @@ from pathlib import Path
 
 import yaml
 from shared.base_app import AstroApp
+from shared.i18n import tr
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
@@ -34,9 +35,18 @@ class AstroPuzzleApp(AstroApp):
         self.snap_threshold = 90
         self.grid_sizes = [(3, 3), (4, 4)]
 
+    def _apply_locale(self):
+        super()._apply_locale()
+        self.title = tr("astro_puzzle.app_title")
+        if getattr(self, "_next_btn", None):
+            self._next_btn.text = tr("astro_puzzle.next_image")
+            self._back_btn.text = tr("astro_puzzle.back_launcher")
+        if getattr(self, "success_overlay", None):
+            self.success_overlay.apply_i18n()
+
     def build(self):
         """Build the puzzle UI: board, difficulty selector, info box, buttons."""
-        self.title = "Astro-Puzzle"
+        self.title = tr("astro_puzzle.app_title")
         Window.bind(on_keyboard=self._on_keyboard)
 
         with open(self.config_path, "r", encoding="utf-8") as f:
@@ -95,22 +105,22 @@ class AstroPuzzleApp(AstroApp):
             height=btn_h,
             spacing=margin_y,
         )
-        next_btn = RoundedButton(
-            text="Nächstes Motiv",
+        self._next_btn = RoundedButton(
+            text=tr("astro_puzzle.next_image"),
             font_size="18sp",
             size_hint=(0.5, 1),
             background_color=(0.3, 0.6, 0.5, 1),
         )
-        next_btn.bind(on_release=lambda x: self._next_image())
-        back_btn = RoundedButton(
-            text="Zurück zur Appübersicht",
+        self._next_btn.bind(on_release=lambda x: self._next_image())
+        self._back_btn = RoundedButton(
+            text=tr("astro_puzzle.back_launcher"),
             font_size="16sp",
             size_hint=(0.5, 1),
             background_color=(0.5, 0.4, 0.6, 0.9),
         )
-        back_btn.bind(on_release=lambda x: self._on_back())
-        btn_row.add_widget(next_btn)
-        btn_row.add_widget(back_btn)
+        self._back_btn.bind(on_release=lambda x: self._on_back())
+        btn_row.add_widget(self._next_btn)
+        btn_row.add_widget(self._back_btn)
         bottom_panel.add_widget(btn_row)
 
         self.puzzle_area = FloatLayout(size_hint_y=1)
@@ -143,7 +153,7 @@ class AstroPuzzleApp(AstroApp):
         self.cols = cols
         self.puzzle_area.clear_widgets()
         loading = Label(
-            text="Puzzle wird geladen…",
+            text=tr("astro_puzzle.loading"),
             font_size="24sp",
             color=Colors.TEXT_PRIMARY,
             size_hint=(1, 1),

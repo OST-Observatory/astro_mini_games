@@ -10,6 +10,7 @@ from kivy.uix.textinput import TextInput
 
 from ui.theme import Colors, SPACING_MD, MIN_TOUCH_TARGET
 from ui.rounded_button import RoundedButton
+from shared.i18n import tr
 
 
 def _font():
@@ -43,7 +44,7 @@ class DatePickerPopup(ModalView):
 
         content.add_widget(
             Label(
-                text="Datum wählen",
+                text=tr("sonnensystem_date.pick_title"),
                 font_name=_font(),
                 font_size="24sp",
                 bold=True,
@@ -54,7 +55,7 @@ class DatePickerPopup(ModalView):
         )
 
         row = BoxLayout(orientation="horizontal", size_hint_y=None, height=MIN_TOUCH_TARGET, spacing=SPACING_MD)
-        row.add_widget(Label(text="Tag:", font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=60))
+        row.add_widget(Label(text=tr("sonnensystem_date.day"), font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=60))
         self.day_in = TextInput(
             text=str(initial_date.day),
             font_name=_font(),
@@ -67,7 +68,7 @@ class DatePickerPopup(ModalView):
             input_filter="int",
         )
         row.add_widget(self.day_in)
-        row.add_widget(Label(text="Monat:", font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=70))
+        row.add_widget(Label(text=tr("sonnensystem_date.month"), font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=70))
         self.month_in = TextInput(
             text=str(initial_date.month),
             font_name=_font(),
@@ -80,7 +81,7 @@ class DatePickerPopup(ModalView):
             input_filter="int",
         )
         row.add_widget(self.month_in)
-        row.add_widget(Label(text="Jahr:", font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=60))
+        row.add_widget(Label(text=tr("sonnensystem_date.year"), font_name=_font(), font_size="18sp", color=Colors.TEXT_PRIMARY, size_hint_x=None, width=60))
         self.year_in = TextInput(
             text=str(initial_date.year),
             font_name=_font(),
@@ -97,7 +98,7 @@ class DatePickerPopup(ModalView):
 
         btn_row = BoxLayout(orientation="horizontal", size_hint_y=None, height=MIN_TOUCH_TARGET, spacing=SPACING_MD)
         heute_btn = RoundedButton(
-            text="Heute",
+            text=tr("sonnensystem_date.today"),
             font_name=_font(),
             font_size="18sp",
             size_hint_x=0.5,
@@ -107,7 +108,7 @@ class DatePickerPopup(ModalView):
         heute_btn.bind(on_release=self._set_today)
         btn_row.add_widget(heute_btn)
         setzen_btn = RoundedButton(
-            text="Übernehmen",
+            text=tr("sonnensystem_date.apply"),
             font_name=_font(),
             font_size="18sp",
             size_hint_x=0.5,

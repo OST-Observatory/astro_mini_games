@@ -7,6 +7,28 @@ from pathlib import Path
 DIFFICULTY_ORDER = ("laie", "amateur", "astronom")  # easy → hard
 
 
+def get_questions_yaml_path() -> Path:
+    """Localized questions file; fallback to German."""
+    from shared.i18n import get_locale
+
+    base = Path(__file__).resolve().parent.parent / "data"
+    loc = get_locale()
+    cand = base / f"questions.{loc}.yaml"
+    if cand.is_file():
+        return cand
+    return base / "questions.de.yaml"
+
+
+def load_categories_from_questions_file(questions_path: Path = None) -> list:
+    """Category list (id, name) from the localized questions YAML."""
+    import yaml
+
+    path = questions_path or get_questions_yaml_path()
+    with open(path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return data.get("categories", [])
+
+
 def _normalize_difficulty(d) -> str:
     """Convert numbers (1,2,3) and legacy labels to laie/amateur/astronom."""
     if d is None:
@@ -39,7 +61,7 @@ def get_category_difficulty_map(questions_path: Path = None) -> dict:
     import yaml
 
     if questions_path is None:
-        questions_path = Path(__file__).parent.parent / "data" / "questions.yaml"
+        questions_path = get_questions_yaml_path()
 
     with open(questions_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
@@ -72,7 +94,7 @@ def get_question_count_per_category(
     import yaml
 
     if questions_path is None:
-        questions_path = Path(__file__).parent.parent / "data" / "questions.yaml"
+        questions_path = get_questions_yaml_path()
 
     with open(questions_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
@@ -149,7 +171,7 @@ def load_questions(
     import yaml
 
     if questions_path is None:
-        questions_path = Path(__file__).parent.parent / "data" / "questions.yaml"
+        questions_path = get_questions_yaml_path()
 
     with open(questions_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
