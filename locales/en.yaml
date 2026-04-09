@@ -53,7 +53,7 @@ sternbilder:
   to_quiz: "Go to quiz"
   back_launcher: "Back to app overview"
   quiz_heading: "Ready for the quiz?"
-  quiz_intro: "Test your knowledge! Choose a quiz mode:\n\n• Tap on map: You see a constellation name and tap it on the star map.\n\n• Multiple choice: A constellation is highlighted. Pick the correct name from three options."
+  quiz_intro: "Test your knowledge! Choose a quiz mode:\n\n• [b][color=#a8c8ff]Tap on map:[/color][/b] You see a constellation name and tap it on the star map.\n\n• [b][color=#a8c8ff]Multiple choice:[/color][/b] A constellation is highlighted. Pick the correct name from three options."
   mode_map_tap: "Tap on map"
   mode_mc: "Multiple choice"
   back_home: "Back to home"

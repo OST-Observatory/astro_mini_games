@@ -53,7 +53,7 @@ sternbilder:
   to_quiz: "Zum Quiz"
   back_launcher: "Zurück zur Appübersicht"
   quiz_heading: "Bereit für das Quiz?"
-  quiz_intro: "Jetzt kannst du dein Wissen testen! Wähle einen Quiz-Modus:\n\n• Auf Karte tippen: Du siehst den Namen eines Sternbilds und tippst es auf der Sternenkarte an.\n\n• Multiple Choice: Ein Sternbild wird hervorgehoben. Wähle den richtigen Namen aus drei Antwortmöglichkeiten."
+  quiz_intro: "Jetzt kannst du dein Wissen testen! Wähle einen Quiz-Modus:\n\n• [b][color=#a8c8ff]Auf Karte tippen:[/color][/b] Du siehst den Namen eines Sternbilds und tippst es auf der Sternenkarte an.\n\n• [b][color=#a8c8ff]Multiple Choice:[/color][/b] Ein Sternbild wird hervorgehoben. Wähle den richtigen Namen aus drei Antwortmöglichkeiten."
   mode_map_tap: "Auf Karte tippen"
   mode_mc: "Multiple Choice"
   back_home: "Zurück zur Startseite"

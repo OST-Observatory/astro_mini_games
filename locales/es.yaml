@@ -53,7 +53,7 @@ sternbilder:
   to_quiz: "Ir al cuestionario"
   back_launcher: "Volver al resumen de apps"
   quiz_heading: "¿Listo para el cuestionario?"
-  quiz_intro: "¡Pon a prueba tus conocimientos! Elige un modo:\n\n• Toca el mapa: ves el nombre de una constelación y la señalas en el mapa estelar.\n\n• Opción múltiple: se resalta una constelación. Elige el nombre correcto entre tres opciones."
+  quiz_intro: "¡Pon a prueba tus conocimientos! Elige un modo:\n\n• [b][color=#a8c8ff]Toca el mapa:[/color][/b] ves el nombre de una constelación y la señalas en el mapa estelar.\n\n• [b][color=#a8c8ff]Opción múltiple:[/color][/b] se resalta una constelación. Elige el nombre correcto entre tres opciones."
   mode_map_tap: "Tocar en el mapa"
   mode_mc: "Opción múltiple"
   back_home: "Volver al inicio"

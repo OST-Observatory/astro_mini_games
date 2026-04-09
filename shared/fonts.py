@@ -12,6 +12,23 @@ _FONT_CACHE: str | None = None
 _BUNDLED_FONT = Path(__file__).resolve().parent.parent / "fonts" / "DejaVuSans.ttf"
 
 
+def _bold_font_path(regular: Path) -> Path | None:
+    """Bold face next to regular (same directory), for Label markup [b] and bold=True."""
+    d = regular.parent
+    stem = regular.stem
+    if "DejaVuSans" in stem or stem == "DejaVuSans":
+        for name in ("DejaVuSans-Bold.ttf", "DejaVu Sans Bold.ttf"):
+            p = d / name
+            if p.exists():
+                return p
+    if "NotoSans" in stem:
+        for name in ("NotoSans-Bold.ttf", "Noto Sans Bold.ttf"):
+            p = d / name
+            if p.exists():
+                return p
+    return None
+
+
 def get_safe_font() -> str:
     """
     Returns a valid font name (never None).
@@ -39,7 +56,15 @@ def get_safe_font() -> str:
                 try:
                     from kivy.core.text import LabelBase
                     reg_name = f"AstroFont_{name}"
-                    LabelBase.register(name=reg_name, fn_regular=str(p))
+                    bold = _bold_font_path(p)
+                    if bold and bold.exists():
+                        LabelBase.register(
+                            name=reg_name,
+                            fn_regular=str(p),
+                            fn_bold=str(bold),
+                        )
+                    else:
+                        LabelBase.register(name=reg_name, fn_regular=str(p))
                     _FONT_CACHE = reg_name
                     return _FONT_CACHE
                 except Exception:

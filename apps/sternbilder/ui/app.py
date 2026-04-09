@@ -22,8 +22,28 @@ from star_map.data_loader import (
 )
 from star_map.hit_test import find_constellation_at
 from shared.widgets.confetti import ConfettiOverlay
-from ui.theme import Colors, MIN_TOUCH_TARGET, RADIUS_MD
+from ui.theme import (
+    Colors,
+    MENU_HEADING_QUIZ_INTRO_SP,
+    MENU_HEADING_START_SP,
+    MENU_INTRO_BOX_BG,
+    MENU_INTRO_BOX_PADDING,
+    MENU_INTRO_MAX_HEIGHT_FRACTION,
+    MENU_PRIMARY_BTN_HEIGHT,
+    MENU_PRIMARY_BTN_WIDTH,
+    MENU_PRIMARY_FONT_SP,
+    MENU_QUIZ_INTRO_PRIMARY_WIDTH,
+    MENU_RESULT_BODY_SP,
+    MENU_SECONDARY_BTN_HEIGHT,
+    MENU_SECONDARY_FONT_SP,
+    MENU_SECONDARY_BTN_WIDTH,
+    MENU_VIGNETTE_EDGE_ALPHA,
+    MENU_VIGNETTE_EDGE_FRACTION,
+    MIN_TOUCH_TARGET,
+    RADIUS_MD,
+)
 from ui.rounded_button import RoundedButton
+from ui.twinkle_background import TwinkleStarsBackground
 from visualization.renderer import StarMapRenderer
 from ui.feedback_overlay import FeedbackOverlay
 
@@ -39,6 +59,98 @@ def _style_icon_arrow_button(btn):
     btn.valign = "middle"
     btn.padding = [0, 0, 0, 5]
     btn.bind(size=lambda inst, s: setattr(inst, "text_size", s))
+
+
+def _apply_menu_screen_vignette(layout: FloatLayout) -> None:
+    """Subtle edge darkening on menu FloatLayouts (behind labels and buttons)."""
+    strip = MENU_VIGNETTE_EDGE_FRACTION
+    alpha = MENU_VIGNETTE_EDGE_ALPHA
+    with layout.canvas.before:
+        Color(0, 0, 0, alpha)
+        rects = [Rectangle(pos=(0, 0), size=(1, 1)) for _ in range(4)]
+    layout._menu_vignette_rects = rects
+
+    def upd(*_a):
+        x, y = layout.x, layout.y
+        w, h = layout.width, layout.height
+        if w <= 0 or h <= 0:
+            return
+        tw = w * strip
+        th = h * strip
+        r = layout._menu_vignette_rects
+        r[0].pos = (x, y + h - th)
+        r[0].size = (w, th)
+        r[1].pos = (x, y)
+        r[1].size = (w, th)
+        r[2].pos = (x, y)
+        r[2].size = (tw, h)
+        r[3].pos = (x + w - tw, y)
+        r[3].size = (tw, h)
+
+    layout.bind(pos=upd, size=upd)
+    upd()
+
+
+def _create_menu_intro_box(width_fraction: float, top_fraction: float):
+    """
+    Box with rounded translucent background; height follows text (see _bind_menu_intro_heights).
+    Returns (box, scroll); add Label to scroll, then call _bind_menu_intro_heights(box, scroll, label).
+    """
+    box = BoxLayout(
+        orientation="vertical",
+        size_hint=(width_fraction, None),
+        height=dp(80),
+        pos_hint={"center_x": 0.5, "top": top_fraction},
+        padding=MENU_INTRO_BOX_PADDING,
+    )
+
+    def _sync_bg(inst, *args):
+        inst._bg_rect.pos = inst.pos
+        inst._bg_rect.size = inst.size
+
+    with box.canvas.before:
+        Color(*MENU_INTRO_BOX_BG)
+        box._bg_rect = RoundedRectangle(
+            pos=box.pos,
+            size=box.size,
+            radius=[RADIUS_MD, RADIUS_MD, RADIUS_MD, RADIUS_MD],
+        )
+    box.bind(pos=_sync_bg, size=_sync_bg)
+    _sync_bg(box)
+
+    scroll = ScrollView(
+        size_hint=(1, None),
+        height=dp(80),
+        do_scroll_x=False,
+        bar_width=dp(8),
+        scroll_type=["bars", "content"],
+    )
+    box.add_widget(scroll)
+    return box, scroll
+
+
+def _bind_menu_intro_heights(box, scroll, label):
+    """Size scroll + box to label content, cap height, enable scroll when text is long."""
+    from kivy.clock import Clock
+
+    pad = MENU_INTRO_BOX_PADDING
+
+    def recompute(*_a):
+        if scroll.width <= 8:
+            return
+        label.text_size = (max(1, int(scroll.width)), None)
+        th = label.texture_size[1] + 40
+        label.height = th
+        cap = Window.height * MENU_INTRO_MAX_HEIGHT_FRACTION
+        inner = min(max(th, dp(36)), cap)
+        scroll.height = inner
+        box.height = inner + 2 * pad
+
+    label.bind(texture_size=lambda *args: recompute())
+    scroll.bind(width=recompute)
+    Window.bind(height=recompute)
+    recompute()
+    Clock.schedule_once(lambda dt: recompute(), 0)
 
 
 class LearnSwipeLayer(Widget):
@@ -93,6 +205,17 @@ class SternbilderApp(AstroApp):
         self.points = 0
         self._widgets = {}
 
+    def on_stop(self):
+        tw = getattr(self, "_twinkle_bg", None)
+        if tw is not None:
+            tw.on_stop_app()
+        super().on_stop()
+
+    def _keep_when_clearing_root_overlays(self, child) -> bool:
+        if super()._keep_when_clearing_root_overlays(child):
+            return True
+        return child is getattr(self, "_twinkle_bg", None)
+
     def _apply_locale(self):
         super()._apply_locale()
         self._sync_sternbilder_texts()
@@ -131,6 +254,8 @@ class SternbilderApp(AstroApp):
             self._sb_mode_tap.text = tr("sternbilder.mode_map_tap")
             self._sb_mode_mc.text = tr("sternbilder.mode_mc")
             self._sb_back_quiz_choice.text = tr("sternbilder.back_launcher")
+            if getattr(self, "_sb_quiz_intro_home", None):
+                self._sb_quiz_intro_home.text = tr("sternbilder.back_home")
         if getattr(self, "_sb_quiz_end_home", None):
             self._sb_quiz_end_home.text = tr("sternbilder.back_home")
             self._sb_quiz_end_launcher.text = tr("sternbilder.back_launcher")
@@ -162,6 +287,9 @@ class SternbilderApp(AstroApp):
             self._bg_rect = Rectangle(pos=self.root.pos, size=self.root.size)
         self.root.bind(size=self._update_bg)
 
+        self._twinkle_bg = TwinkleStarsBackground()
+        self.root.add_widget(self._twinkle_bg)
+
         self.star_map = StarMapRenderer(size_hint=(1, 1), on_tap=self._on_tap)
         self.root.add_widget(self.star_map)
 
@@ -177,11 +305,12 @@ class SternbilderApp(AstroApp):
 
     def _build_start_screen(self):
         layout = FloatLayout(size_hint=(1, 1))
+        _apply_menu_screen_vignette(layout)
 
         self._sb_start_heading = Label(
             text=tr("sternbilder.heading_learn"),
             font_name=_font(),
-            font_size="50sp",
+            font_size=MENU_HEADING_START_SP,
             bold=True,
             color=Colors.TEXT_PRIMARY,
             size_hint=(None, None),
@@ -190,7 +319,7 @@ class SternbilderApp(AstroApp):
         self._sb_start_heading.bind(texture_size=self._sb_start_heading.setter("size"))
         layout.add_widget(self._sb_start_heading)
 
-        scroll = ScrollView(size_hint=(0.55, 0.4), pos_hint={"center_x": 0.5, "top": 0.84})
+        intro_box, scroll = _create_menu_intro_box(0.58, 0.825)
         self._sb_start_intro = Label(
             text=tr("sternbilder.intro"),
             font_name=_font(),
@@ -200,20 +329,18 @@ class SternbilderApp(AstroApp):
             halign="center",
             valign="middle",
         )
-        self._sb_start_intro.bind(
-            texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 40),
-            size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
-        )
         scroll.add_widget(self._sb_start_intro)
-        layout.add_widget(scroll)
+        _bind_menu_intro_heights(intro_box, scroll, self._sb_start_intro)
+        layout.add_widget(intro_box)
 
         self._sb_learn_btn = RoundedButton(
             text=tr("sternbilder.learn_tab"),
             font_name=_font(),
-            font_size="35sp",
+            font_size=MENU_PRIMARY_FONT_SP,
             bold=True,
-            size_hint=(0.5, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.45},
+            size_hint=(MENU_PRIMARY_BTN_WIDTH, None),
+            height=MENU_PRIMARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "center_y": 0.405},
             background_color=Colors.ACCENT,
             background_normal="",
         )
@@ -223,10 +350,11 @@ class SternbilderApp(AstroApp):
         self._sb_quiz_btn = RoundedButton(
             text=tr("sternbilder.to_quiz"),
             font_name=_font(),
-            font_size="35sp",
+            font_size=MENU_PRIMARY_FONT_SP,
             bold=True,
-            size_hint=(0.5, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.32},
+            size_hint=(MENU_PRIMARY_BTN_WIDTH, None),
+            height=MENU_PRIMARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "center_y": 0.285},
             background_color=Colors.BG_BUTTON,
             background_normal="",
         )
@@ -236,9 +364,10 @@ class SternbilderApp(AstroApp):
         self._sb_back_start = RoundedButton(
             text=tr("sternbilder.back_launcher"),
             font_name=_font(),
-            font_size="16sp",
-            size_hint=(0.5, 0.08),
-            pos_hint={"center_x": 0.5, "bottom": 0.04},
+            font_size=MENU_SECONDARY_FONT_SP,
+            size_hint=(MENU_SECONDARY_BTN_WIDTH, None),
+            height=MENU_SECONDARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "bottom": 0.035},
             background_color=Colors.BG_BUTTON,
         )
         self._sb_back_start.bind(on_release=lambda x: self.stop())
@@ -249,11 +378,12 @@ class SternbilderApp(AstroApp):
     def _build_quiz_intro(self):
         """Explanation of quiz modes between learn mode and quiz."""
         layout = FloatLayout(size_hint=(1, 1))
+        _apply_menu_screen_vignette(layout)
 
         self._sb_quiz_title = Label(
             text=tr("sternbilder.quiz_heading"),
             font_name=_font(),
-            font_size="40sp",
+            font_size=MENU_HEADING_QUIZ_INTRO_SP,
             bold=True,
             color=Colors.TEXT_PRIMARY,
             size_hint=(None, None),
@@ -262,7 +392,7 @@ class SternbilderApp(AstroApp):
         self._sb_quiz_title.bind(texture_size=self._sb_quiz_title.setter("size"))
         layout.add_widget(self._sb_quiz_title)
 
-        scroll = ScrollView(size_hint=(0.7, 0.45), pos_hint={"center_x": 0.5, "top": 0.82})
+        intro_box, scroll = _create_menu_intro_box(0.72, 0.83)
         self._sb_quiz_intro = Label(
             text=tr("sternbilder.quiz_intro"),
             font_name=_font(),
@@ -271,20 +401,19 @@ class SternbilderApp(AstroApp):
             size_hint=(1, None),
             halign="left",
             valign="middle",
-        )
-        self._sb_quiz_intro.bind(
-            texture_size=lambda lbl, val: setattr(lbl, "height", val[1] + 40),
-            size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None)),
+            markup=True,
         )
         scroll.add_widget(self._sb_quiz_intro)
-        layout.add_widget(scroll)
+        _bind_menu_intro_heights(intro_box, scroll, self._sb_quiz_intro)
+        layout.add_widget(intro_box)
 
         self._sb_mode_tap = RoundedButton(
             text=tr("sternbilder.mode_map_tap"),
             font_name=_font(),
-            font_size="35sp",
-            size_hint=(0.7, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.32},
+            font_size=MENU_PRIMARY_FONT_SP,
+            size_hint=(MENU_QUIZ_INTRO_PRIMARY_WIDTH, None),
+            height=MENU_PRIMARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "center_y": 0.405},
             bold=True,
             background_color=Colors.ACCENT,
             background_normal="",
@@ -295,9 +424,10 @@ class SternbilderApp(AstroApp):
         self._sb_mode_mc = RoundedButton(
             text=tr("sternbilder.mode_mc"),
             font_name=_font(),
-            font_size="35sp",
-            size_hint=(0.7, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.18},
+            font_size=MENU_PRIMARY_FONT_SP,
+            size_hint=(MENU_QUIZ_INTRO_PRIMARY_WIDTH, None),
+            height=MENU_PRIMARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "center_y": 0.285},
             bold=True,
             background_color=Colors.ACCENT_2,
             background_normal="",
@@ -305,30 +435,49 @@ class SternbilderApp(AstroApp):
         self._sb_mode_mc.bind(on_release=lambda x: self._start_quiz_from_intro("mc"))
         layout.add_widget(self._sb_mode_mc)
 
+        quiz_intro_bottom = BoxLayout(
+            orientation="horizontal",
+            size_hint=(0.32, None),
+            height=MENU_SECONDARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "bottom": 0.035},
+            spacing=dp(8),
+        )
+        self._sb_quiz_intro_home = RoundedButton(
+            text=tr("sternbilder.back_home"),
+            font_name=_font(),
+            font_size=MENU_SECONDARY_FONT_SP,
+            size_hint=(1, 1),
+            background_color=Colors.BG_BUTTON,
+        )
+        self._sb_quiz_intro_home.bind(
+            on_release=lambda x: self._show_screen("start")
+        )
         self._sb_back_quiz_choice = RoundedButton(
             text=tr("sternbilder.back_launcher"),
             font_name=_font(),
-            font_size="16sp",
-            size_hint=(0.5, 0.08),
-            pos_hint={"center_x": 0.5, "bottom": 0.04},
+            font_size=MENU_SECONDARY_FONT_SP,
+            size_hint=(1, 1),
             background_color=Colors.BG_BUTTON,
         )
         self._sb_back_quiz_choice.bind(on_release=lambda x: self.stop())
-        layout.add_widget(self._sb_back_quiz_choice)
+        quiz_intro_bottom.add_widget(self._sb_quiz_intro_home)
+        quiz_intro_bottom.add_widget(self._sb_back_quiz_choice)
+        layout.add_widget(quiz_intro_bottom)
 
         self._widgets["quiz_intro"] = layout
 
     def _build_quiz_end(self):
         """Quiz finished - show points."""
         layout = FloatLayout(size_hint=(1, 1))
+        _apply_menu_screen_vignette(layout)
 
         self._quiz_end_label = Label(
             text="",
             font_name=_font(),
-            font_size="24sp",
+            font_size=MENU_RESULT_BODY_SP,
             color=Colors.TEXT_PRIMARY,
             size_hint=(0.9, None),
-            pos_hint={"center_x": 0.5, "center_y": 0.55},
+            pos_hint={"center_x": 0.5, "center_y": 0.56},
             halign="center",
         )
         self._quiz_end_label.bind(texture_size=self._quiz_end_label.setter("size"))
@@ -337,10 +486,11 @@ class SternbilderApp(AstroApp):
         self._sb_quiz_end_home = RoundedButton(
             text=tr("sternbilder.back_home"),
             font_name=_font(),
-            font_size="35sp",
+            font_size=MENU_PRIMARY_FONT_SP,
             bold=True,
-            size_hint=(0.5, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.35},
+            size_hint=(MENU_PRIMARY_BTN_WIDTH, None),
+            height=MENU_PRIMARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "center_y": 0.34},
             background_color=Colors.ACCENT,
             background_normal="",
         )
@@ -350,9 +500,10 @@ class SternbilderApp(AstroApp):
         self._sb_quiz_end_launcher = RoundedButton(
             text=tr("sternbilder.back_launcher"),
             font_name=_font(),
-            font_size="16sp",
-            size_hint=(0.5, 0.08),
-            pos_hint={"center_x": 0.5, "bottom": 0.04},
+            font_size=MENU_SECONDARY_FONT_SP,
+            size_hint=(MENU_SECONDARY_BTN_WIDTH, None),
+            height=MENU_SECONDARY_BTN_HEIGHT,
+            pos_hint={"center_x": 0.5, "bottom": 0.035},
             background_color=Colors.BG_BUTTON,
         )
         self._sb_quiz_end_launcher.bind(on_release=lambda x: self.stop())
