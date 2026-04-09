@@ -168,6 +168,7 @@ sonnensystem_info:
 
 hr_diagramm:
   app_title: "Diagrama HR"
+  back_launcher: "Volver al resumen de apps"
   unknown: "Desconocido"
   line_bv: "B-V: {v:.2f}"
   line_absmag: "Mag. abs.: {v:.1f}"

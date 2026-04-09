@@ -8,10 +8,13 @@ from shared.i18n import tr
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
+from kivy.metrics import dp
+from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 
+from shared.fonts import get_safe_font
 from ui.info_panel import InfoPanel
-from ui.theme import Colors
+from ui.theme import Colors, MIN_TOUCH_TARGET
 from visualization.scatter_renderer import HRScatterRenderer
 
 
@@ -25,6 +28,8 @@ class HRDiagrammApp(AstroApp):
     def _apply_locale(self):
         super()._apply_locale()
         self.title = tr("hr_diagramm.app_title")
+        if getattr(self, "_back_btn", None):
+            self._back_btn.text = tr("hr_diagramm.back_launcher")
         if getattr(self, "info_panel", None):
             self.info_panel.apply_i18n()
 
@@ -47,17 +52,32 @@ class HRDiagrammApp(AstroApp):
 
         self.info_panel = InfoPanel()
         root.add_widget(self.info_panel)
+
+        self._back_btn = Button(
+            text=tr("hr_diagramm.back_launcher"),
+            font_name=get_safe_font(),
+            font_size="16sp",
+            size_hint=(None, None),
+            size=(dp(300), MIN_TOUCH_TARGET),
+            pos_hint={"x": 0.02, "top": 0.97},
+            background_color=(0.35, 0.32, 0.52, 0.95),
+            background_normal="",
+            color=Colors.TEXT_PRIMARY,
+        )
+        self._back_btn.bind(on_release=lambda *_: self.stop())
+        root.add_widget(self._back_btn)
+
         Clock.schedule_once(self._trigger_redraw, 0.05)
         return root
 
     def _trigger_redraw(self, dt):
-        """Pi-KMS: Touch triggers repaint - re-insert widget to force redraw."""
+        """Pi-KMS: Touch triggers repaint - re-insert info panel to force redraw."""
         root = self.root
-        if not root or len(root.children) < 2:
+        panel = getattr(self, "info_panel", None)
+        if not root or panel is None or panel.parent is not root:
             return
-        child = root.children[-1]  # InfoPanel
-        root.remove_widget(child)
-        Clock.schedule_once(lambda d: root.add_widget(child), 0)
+        root.remove_widget(panel)
+        Clock.schedule_once(lambda d: root.add_widget(panel), 0)
 
     def _update_bg(self, instance, value):
         self._bg_rect.pos = instance.pos
