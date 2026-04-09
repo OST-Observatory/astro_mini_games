@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 
 from quiz.question_loader import (
     get_category_difficulty_map,
+    get_localized_question_for_display,
     load_categories_from_questions_file,
     load_questions,
     shuffle_and_limit,
@@ -110,7 +111,8 @@ class QuizApp(AstroApp):
             return
 
         timer_sec = self.config_data.get("game", {}).get("timer_seconds", 20)
-        self.question_screen.show_question(q, timer_sec)
+        q_display = get_localized_question_for_display(q)
+        self.question_screen.show_question(q_display, timer_sec)
         self.question_screen.update_stats(self.game.points, self.game.streak)
         self.root.add_widget(self.question_screen)
         self.ensure_lang_switcher_on_top()
@@ -160,7 +162,8 @@ class QuizApp(AstroApp):
             self.start_screen.apply_locale()
         if self.current_screen == "question" and self.game and self.game.current_question:
             timer_sec = self.config_data.get("game", {}).get("timer_seconds", 20)
-            self.question_screen.show_question(self.game.current_question, timer_sec)
+            q_display = get_localized_question_for_display(self.game.current_question)
+            self.question_screen.show_question(q_display, timer_sec)
             self.question_screen.update_stats(self.game.points, self.game.streak)
         elif self.current_screen == "result" and self.result_screen:
             self.result_screen.apply_locale()

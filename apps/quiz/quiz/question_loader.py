@@ -210,3 +210,52 @@ def shuffle_and_limit(questions: list, limit: int = None) -> list:
     if limit:
         shuffled = shuffled[:limit]
     return shuffled
+
+
+# (resolved_path_str, mtime_ns, id -> question dict)
+_QUESTIONS_BY_ID_CACHE: tuple[str, int, dict] | None = None
+
+
+def _questions_by_id_from_yaml(questions_path: Path) -> dict[str, dict]:
+    """Parse YAML once per path/mtime; map question id -> question dict."""
+    import yaml
+
+    path = questions_path.resolve()
+    try:
+        st = path.stat()
+    except OSError:
+        return {}
+
+    global _QUESTIONS_BY_ID_CACHE
+    cache_key = (str(path), st.st_mtime_ns)
+    if _QUESTIONS_BY_ID_CACHE and _QUESTIONS_BY_ID_CACHE[0] == cache_key[0] and _QUESTIONS_BY_ID_CACHE[1] == cache_key[1]:
+        return _QUESTIONS_BY_ID_CACHE[2]
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+    except (OSError, yaml.YAMLError):
+        _QUESTIONS_BY_ID_CACHE = (cache_key[0], cache_key[1], {})
+        return _QUESTIONS_BY_ID_CACHE[2]
+
+    by_id = {q["id"]: q for q in data.get("questions", []) if q.get("id")}
+    _QUESTIONS_BY_ID_CACHE = (cache_key[0], cache_key[1], by_id)
+    return by_id
+
+
+def get_localized_question_for_display(question: dict, questions_path: Path = None) -> dict:
+    """
+    Resolve question text/answers/image for the *current* locale by matching ``id``.
+
+    The game keeps question dicts from the round start; after a language switch we still
+    need the same ``correct`` index and answer order as in that dict (parallel YAML files).
+
+    Falls back to ``question`` if there is no ``id`` or no match in the file.
+    """
+    qid = question.get("id")
+    if not qid:
+        return question
+
+    path = questions_path or get_questions_yaml_path()
+    by_id = _questions_by_id_from_yaml(path)
+    return by_id.get(qid, question)
