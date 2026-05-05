@@ -1,0 +1,53 @@
+# Panda3D display probe – systemd unit (Kiosk / tty1, KMS)
+#
+# Use when the machine has no interactive login on the console (getty on tty1
+# disabled like astro-launcher.service). Runs scripts/panda_display_probe.py on
+# /dev/tty1 with SDL_VIDEODRIVER=kmsdrm so behaviour matches the launcher context.
+#
+# Before testing, stop the launcher if it is running (both need tty1):
+#   sudo systemctl stop astro-launcher
+#
+# Install:
+#   1. Edit paths under [Service] (User, WorkingDirectory, ExecStart python path).
+#      ExecStart MUST use a Python that has Panda3D installed (not all venvs do).
+#   2. Optional: adjust PROBE_SECONDS via Environment= below.
+#   3. sudo cp contrib/astro-panda-display-probe.service /etc/systemd/system/
+#   4. sudo systemctl daemon-reload
+#   5. sudo systemctl start astro-panda-display-probe   # one-shot run
+#
+# Logs:
+#   journalctl -u astro-panda-display-probe -b
+#
+# Panda3D vs SDL: SDL_VIDEODRIVER=kmsdrm matches the Kivy launcher but does not
+# select Panda’s backend; Panda defaults to GLX (X11). On a pure KMS console
+# without X, the probe may still fail until you either:
+#   - run a minimal Xorg on :0 and set Environment=DISPLAY=:0, or
+#   - try software pipe: Environment=PANDA_LOAD_DISPLAY=tinydisplay
+#     (adds --load-display via env; see scripts/panda_display_probe.py).
+#
+# Re-enable normal kiosk when done:
+#   sudo systemctl start astro-launcher
+
+[Unit]
+Description=Astro Panda3D display probe (minimal GL/window test on tty1)
+After=multi-user.target
+Conflicts=getty@tty1.service
+Before=getty@tty1.service
+
+[Service]
+Type=oneshot
+User=kiosk-pi
+Group=kiosk-pi
+Environment=SDL_VIDEODRIVER=kmsdrm
+Environment=PYTHONUNBUFFERED=1
+Environment=PROBE_SECONDS=20
+WorkingDirectory=/home/kiosk-pi/projects/astro_mini_games/astro_mini_games
+# Python must have panda3d (e.g. shared venv or asteroid project venv)
+ExecStart=/bin/sh -c 'exec /home/kiosk-pi/projects/astro_mini_games/venv/bin/python -u scripts/panda_display_probe.py --seconds "${PROBE_SECONDS}"'
+StandardInput=tty
+StandardOutput=journal+console
+StandardError=journal+console
+TTYPath=/dev/tty1
+
+[Install]
+WantedBy=multi-user.target

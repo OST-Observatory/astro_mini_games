@@ -5,6 +5,15 @@ stats:
   title: "Nutzungsstatistik"
   no_data: "Noch keine Daten."
   close: "Schließen"
+  col_app: "App"
+  col_starts: "Aufrufe"
+  col_duration: "Gesamtzeit"
+  starts_cell: "{n}×"
+  dur_seconds: "{n} s"
+  dur_min_sec: "{m} min {s} s"
+  dur_hours_only: "{h} h"
+  dur_hours_min: "{h} h {m} min"
+  dur_hour_min_sec: "{h} h {m} min {s} s"
 
 idle:
   warning_line1: "Zurück zum Launcher in {n} Sek?"

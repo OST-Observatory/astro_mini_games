@@ -21,6 +21,7 @@ ICONS = {
     "travel_explore": "\ue2db",  # Explore – exoplanet
     "extension": "\ue87b",       # Puzzle pieces – astro puzzle
     "orbit": "\ue028",           # N-body/orbit simulation
+    "search": "\ue8b6",          # Search – asteroid game
 }
 
 
