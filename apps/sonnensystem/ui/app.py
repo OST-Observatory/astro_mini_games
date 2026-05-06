@@ -20,7 +20,8 @@ from ui.info_panel import InfoPanel
 from ui.date_picker import DatePickerPopup
 from visualization.renderer import SolarSystemRenderer
 
-
+# Normalized distance from screen bottom for explore-mode controls (play/zoom/back row).
+_CONTROLS_BOTTOM_HINT = 0.045
 def _font():
     from shared.fonts import get_safe_font
     return get_safe_font()
@@ -97,7 +98,7 @@ class SonnensystemApp(AstroApp):
             orientation="horizontal",
             size_hint=(None, None),
             size=(btn_sz * 6 + 80 + SPACING_MD * 6, btn_sz),
-            pos_hint={"x": 0.02, "bottom": 0.02},
+            pos_hint={"x": 0.02, "bottom": _CONTROLS_BOTTOM_HINT},
             spacing=SPACING_MD,
         )
         self.pause_btn = RoundedButton(
@@ -178,7 +179,7 @@ class SonnensystemApp(AstroApp):
             font_size="14sp",
             size_hint=(None, None),
             size=(200, MIN_TOUCH_TARGET),
-            pos_hint={"right": 0.53, "bottom": 0.02},
+            pos_hint={"right": 0.53, "bottom": _CONTROLS_BOTTOM_HINT},
             background_color=Colors.BG_BUTTON,
             color=Colors.TEXT_PRIMARY,
         )

@@ -1,5 +1,6 @@
 """Solar system: top-down view of ecliptic, real ephemerides."""
 
+import math
 from datetime import datetime, timedelta, timezone
 
 from kivy.clock import Clock
@@ -134,6 +135,8 @@ class SolarSystemRenderer(Widget):
                 jitter_au=jitter_au_val,
             )
             rad_pd = preset.get("rad_per_day")
+            r_lo = float(preset["r_min_au"])
+            r_hi = float(preset["r_max_au"])
             layers.append(
                 {
                     "particles": particles,
@@ -143,6 +146,11 @@ class SolarSystemRenderer(Widget):
                     ),
                     "pointsize": float(preset["pointsize"]),
                     "rgba": [float(c) for c in preset["rgba"]],
+                    "r_min_au": r_lo,
+                    "r_max_au": r_hi,
+                    "info_key": (
+                        "belt_asteroid" if key == "asteroid" else "belt_kuiper"
+                    ),
                 }
             )
         return layers
@@ -350,12 +358,32 @@ class SolarSystemRenderer(Widget):
             and len(self.touch_handler._touches) == 0
             and dist < self._tap_tolerance
             and hasattr(self, "_planet_positions")
+            and self.on_planet_tap
         ):
+            tapped = False
             for name, px, py, pr, _ in self._planet_positions:
                 d = ((touch.pos[0] - px) ** 2 + (touch.pos[1] - py) ** 2) ** 0.5
-                if d < pr / 2 + self._tap_tolerance and self.on_planet_tap:
+                if d < pr / 2 + self._tap_tolerance:
                     self.on_planet_tap(name)
+                    tapped = True
                     break
+            if not tapped and self._belt_layers and self.width > 0 and self.height > 0:
+                cx = self.x + self.width / 2
+                cy = self.y + self.height / 2
+                x_au, y_au = self.camera.screen_to_world_au(
+                    touch.pos[0], touch.pos[1], cx, cy
+                )
+                r = math.hypot(x_au, y_au)
+                pad_au = max(
+                    6.0 / self.camera.scale,
+                    0.12,
+                )
+                for layer in self._belt_layers:
+                    lo = layer["r_min_au"] - pad_au
+                    hi = layer["r_max_au"] + pad_au
+                    if lo <= r <= hi:
+                        self.on_planet_tap(layer["info_key"])
+                        break
         if len(self.touch_handler._touches) == 0:
             self._multi_touch_used = False
         return True

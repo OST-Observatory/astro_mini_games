@@ -122,6 +122,8 @@ sonnensystem_info:
     Haumea: "Haumea"
     Makemake: "Makemake"
     Eris: "Eris"
+    belt_asteroid: "Cinturón de asteroides"
+    belt_kuiper: "Cinturón de Kuiper"
   planet:
     Merkur:
       distance: "0.39× distancia Tierra–Sol"
@@ -214,6 +216,14 @@ sonnensystem_info:
       size: "≈0,18 diámetros terrestres"
       type: "Planeta enano"
       desc: "Planeta enano muy masivo en el sistema solar exterior; su descubrimiento influyó en la nueva definición de planeta."
+    belt_asteroid:
+      distance: "típicamente unos 2–3,5 UA del Sol"
+      type: "Cinturón esquemático"
+      desc: "Entre Marte y Júpiter orbitan innumerables asteroides rocosos. Aquí se muestran como un anillo de puntos; los objetos individuales (p. ej. Ceres) siguen siendo seleccionables por separado."
+    belt_kuiper:
+      distance: "típicamente unas 40–50 UA del Sol"
+      type: "Cinturón esquemático"
+      desc: "Más allá de Neptuno está el cinturón de Kuiper, con muchos cuerpos helados y rocosos. Es una vista simplificada; los planetanos cercanos tienen prioridad al tocar."
 
 hr_diagramm:
   app_title: "Diagrama HR"

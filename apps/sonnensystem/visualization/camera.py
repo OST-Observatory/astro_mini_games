@@ -67,6 +67,20 @@ class SolarCamera:
         sy = center_y + ry * self.scale
         return (sx, sy)
 
+    def screen_to_world_au(
+        self, sx: float, sy: float, center_x: float, center_y: float
+    ) -> tuple[float, float]:
+        """Inverse of ``world_to_screen``: screen px → heliocentric ecliptic (AU)."""
+        if self.scale <= 0:
+            return (0.0, 0.0)
+        rx = (sx - center_x) / self.scale
+        ry = (sy - center_y) / self.scale
+        cos_a = math.cos(self.angle)
+        sin_a = math.sin(self.angle)
+        x_au = rx * cos_a + ry * sin_a
+        y_au = -rx * sin_a + ry * cos_a
+        return (float(x_au), float(y_au))
+
     def rotate(self, dx_pixels: float):
         """Rotate view by pixel delta (converted to radians)."""
         self.angle += dx_pixels * 0.008

@@ -122,6 +122,8 @@ sonnensystem_info:
     Haumea: "Haumea"
     Makemake: "Makemake"
     Eris: "Eris"
+    belt_asteroid: "Asteroidengürtel"
+    belt_kuiper: "Kuipergürtel"
   planet:
     Merkur:
       distance: "0.39× Erde–Sonne"
@@ -214,6 +216,14 @@ sonnensystem_info:
       size: "≈0,18 Erddurchmesser"
       type: "Zwergplanet"
       desc: "Sehr massereicher Zwergplanet im äußeren Sonnensystem; seine Entdeckung trug zur Neudefinition des Planetenbegriffs bei."
+    belt_asteroid:
+      distance: "typisch etwa 2–3,5 AE von der Sonne"
+      type: "Schematischer Gürtel"
+      desc: "Zwischen Mars und Jupiter liegen sehr viele kleine Asteroiden. Hier sind sie als dichter Punktgürtel angedeutet; Einzelobjekte (z. B. Ceres) können weiterhin separat angetippt werden."
+    belt_kuiper:
+      distance: "typisch etwa 40–50 AE von der Sonne"
+      type: "Schematischer Gürtel"
+      desc: "Am Rand des Planetensystems liegt der Kuipergürtel mit zahlreichen kleinen Eis- und Gesteinskörpern. Die Ansicht zeigt einen vereinfachten Ring; nahe Zwergplaneten haben beim Antippen Vorrang."
 
 hr_diagramm:
   app_title: "HR-Diagramm"

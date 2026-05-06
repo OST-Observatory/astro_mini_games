@@ -122,6 +122,8 @@ sonnensystem_info:
     Haumea: "Haumea"
     Makemake: "Makemake"
     Eris: "Eris"
+    belt_asteroid: "Asteroid belt"
+    belt_kuiper: "Kuiper belt"
   planet:
     Merkur:
       distance: "0.39× Earth–Sun distance"
@@ -214,6 +216,14 @@ sonnensystem_info:
       size: "≈0.18 Earth diameters"
       type: "Dwarf planet"
       desc: "A massive dwarf planet in the outer solar system; its discovery helped reshape the definition of a planet."
+    belt_asteroid:
+      distance: "typically about 2–3.5 AU from the Sun"
+      type: "Schematic belt"
+      desc: "Countless small rocky bodies orbit between Mars and Jupiter. Here they appear as a dotted ring for clarity; individual objects (e.g. Ceres) can still be tapped separately."
+    belt_kuiper:
+      distance: "typically about 40–50 AU from the Sun"
+      type: "Schematic belt"
+      desc: "Beyond Neptune lies the Kuiper belt of icy and rocky bodies. This view uses a simplified ring; nearby dwarf planets take priority when tapping."
 
 hr_diagramm:
   app_title: "HR diagram"
