@@ -61,6 +61,12 @@ DWARF_ORBITAL_ELEMENTS = {
     "Haumea": (43.218, 0.19126, math.radians((121.862 + 239.041) % 360)),
     "Makemake": (45.791, 0.15976, math.radians((307.482 + 297.454) % 360)),
     "Eris": (67.781, 0.43607, math.radians((35.952 + 151.639) % 360)),
+    # Sedna (90377): schematic Kepler ellipse on ecliptic (~mean a, high e)
+    "Sedna": (
+        552.0,
+        0.8545,
+        math.radians((144.246 + 358.303) % 360),
+    ),
 }
 
 DWARF_ORBITAL_PERIODS_YEARS = {
@@ -69,6 +75,7 @@ DWARF_ORBITAL_PERIODS_YEARS = {
     "Haumea": 284.0,
     "Makemake": 306.2,
     "Eris": 558.07,
+    "Sedna": 248.0 * ((552.0 / 39.482) ** 1.5),
 }
 
 # Mean anomaly at J2000 for Kepler propagation (Pluto filled from Skyfield).
@@ -77,6 +84,7 @@ DWARF_M0_RAD_J2000 = {
     "Eris": math.radians(191.7357),
     "Haumea": math.radians(181.4242),
     "Makemake": math.radians(128.4508),
+    "Sedna": math.radians(356.794),
 }
 
 DWARF_PLANET_SKYFIELD = [

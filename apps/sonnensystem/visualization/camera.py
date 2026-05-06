@@ -20,22 +20,26 @@ class SolarCamera:
         self,
         view_width: float,
         view_height: float,
+        reference_au: float = NEPTUNE_AU,
+        min_zoom_factor: float = 0.12,
         outer_view_au: float | None = None,
         outer_view_margin: float = 1.05,
     ):
         self.view_width = view_width
         self.view_height = view_height
         self.angle = 0.0
+        self.reference_au = max(float(reference_au), 1e-6)
+        self._min_zoom_factor = float(min_zoom_factor)
         self.outer_view_au = outer_view_au
         self.outer_view_margin = max(outer_view_margin, 1.0)
         self._update_scale_limits()
         self.scale = self._initial_scale
 
     def _update_scale_limits(self):
-        """Scale so Neptune (30 AU) fits in 85% of view."""
+        """Initial scale so ``reference_au`` fits in ~85% of the smaller view dimension."""
         r = 0.425 * min(self.view_width, self.view_height)
-        self._initial_scale = r / NEPTUNE_AU
-        legacy_min = self._initial_scale * 0.12
+        self._initial_scale = r / self.reference_au
+        legacy_min = self._initial_scale * self._min_zoom_factor
         self.min_scale = legacy_min
         if self.outer_view_au and self.outer_view_au > 0:
             half_dim = 0.5 * min(self.view_width, self.view_height)
@@ -45,8 +49,46 @@ class SolarCamera:
         if not hasattr(self, "scale") or self.scale <= 0:
             self.scale = self._initial_scale
 
+    def apply_profile(
+        self,
+        reference_au: float,
+        outer_view_au: float | None = None,
+        outer_view_margin: float = 1.05,
+        min_zoom_factor: float = 0.12,
+        preserve_zoom_ratio: bool = True,
+    ):
+        """
+        Switch scale baseline (e.g. inner system vs Oort schematic view).
+        If preserve_zoom_ratio, keeps scale / initial_scale similar across profile change.
+        """
+        old_initial = getattr(self, "_initial_scale", None)
+        old_scale = getattr(self, "scale", None)
+        zr = (
+            old_scale / old_initial
+            if (
+                preserve_zoom_ratio
+                and old_initial
+                and old_initial > 0
+                and old_scale
+                and old_scale > 0
+            )
+            else None
+        )
+        self.reference_au = max(float(reference_au), 1e-6)
+        self._min_zoom_factor = float(min_zoom_factor)
+        self.outer_view_au = outer_view_au
+        self.outer_view_margin = max(float(outer_view_margin), 1.0)
+        self._update_scale_limits()
+        if zr is not None:
+            self.scale = max(
+                self.min_scale,
+                min(self.max_scale, self._initial_scale * zr),
+            )
+        else:
+            self.scale = self._initial_scale
+
     def resize(self, w: float, h: float):
-        """Update view size and adjust scale to keep Neptune visible."""
+        """Update view size and adjust scale to match reference."""
         if w > 0 and h > 0:
             old_initial = getattr(self, "_initial_scale", None)
             old_scale = getattr(self, "scale", None)

@@ -81,14 +81,18 @@ sonnensystem:
   settings: "Settings"
   date: "Date"
   legend: "Legend"
+  region_inner: "Inner system"
+  region_oort: "Oort cloud"
+  open_oort_view: "Open Oort view"
   names_off: "Names off"
   planets_large: "Enlarged planets"
   planets_scale: "Planets to scale"
   title: "Explore the solar system"
   lets_go: "Let’s go!"
-  intro: "Real solar system with actual positions (Skyfield/NASA). Top-down view of the ecliptic. Starts with today’s date — pick another if you like. Buttons: ↶↷ rotate, −/+ zoom, 1×–100× time speed, legend for planet names. Tap a planet for details."
+  intro: "Real solar system with actual positions (Skyfield/NASA). Top-down view of the ecliptic. Starts with today’s date — pick another if you like. Buttons: ↶↷ rotate, −/+ zoom, 1×–100× time speed, legend for planet names. Tap a planet for details. From the Kuiper belt info you can open the schematic Oort view; touch and hold one finger (~0.5 s) to toggle inner system vs Oort (when enabled)."
   names_on: "Names on"
   legend_check: "Legend ✓"
+  sedna_orbit_label: "Sedna orbit"
 
 sonnensystem_date:
   pick_title: "Pick date"
@@ -122,8 +126,10 @@ sonnensystem_info:
     Haumea: "Haumea"
     Makemake: "Makemake"
     Eris: "Eris"
+    Sedna: "Sedna"
     belt_asteroid: "Asteroid belt"
     belt_kuiper: "Kuiper belt"
+    belt_oort: "Oort cloud (schematic)"
   planet:
     Merkur:
       distance: "0.39× Earth–Sun distance"
@@ -216,6 +222,13 @@ sonnensystem_info:
       size: "≈0.18 Earth diameters"
       type: "Dwarf planet"
       desc: "A massive dwarf planet in the outer solar system; its discovery helped reshape the definition of a planet."
+    Sedna:
+      distance: "≈552 AU (semi-major axis, schematic)"
+      period: "≈13,000 yr (model orbital period)"
+      mass: "≈0.00017 Earth masses"
+      size: "≈0.08 Earth diameters"
+      type: "Trans-Neptunian object (model)"
+      desc: "90377 Sedna on a very large, highly eccentric orbit; drawn here as a Kepler ellipse in the ecliptic and used as a common AU ruler in both the inner and Oort views."
     belt_asteroid:
       distance: "typically about 2–3.5 AU from the Sun"
       type: "Schematic belt"
@@ -224,6 +237,11 @@ sonnensystem_info:
       distance: "typically about 40–50 AU from the Sun"
       type: "Schematic belt"
       desc: "Beyond Neptune lies the Kuiper belt of icy and rocky bodies. This view uses a simplified ring; nearby dwarf planets take priority when tapping."
+    belt_oort:
+      distance: "Model: roughly 2,500–100,000 AU (same AU grid as the inner view)"
+      type: "Schematic spherical shell"
+      desc: "The Oort cloud is a hypothetical distant reservoir of cometary nuclei—shown here as a dense point cloud in the same astronomical-unit frame as the planetary orbits. There is no central Sun glyph; Sedna’s orbit gives a sense of distance."
+      scale_nominal: "Initial zoom uses camera reference distance {ref_au:g} AU (same rule as inside: about 0.425×min(width,height)/reference pixels per AU). At 1920×1080 that is roughly {px50_fhd:.3f} px for 50 AU (outer Kuiper edge) and {px_sedna_fhd:.3f} px for Sedna’s semi-major axis ({sedna_a:g} AU). At 2560×1440: {px50_qhd:.3f} px and {px_sedna_qhd:.3f} px respectively. Sedna’s orbit appears in both views; when the inner view is zoomed all the way out it often lies off-screen because the model perihelion is about {sedna_q:.1f} AU."
 
 hr_diagramm:
   app_title: "HR diagram"

@@ -14,9 +14,10 @@ touch:
   pinch_enabled: true
   tap_tolerance_px: 40
 
-# Strongest zoom-out: ensure outer radius (AU) fits (Kuiper ~50 AU + margin); Oort later
+# Strongest zoom-out: min_scale capped so viewport radius ≥ outer_view_au × margin (AU).
+# ~1000×1.05 fits Sedna’s schematic orbit (aphelion ~a(1+e) ≈ 1024 AU).
 camera:
-  outer_view_au: 55
+  outer_view_au: 1000
   outer_view_margin: 1.05
 
 # Pseudo-particle belts (batched Point draw; Pi-friendly counts)
@@ -41,3 +42,18 @@ belts:
     rotation_deg_per_year: 0.0
     pointsize: 2.0
     rgba: [0.38, 0.42, 0.55, 0.65]
+
+# Schematic spherical Oort cloud (separate view scale; not comparable px/AU to inner system)
+oort:
+  enabled: true
+  reference_au: 100000
+  outer_view_au: 105000
+  outer_view_margin: 1.08
+  min_zoom_factor: 0.055
+  r_min_au: 2500
+  r_max_au: 100000
+  count: 14000
+  seed: 911
+  rotation_deg_per_year: 0.012
+  pointsize: 1.75
+  rgba: [0.34, 0.40, 0.52, 0.42]

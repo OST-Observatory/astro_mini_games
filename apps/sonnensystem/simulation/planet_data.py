@@ -30,8 +30,13 @@ PLANET_ORDER = [
     "Merkur", "Venus", "Erde", "Mars", "Jupiter", "Saturn", "Uranus", "Neptun",
 ]
 
-# Five IAU dwarf planets (names kept international / Latin)
-DWARF_PLANET_ORDER = ["Ceres", "Pluto", "Haumea", "Makemake", "Eris"]
+# Dwarf planets + Sedna (90377; detached TNO, comparison orbit in both views)
+DWARF_PLANET_ORDER = ["Ceres", "Pluto", "Haumea", "Makemake", "Eris", "Sedna"]
+
+# Schemaparameter für Infotexte (große Halbachse, AE; e wie in ephemeris.py)
+SEDNA_SEMI_MAJOR_AU = 552.0
+SEDNA_ECCENTRICITY_SCHEMATIC = 0.8545
+SEDNA_PERIHELION_AU = SEDNA_SEMI_MAJOR_AU * (1.0 - SEDNA_ECCENTRICITY_SCHEMATIC)
 
 DWARF_PLANET_RADII_KM = {
     "Ceres": 469.4,
@@ -39,6 +44,7 @@ DWARF_PLANET_RADII_KM = {
     "Haumea": 816.0,
     "Makemake": 715.0,
     "Eris": 1163.0,
+    "Sedna": 995.0,
 }
 
 DWARF_PLANET_COLORS = {
@@ -47,6 +53,7 @@ DWARF_PLANET_COLORS = {
     "Haumea": [0.52, 0.58, 0.54, 1],
     "Makemake": [0.52, 0.45, 0.38, 1],
     "Eris": [0.58, 0.54, 0.68, 1],
+    "Sedna": [0.88, 0.48, 0.28, 1],
 }
 
 

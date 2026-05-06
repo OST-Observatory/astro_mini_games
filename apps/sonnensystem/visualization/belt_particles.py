@@ -79,3 +79,49 @@ def belt_screen_points_flat(
         sx, sy = world_to_screen(x_au, y_au, cx, cy)
         pts.extend([sx, sy])
     return pts
+
+
+def build_spherical_shell_particles(
+    r_min_au: float,
+    r_max_au: float,
+    count: int,
+    seed: int,
+) -> list[tuple[float, float]]:
+    """
+    Uniform sampling in a spherical shell (volume-uniform radius), projected to ecliptic x,y.
+    Deterministic for fixed seed.
+    """
+    if count <= 0 or r_max_au <= r_min_au:
+        return []
+    rng = random.Random(seed)
+    lo3 = r_min_au**3
+    hi3 = r_max_au**3
+    out: list[tuple[float, float]] = []
+    for _ in range(count):
+        r = (lo3 + rng.random() * (hi3 - lo3)) ** (1.0 / 3.0)
+        u = rng.uniform(-1.0, 1.0)
+        phi = rng.uniform(0.0, 2 * math.pi)
+        st = math.sqrt(max(0.0, 1.0 - u * u))
+        x = r * st * math.cos(phi)
+        y = r * st * math.sin(phi)
+        out.append((float(x), float(y)))
+    return out
+
+
+def cloud_xy_screen_points_flat(
+    particles_xy: list[tuple[float, float]],
+    phase_rad: float,
+    world_to_screen,
+    cx: float,
+    cy: float,
+) -> list[float]:
+    """Rigid rotation of (x,y) by phase_rad, then project for Kivy Point."""
+    c = math.cos(phase_rad)
+    s = math.sin(phase_rad)
+    pts: list[float] = []
+    for x, y in particles_xy:
+        xr = x * c - y * s
+        yr = x * s + y * c
+        sx, sy = world_to_screen(xr, yr, cx, cy)
+        pts.extend([sx, sy])
+    return pts

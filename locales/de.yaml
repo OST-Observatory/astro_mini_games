@@ -81,14 +81,18 @@ sonnensystem:
   settings: "Einstellungen"
   date: "Datum"
   legend: "Legende"
+  region_inner: "Inneres System"
+  region_oort: "Oort-Wolke"
+  open_oort_view: "Oort-Ansicht öffnen"
   names_off: "Namen aus"
   planets_large: "Vergrößerte Planeten"
   planets_scale: "Planeten im Maßstab"
   title: "Sonnensystem erkunden"
   lets_go: "Los geht's!"
-  intro: "Echtes Sonnensystem mit echten Positionen (Skyfield/NASA). Reine Draufsicht auf die Ekliptik-Ebene. Startet mit dem heutigen Datum – du kannst ein anderes Datum wählen. Buttons: ↶↷ drehen, −/+ zoomen, 1×–100× Zeit, Legende für Planeten-Namen. Tippe auf einen Planeten für Infos."
+  intro: "Echtes Sonnensystem mit echten Positionen (Skyfield/NASA). Reine Draufsicht auf die Ekliptik-Ebene. Startet mit dem heutigen Datum – du kannst ein anderes Datum wählen. Buttons: ↶↷ drehen, −/+ zoomen, 1×–100× Zeit, Legende für Planeten-Namen. Tippe auf einen Planeten für Infos. Im Kuipergürtel-Infotext kannst du die schematische Oort-Ansicht öffnen; mit einem Finger ~0,5 s gedrückt halten wechselst du zwischen Innerem System und Oort (falls aktiv)."
   names_on: "Namen ein"
   legend_check: "Legende ✓"
+  sedna_orbit_label: "Sedna-Orbit"
 
 sonnensystem_date:
   pick_title: "Datum wählen"
@@ -122,8 +126,10 @@ sonnensystem_info:
     Haumea: "Haumea"
     Makemake: "Makemake"
     Eris: "Eris"
+    Sedna: "Sedna"
     belt_asteroid: "Asteroidengürtel"
     belt_kuiper: "Kuipergürtel"
+    belt_oort: "Oortsche Wolke (schematisch)"
   planet:
     Merkur:
       distance: "0.39× Erde–Sonne"
@@ -216,6 +222,13 @@ sonnensystem_info:
       size: "≈0,18 Erddurchmesser"
       type: "Zwergplanet"
       desc: "Sehr massereicher Zwergplanet im äußeren Sonnensystem; seine Entdeckung trug zur Neudefinition des Planetenbegriffs bei."
+    Sedna:
+      distance: "≈552 AE (große Halbachse, schematisch)"
+      period: "≈13 000 Jahre (Modell-Umlaufzeit)"
+      mass: "≈0,00017 Erdmassen"
+      size: "≈0,08 Erddurchmesser"
+      type: "Transneptunisches Objekt (Modell)"
+      desc: "90377 Sedna mit sehr großer, stark elliptischer Bahn; hier als Kepler-Ellipse in der Ekliptik dargestellt und als gemeinsamer AU-Maßstab in Innen- und Oort-Ansicht."
     belt_asteroid:
       distance: "typisch etwa 2–3,5 AE von der Sonne"
       type: "Schematischer Gürtel"
@@ -224,6 +237,11 @@ sonnensystem_info:
       distance: "typisch etwa 40–50 AE von der Sonne"
       type: "Schematischer Gürtel"
       desc: "Am Rand des Planetensystems liegt der Kuipergürtel mit zahlreichen kleinen Eis- und Gesteinskörpern. Die Ansicht zeigt einen vereinfachten Ring; nahe Zwergplaneten haben beim Antippen Vorrang."
+    belt_oort:
+      distance: "Modell: etwa 2 500–100 000 AE (gleiches AU-Raster wie Innenansicht)"
+      type: "Schematische Kugelschale"
+      desc: "Die Oortsche Wolke ist eine sehr weit außen vermutete Hülle aus Kometenkernen – hier als dichte Punktwolke im gleichen AU-Koordinatensystem wie die Planetenbahnen. Es gibt keinen zentralen Sonnenpunkt; als Entfernungsmaßstab dient die eingezeichnete Bahn von Sedna."
+      scale_nominal: "Startzoom: Referenzdistanz der Kamera {ref_au:g} AU (wie innen gilt näherungsweise 0,425×min(Breite,Höhe)/Referenz als Pixel pro AU). Bei 1920×1080 ergibt das etwa {px50_fhd:.3f} px für 50 AU (Kuiper-Rand) und {px_sedna_fhd:.3f} px für Sednas große Halbachse ({sedna_a:g} AU). Bei 2560×1440: {px50_qhd:.3f} px bzw. {px_sedna_qhd:.3f} px. Sednas Bahn erscheint in beiden Ansichten; im maximal herausgezoomten Innenbild liegt sie oft außerhalb, weil das Modell-Perihel etwa {sedna_q:.1f} AU hat."
 
 hr_diagramm:
   app_title: "HR-Diagramm"

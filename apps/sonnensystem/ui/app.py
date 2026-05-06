@@ -22,6 +22,8 @@ from visualization.renderer import SolarSystemRenderer
 
 # Normalized distance from screen bottom for explore-mode controls (play/zoom/back row).
 _CONTROLS_BOTTOM_HINT = 0.045
+
+
 def _font():
     from shared.fonts import get_safe_font
     return get_safe_font()
@@ -55,6 +57,10 @@ class SonnensystemApp(AstroApp):
             self.massstab_btn.text = tr("sonnensystem.planets_scale")
             self._back_btn.text = tr("sonnensystem.back_launcher")
             self._reset_btn.text = tr("sonnensystem.reset")
+            if getattr(self, "region_inner_btn", None):
+                self.region_inner_btn.text = tr("sonnensystem.region_inner")
+            if getattr(self, "region_oort_btn", None):
+                self.region_oort_btn.text = tr("sonnensystem.region_oort")
         if getattr(self, "info_panel", None):
             self.info_panel.apply_i18n()
 
@@ -75,6 +81,7 @@ class SonnensystemApp(AstroApp):
         self.renderer = SolarSystemRenderer(
             config,
             on_planet_tap=self._on_planet_tap,
+            on_region_changed=self._on_space_region_changed,
             size_hint=(1, 1),
         )
         root.add_widget(self.renderer)
@@ -83,7 +90,9 @@ class SonnensystemApp(AstroApp):
         self._build_intro(root)
 
         # Info panel (hidden)
-        self.info_panel = InfoPanel()
+        self.info_panel = InfoPanel(
+            on_open_oort=lambda: self._set_space_region("oort"),
+        )
         root.add_widget(self.info_panel)
         root.bind(size=lambda inst, val: self.info_panel._update_width())
 
@@ -191,7 +200,7 @@ class SonnensystemApp(AstroApp):
         settings_outer = BoxLayout(
             orientation="vertical",
             size_hint=(None, None),
-            size=(340, 275),
+            size=(340, 329),
             pos_hint={"x": 0.02, "top": 0.98},
             spacing=0,
             padding=(0, 0, 0, 0),
@@ -219,7 +228,7 @@ class SonnensystemApp(AstroApp):
         time_box = BoxLayout(
             orientation="vertical",
             size_hint_y=None,
-            height=242,
+            height=296,
             spacing=6,
             padding=8,
         )
@@ -313,6 +322,31 @@ class SonnensystemApp(AstroApp):
         row3.add_widget(self.massstab_btn)
         time_box.add_widget(row3)
 
+        row4 = BoxLayout(orientation="horizontal", size_hint_y=None, height=btn_h, spacing=6)
+        self.region_inner_btn = RoundedButton(
+            text=tr("sonnensystem.region_inner"),
+            font_name=_font(),
+            font_size="14sp",
+            size_hint_x=None,
+            width=165,
+            background_color=Colors.BG_BUTTON_ACTIVE,
+            color=Colors.TEXT_PRIMARY,
+        )
+        self.region_inner_btn.bind(on_release=lambda x: self._set_space_region("inner"))
+        row4.add_widget(self.region_inner_btn)
+        self.region_oort_btn = RoundedButton(
+            text=tr("sonnensystem.region_oort"),
+            font_name=_font(),
+            font_size="14sp",
+            size_hint_x=None,
+            width=165,
+            background_color=Colors.BG_BUTTON,
+            color=Colors.TEXT_PRIMARY,
+        )
+        self.region_oort_btn.bind(on_release=lambda x: self._set_space_region("oort"))
+        row4.add_widget(self.region_oort_btn)
+        time_box.add_widget(row4)
+
         settings_outer.add_widget(time_box)
         self._legend_panel = None
         self._time_box = settings_outer
@@ -320,7 +354,91 @@ class SonnensystemApp(AstroApp):
         root.add_widget(settings_outer)
 
         Clock.schedule_interval(self._update_time_label, 0.3)
+        self._sync_space_region_ui()
         return root
+
+    def _set_space_region(self, region: str):
+        self.renderer.set_space_region(region)
+
+    def _oort_reference_au_from_config(self) -> float | None:
+        oc = getattr(self.renderer, "config", {}).get("oort")
+        if isinstance(oc, dict) and oc.get("reference_au") is not None:
+            return float(oc["reference_au"])
+        return None
+
+    def _show_belt_oort_panel(self):
+        self.info_panel.show(
+            "belt_oort",
+            self.renderer.sim_date,
+            oort_link_available=False,
+            oort_reference_au=self._oort_reference_au_from_config(),
+        )
+
+    def _on_space_region_changed(self, region: str):
+        self._sync_space_region_ui(region)
+        if region == "oort" and self.renderer._oort_layer is not None:
+            self._show_belt_oort_panel()
+        elif region == "inner" and self.info_panel._last_planet_name == "belt_oort":
+            self.info_panel.hide()
+
+    def _sync_space_region_ui(self, region: str | None = None):
+        region = region if region is not None else self.renderer.space_region
+        oort = region == "oort"
+        no_oort_layer = self.renderer._oort_layer is None
+        self.region_oort_btn.disabled = no_oort_layer
+        self.region_oort_btn.opacity = 0.45 if no_oort_layer else 1.0
+
+        self.region_inner_btn.set_display_color(
+            Colors.BG_BUTTON_ACTIVE if not oort else Colors.BG_BUTTON
+        )
+        self.region_oort_btn.set_display_color(
+            Colors.BG_BUTTON_ACTIVE if oort else Colors.BG_BUTTON
+        )
+
+        self.time_label.opacity = 0 if oort else 1
+
+        _muted_bg = (0.11, 0.09, 0.15, 1)
+        if oort:
+            if self._legend_panel and self._legend_panel.parent:
+                self.root.remove_widget(self._legend_panel)
+                self.legend_btn.text = tr("sonnensystem.legend")
+
+            self._date_btn.opacity = 1.0
+            self._date_btn.disabled = True
+            self._date_btn.set_display_color(_muted_bg)
+            self._date_btn.color = Colors.TEXT_SECONDARY
+
+            self.legend_btn.opacity = 1.0
+            self.legend_btn.disabled = True
+            self.legend_btn.set_display_color(_muted_bg)
+            self.legend_btn.color = Colors.TEXT_SECONDARY
+
+            self.namen_btn.opacity = 1.0
+            self.namen_btn.disabled = True
+            self.namen_btn.set_display_color(_muted_bg)
+            self.namen_btn.color = Colors.TEXT_SECONDARY
+        else:
+            self._date_btn.opacity = 1.0
+            self._date_btn.disabled = False
+            self._date_btn.set_display_color(Colors.BG_BUTTON)
+            self._date_btn.color = Colors.TEXT_PRIMARY
+
+            self.legend_btn.opacity = 1.0
+            self.legend_btn.disabled = False
+            self.legend_btn.set_display_color(Colors.BG_BUTTON)
+            self.legend_btn.color = Colors.TEXT_PRIMARY
+
+            self.namen_btn.opacity = 1.0
+            self.namen_btn.disabled = False
+            self.namen_btn.set_display_color(Colors.BG_BUTTON)
+            self.namen_btn.color = Colors.TEXT_PRIMARY
+
+        for w in (self.vergroessert_btn, self.massstab_btn):
+            w.disabled = oort
+            w.opacity = 0.45 if oort else 1.0
+
+        if not oort:
+            self._update_time_label(0)
 
     def _set_time_scale(self, mult: float):
         self.renderer.time_scale = float(mult)
@@ -478,6 +596,9 @@ class SonnensystemApp(AstroApp):
 
     def _update_time_label(self, dt):
         if hasattr(self, "time_label") and hasattr(self, "renderer"):
+            if self.renderer.space_region == "oort":
+                self.time_label.text = ""
+                return
             d = self.renderer.sim_date
             self.time_label.text = d.strftime("%d.%m.%Y")
 
@@ -492,7 +613,12 @@ class SonnensystemApp(AstroApp):
         if self._legend_panel and self._legend_panel.parent:
             self.root.remove_widget(self._legend_panel)
             self.legend_btn.text = tr("sonnensystem.legend")
-        self.info_panel.show(planet_name, self.renderer.sim_date)
+        self.info_panel.show(
+            planet_name,
+            self.renderer.sim_date,
+            oort_link_available=self.renderer._oort_layer is not None,
+            oort_reference_au=self._oort_reference_au_from_config(),
+        )
 
     def _toggle_pause(self, instance):
         self.renderer.paused = not self.renderer.paused
