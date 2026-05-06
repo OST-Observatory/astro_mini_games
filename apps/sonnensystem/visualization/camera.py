@@ -9,21 +9,38 @@ class SolarCamera:
     """
     Pure top-down view of the ecliptic plane.
     (x, y) in AU, z ignored. scale = pixels per AU.
+
+    When ``outer_view_au`` is set, ``min_scale`` is capped so that at maximum
+    zoom-out the viewport half-extent in AU is at least ``outer_view_au`` ×
+    ``outer_view_margin`` (fits Kuiper ~50 AU + pad; hook for Oort later).
+    Uses half the smaller window dimension as visible radius (conservative).
     """
 
-    def __init__(self, view_width: float, view_height: float):
+    def __init__(
+        self,
+        view_width: float,
+        view_height: float,
+        outer_view_au: float | None = None,
+        outer_view_margin: float = 1.05,
+    ):
         self.view_width = view_width
         self.view_height = view_height
         self.angle = 0.0
+        self.outer_view_au = outer_view_au
+        self.outer_view_margin = max(outer_view_margin, 1.0)
         self._update_scale_limits()
         self.scale = self._initial_scale
-        self._initial_scale = self.scale
 
     def _update_scale_limits(self):
         """Scale so Neptune (30 AU) fits in 85% of view."""
         r = 0.425 * min(self.view_width, self.view_height)
         self._initial_scale = r / NEPTUNE_AU
-        self.min_scale = self._initial_scale * 0.12
+        legacy_min = self._initial_scale * 0.12
+        self.min_scale = legacy_min
+        if self.outer_view_au and self.outer_view_au > 0:
+            half_dim = 0.5 * min(self.view_width, self.view_height)
+            cap = half_dim / (self.outer_view_au * self.outer_view_margin)
+            self.min_scale = min(self.min_scale, cap)
         self.max_scale = self._initial_scale * 10.0
         if not hasattr(self, "scale") or self.scale <= 0:
             self.scale = self._initial_scale

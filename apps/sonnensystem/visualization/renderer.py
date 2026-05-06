@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from kivy.clock import Clock
 from kivy.core.text import Label as CoreLabel
 from kivy.graphics import Color, Ellipse, Line, Rectangle
+from kivy.graphics.vertex_instructions import Point
 from kivy.uix.widget import Widget
 
 from simulation.ephemeris import get_orbit_samples, get_positions_at
@@ -14,8 +15,40 @@ from simulation.planet_data import (
     PLANET_COLORS,
     get_planets_with_data,
 )
+from visualization.belt_particles import (
+    belt_phase_rad,
+    belt_screen_points_flat,
+    build_ring_particles,
+)
 from visualization.camera import SolarCamera
 from visualization.touch_handler import SolarTouchHandler
+
+_BELT_PRESETS = {
+    "asteroid": {
+        "enabled": True,
+        "count": 240,
+        "seed": 41,
+        "r_min_au": 2.0,
+        "r_max_au": 3.4,
+        "jitter_au": 0.08,
+        "rotation_deg_per_year": 2.5,
+        "rad_per_day": None,
+        "pointsize": 2.5,
+        "rgba": [0.55, 0.52, 0.48, 0.85],
+    },
+    "kuiper": {
+        "enabled": True,
+        "count": 100,
+        "seed": 73,
+        "r_min_au": 41.0,
+        "r_max_au": 50.0,
+        "jitter_au": 0.5,
+        "rotation_deg_per_year": 0.0,
+        "rad_per_day": None,
+        "pointsize": 2.0,
+        "rgba": [0.38, 0.42, 0.55, 0.65],
+    },
+}
 
 
 class SolarSystemRenderer(Widget):
@@ -26,7 +59,13 @@ class SolarSystemRenderer(Widget):
         self.config = config
         self.on_planet_tap = on_planet_tap
         self.planets = get_planets_with_data()
-        self.camera = SolarCamera(800, 600)  # updated on bind(size)
+        cam_cfg = config.get("camera") or {}
+        self.camera = SolarCamera(
+            800,
+            600,
+            outer_view_au=cam_cfg.get("outer_view_au"),
+            outer_view_margin=float(cam_cfg.get("outer_view_margin", 1.05)),
+        )
         touch_cfg = config.get("touch", {})
         self.touch_handler = SolarTouchHandler(
             self.camera, pinch_enabled=touch_cfg.get("pinch_enabled", True)
@@ -56,6 +95,7 @@ class SolarSystemRenderer(Widget):
         self.time_scale = 10.0
         self.paused = False
         self._orbit_cache = {}
+        self._belt_layers = self._build_belt_layers()
 
         self.bind(size=self._on_size, pos=self._draw)
         Clock.schedule_interval(self._update, 1 / 30)
@@ -64,6 +104,46 @@ class SolarSystemRenderer(Widget):
         if self.width > 0 and self.height > 0:
             self.camera.resize(self.width, self.height)
         self._draw()
+
+    def _build_belt_layers(self) -> list[dict]:
+        belts_cfg = self.config.get("belts")
+        if belts_cfg is None:
+            belts_cfg = {}
+        layers: list[dict] = []
+        for key in ("asteroid", "kuiper"):
+            preset = _BELT_PRESETS[key].copy()
+            raw = belts_cfg.get(key)
+            if isinstance(raw, dict):
+                preset.update(raw)
+                if (
+                    "jitter_au" not in raw
+                    and raw.get("thickness_jitter_au") is not None
+                ):
+                    preset["jitter_au"] = raw["thickness_jitter_au"]
+            if not preset.get("enabled", True):
+                continue
+            _ju = preset.get("jitter_au")
+            jitter_au_val = float(_ju if _ju is not None else 0.0)
+            particles = build_ring_particles(
+                float(preset["r_min_au"]),
+                float(preset["r_max_au"]),
+                int(preset["count"]),
+                int(preset["seed"]),
+                jitter_au=jitter_au_val,
+            )
+            rad_pd = preset.get("rad_per_day")
+            layers.append(
+                {
+                    "particles": particles,
+                    "deg_per_year": float(preset.get("rotation_deg_per_year") or 0.0),
+                    "rad_per_day": (
+                        float(rad_pd) if rad_pd is not None else None
+                    ),
+                    "pointsize": float(preset["pointsize"]),
+                    "rgba": [float(c) for c in preset["rgba"]],
+                }
+            )
+        return layers
 
     def _scale_factor(self) -> float:
         if self.height <= 0:
@@ -140,6 +220,31 @@ class SolarSystemRenderer(Widget):
                     points.extend([sx, sy])
                 self.canvas.add(Color(0.35, 0.45, 0.6, 0.6))
                 self.canvas.add(Line(points=points, width=orbit_width))
+
+        # Belt pseudo-particles (after orbit lines, before Sun/planets)
+        for layer in self._belt_layers:
+            particles = layer["particles"]
+            if not particles:
+                continue
+            phase = belt_phase_rad(
+                self.sim_date,
+                layer["deg_per_year"],
+                layer["rad_per_day"],
+            )
+            flat = belt_screen_points_flat(
+                particles,
+                phase,
+                self.camera.world_to_screen,
+                cx,
+                cy,
+            )
+            if len(flat) < 4:
+                continue
+            rgba = layer["rgba"]
+            self.canvas.add(Color(rgba[0], rgba[1], rgba[2], rgba[3]))
+            self.canvas.add(
+                Point(points=flat, pointsize=layer["pointsize"])
+            )
 
         # Sun (glow + core, compact inside Mercury orbit)
         sun_r = self._planet_radius_px("", is_sun=True)

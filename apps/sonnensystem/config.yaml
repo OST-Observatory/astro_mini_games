@@ -13,3 +13,31 @@ display:
 touch:
   pinch_enabled: true
   tap_tolerance_px: 40
+
+# Strongest zoom-out: ensure outer radius (AU) fits (Kuiper ~50 AU + margin); Oort later
+camera:
+  outer_view_au: 55
+  outer_view_margin: 1.05
+
+# Pseudo-particle belts (batched Point draw; Pi-friendly counts)
+belts:
+  asteroid:
+    enabled: true
+    count: 240
+    seed: 41
+    r_min_au: 2.0
+    r_max_au: 3.4
+    jitter_au: 0.08
+    rotation_deg_per_year: 35.0
+    pointsize: 2.5
+    rgba: [0.55, 0.52, 0.48, 0.85]
+  kuiper:
+    enabled: true
+    count: 1000
+    seed: 73
+    r_min_au: 41.0
+    r_max_au: 50.0
+    jitter_au: 0.5
+    rotation_deg_per_year: 0.0
+    pointsize: 2.0
+    rgba: [0.38, 0.42, 0.55, 0.65]
