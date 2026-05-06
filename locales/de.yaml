@@ -117,6 +117,11 @@ sonnensystem_info:
     Saturn: "Saturn"
     Uranus: "Uranus"
     Neptun: "Neptun"
+    Ceres: "Ceres"
+    Pluto: "Pluto"
+    Haumea: "Haumea"
+    Makemake: "Makemake"
+    Eris: "Eris"
   planet:
     Merkur:
       distance: "0.39× Erde–Sonne"
@@ -174,6 +179,41 @@ sonnensystem_info:
       size: "3.9 Erddurchmesser"
       type: "Eisriese"
       desc: "Der äußerste Planet des Sonnensystems; Licht braucht von der Sonne bis hierher über vier Stunden."
+    Ceres:
+      distance: "≈2,77 AE (mittlere große Halbachse)"
+      period: "≈4,6 Jahre"
+      mass: "≈0,013 Erdmassen"
+      size: "≈0,07 Erddurchmesser"
+      type: "Zwergplanet"
+      desc: "Größtes Objekt im Asteroidengürtel; seit 2006 als Zwergplanet geführt."
+    Pluto:
+      distance: "≈39,5 AE"
+      period: "≈248 Jahre"
+      mass: "≈0,002 Erdmassen"
+      size: "≈0,19 Erddurchmesser"
+      type: "Zwergplanet"
+      desc: "Dominanter Zwergplanet im Kuipergürtel mit mehreren Monden (darunter Charon)."
+    Haumea:
+      distance: "≈43 AE"
+      period: "≈284 Jahre"
+      mass: "≈0,0007 Erdmassen"
+      size: "≈0,13 Erddurchmesser (Äquator, stark verformt)"
+      type: "Zwergplanet"
+      desc: "Schnell rotierender, stark verformter Zwergplanet im Kuipergürtel mit Ring."
+    Makemake:
+      distance: "≈46 AE"
+      period: "≈306 Jahre"
+      mass: "≈0,0004 Erdmassen"
+      size: "≈0,11 Erddurchmesser"
+      type: "Zwergplanet"
+      desc: "Klassischer Kuipergürtel-Zwergplanet mit sehr dunkler Oberfläche."
+    Eris:
+      distance: "≈68 AE"
+      period: "≈558 Jahre"
+      mass: "≈0,003 Erdmassen"
+      size: "≈0,18 Erddurchmesser"
+      type: "Zwergplanet"
+      desc: "Sehr massereicher Zwergplanet im äußeren Sonnensystem; seine Entdeckung trug zur Neudefinition des Planetenbegriffs bei."
 
 hr_diagramm:
   app_title: "HR-Diagramm"

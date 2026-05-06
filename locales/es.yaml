@@ -117,6 +117,11 @@ sonnensystem_info:
     Saturn: "Saturno"
     Uranus: "Urano"
     Neptun: "Neptuno"
+    Ceres: "Ceres"
+    Pluto: "Plutón"
+    Haumea: "Haumea"
+    Makemake: "Makemake"
+    Eris: "Eris"
   planet:
     Merkur:
       distance: "0.39× distancia Tierra–Sol"
@@ -174,6 +179,41 @@ sonnensystem_info:
       size: "3.9 diámetros terrestres"
       type: "Gigante de hielo"
       desc: "El planeta mayor más lejano; la luz tarda más de cuatro horas en llegar desde el Sol."
+    Ceres:
+      distance: "≈2,77 UA (semieje mayor)"
+      period: "≈4,6 años"
+      mass: "≈0,013 masas terrestres"
+      size: "≈0,07 diámetros terrestres"
+      type: "Planeta enano"
+      desc: "El mayor objeto del cinturón de asteroides; reconocido como planeta enano desde 2006."
+    Pluto:
+      distance: "≈39,5 UA"
+      period: "≈248 años"
+      mass: "≈0,002 masas terrestres"
+      size: "≈0,19 diámetros terrestres"
+      type: "Planeta enano"
+      desc: "El mayor planeta enano del cinturón de Kuiper, con varias lunas, entre ellas Caronte."
+    Haumea:
+      distance: "≈43 UA"
+      period: "≈284 años"
+      mass: "≈0,0007 masas terrestres"
+      size: "≈0,13 diámetros terrestres (ecuatorial, alargado)"
+      type: "Planeta enano"
+      desc: "Planeta enano del cinturón de Kuiper, muy achatado por su rápida rotación y con un anillo."
+    Makemake:
+      distance: "≈46 UA"
+      period: "≈306 años"
+      mass: "≈0,0004 masas terrestres"
+      size: "≈0,11 diámetros terrestres"
+      type: "Planeta enano"
+      desc: "Planeta enano clásico del cinturón de Kuiper con superficie muy oscura."
+    Eris:
+      distance: "≈68 UA"
+      period: "≈558 años"
+      mass: "≈0,003 masas terrestres"
+      size: "≈0,18 diámetros terrestres"
+      type: "Planeta enano"
+      desc: "Planeta enano muy masivo en el sistema solar exterior; su descubrimiento influyó en la nueva definición de planeta."
 
 hr_diagramm:
   app_title: "Diagrama HR"

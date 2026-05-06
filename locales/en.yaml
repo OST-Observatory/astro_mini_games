@@ -117,6 +117,11 @@ sonnensystem_info:
     Saturn: "Saturn"
     Uranus: "Uranus"
     Neptun: "Neptune"
+    Ceres: "Ceres"
+    Pluto: "Pluto"
+    Haumea: "Haumea"
+    Makemake: "Makemake"
+    Eris: "Eris"
   planet:
     Merkur:
       distance: "0.39× Earth–Sun distance"
@@ -174,6 +179,41 @@ sonnensystem_info:
       size: "3.9 Earth diameters"
       type: "Ice giant"
       desc: "The outermost major planet; sunlight takes over four hours to reach it."
+    Ceres:
+      distance: "≈2.77 AU (semi-major axis)"
+      period: "≈4.6 years"
+      mass: "≈0.013 Earth masses"
+      size: "≈0.07 Earth diameters"
+      type: "Dwarf planet"
+      desc: "Largest object in the asteroid belt; classified as a dwarf planet since 2006."
+    Pluto:
+      distance: "≈39.5 AU"
+      period: "≈248 years"
+      mass: "≈0.002 Earth masses"
+      size: "≈0.19 Earth diameters"
+      type: "Dwarf planet"
+      desc: "The largest dwarf planet in the Kuiper belt, with several moons including Charon."
+    Haumea:
+      distance: "≈43 AU"
+      period: "≈284 years"
+      mass: "≈0.0007 Earth masses"
+      size: "≈0.13 Earth diameters (equatorial, elongated)"
+      type: "Dwarf planet"
+      desc: "A fast-spinning, elongated Kuiper belt dwarf planet with a ring system."
+    Makemake:
+      distance: "≈46 AU"
+      period: "≈306 years"
+      mass: "≈0.0004 Earth masses"
+      size: "≈0.11 Earth diameters"
+      type: "Dwarf planet"
+      desc: "A classical Kuiper belt dwarf planet with a very dark, reddish surface."
+    Eris:
+      distance: "≈68 AU"
+      period: "≈558 years"
+      mass: "≈0.003 Earth masses"
+      size: "≈0.18 Earth diameters"
+      type: "Dwarf planet"
+      desc: "A massive dwarf planet in the outer solar system; its discovery helped reshape the definition of a planet."
 
 hr_diagramm:
   app_title: "HR diagram"

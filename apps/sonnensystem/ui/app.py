@@ -369,11 +369,17 @@ class SonnensystemApp(AstroApp):
             instance.text = tr("sonnensystem.legend_check")
 
     def _build_legend(self):
-        from simulation.planet_data import PLANET_ORDER, PLANET_COLORS
+        from simulation.planet_data import (
+            DWARF_PLANET_ORDER,
+            PLANET_ORDER,
+            body_color_rgba,
+        )
+        rows = list(PLANET_ORDER) + list(DWARF_PLANET_ORDER)
+        row_h = 28
         box = BoxLayout(
             orientation="vertical",
             size_hint=(None, None),
-            size=(120, 260),
+            size=(140, row_h * len(rows) + 48),
             pos_hint={"right": 0.98, "center_y": 0.5},
             padding=10,
             spacing=4,
@@ -384,13 +390,13 @@ class SonnensystemApp(AstroApp):
             box._bg = RoundedRectangle(pos=box.pos, size=box.size, radius=[12] * 4)
         box.bind(pos=lambda b, v: setattr(b._bg, "pos", v))
         box.bind(size=lambda b, v: setattr(b._bg, "size", v))
-        for name in PLANET_ORDER:
-            row = BoxLayout(orientation="horizontal", size_hint_y=None, height=28, spacing=8)
+        for name in rows:
+            row = BoxLayout(orientation="horizontal", size_hint_y=None, height=row_h, spacing=8)
             dot = Button(
                 text="",
                 size_hint=(None, None),
                 size=(20, 20),
-                background_color=PLANET_COLORS.get(name, [1, 1, 1, 1]),
+                background_color=body_color_rgba(name),
                 background_normal="",
             )
             row.add_widget(dot)

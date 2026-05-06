@@ -11,8 +11,9 @@ from kivy.uix.widget import Widget
 from simulation.ephemeris import get_orbit_samples, get_positions_at
 from simulation.planet_data import (
     SUN_RADIUS_KM,
-    PLANET_RADII_KM,
-    PLANET_COLORS,
+    body_color_rgba,
+    body_radius_km,
+    get_dwarf_planets_with_data,
     get_planets_with_data,
 )
 from visualization.belt_particles import (
@@ -59,6 +60,7 @@ class SolarSystemRenderer(Widget):
         self.config = config
         self.on_planet_tap = on_planet_tap
         self.planets = get_planets_with_data()
+        self.dwarf_planets = get_dwarf_planets_with_data()
         cam_cfg = config.get("camera") or {}
         self.camera = SolarCamera(
             800,
@@ -161,7 +163,7 @@ class SolarSystemRenderer(Widget):
         if is_sun:
             r_km = SUN_RADIUS_KM
         else:
-            r_km = PLANET_RADII_KM.get(name, 6371)
+            r_km = body_radius_km(name)
 
         # Sun size: always limited to ~10% of 1 AU (inside Mercury orbit)
         max_sun_px = 0.1 * self.camera.scale
@@ -175,13 +177,19 @@ class SolarSystemRenderer(Widget):
             # Scale: planets strictly proportional to sun, correct size ratio.
             # No zf multiplication – scaling comes from camera.scale.
             r_px = ratio * sun_px
-            return max(1.0, r_px)
+            r_px = max(1.0, r_px)
         else:
             # Enlarged: planets visible, size scales with zoom.
             # Base proportional to sun, then with zf for zoom adjustment.
             base = ratio * 200  # Earth size ~2 px at zf=1
             r_px = base * zf
-            return max(2.0, min(r_px, 48))
+            r_px = max(2.0, min(r_px, 48))
+
+        # Dwarf planets / small bodies stay visible when enlarged
+        if r_km < 2800:
+            floor = 4.5 if self.size_mode != "massstab" else 2.0
+            r_px = max(r_px, floor)
+        return r_px
 
     def _update(self, dt):
         if not self.paused:
@@ -221,6 +229,22 @@ class SolarSystemRenderer(Widget):
                 self.canvas.add(Color(0.35, 0.45, 0.6, 0.6))
                 self.canvas.add(Line(points=points, width=orbit_width))
 
+        dwarf_orbit_width = max(1.0, orbit_width * 0.58)
+        for p in self.dwarf_planets:
+            name = p["name"]
+            if name not in self._orbit_cache:
+                self._orbit_cache[name] = get_orbit_samples(
+                    name, self.sim_date, num_points=96
+                )
+            pts = self._orbit_cache[name]
+            if len(pts) >= 4:
+                points = []
+                for x, y, z in pts:
+                    sx, sy = self.camera.world_to_screen(x, y, cx, cy)
+                    points.extend([sx, sy])
+                self.canvas.add(Color(0.46, 0.36, 0.52, 0.52))
+                self.canvas.add(Line(points=points, width=dwarf_orbit_width))
+
         # Belt pseudo-particles (after orbit lines, before Sun/planets)
         for layer in self._belt_layers:
             particles = layer["particles"]
@@ -258,10 +282,13 @@ class SolarSystemRenderer(Widget):
             Ellipse(pos=(cx - sun_r, cy - sun_r), size=(sun_r * 2, sun_r * 2))
         )
 
-        # Planets
+        # Major planets first, then dwarf planets (drawn on top)
         self._planet_positions = []
-        for name, x, y, z in positions:
-            color = PLANET_COLORS.get(name, [1, 1, 1, 1])
+        major_names = {p["name"] for p in self.planets}
+        dwarf_names = {p["name"] for p in self.dwarf_planets}
+
+        def draw_sphere(name: str, x: float, y: float, z: float):
+            color = body_color_rgba(name)
             sx, sy = self.camera.world_to_screen(x, y, cx, cy)
             r = self._planet_radius_px(name)
             self._planet_positions.append((name, sx, sy, r * 2, color))
@@ -270,7 +297,13 @@ class SolarSystemRenderer(Widget):
             self.canvas.add(Color(*color))
             self.canvas.add(Ellipse(pos=(sx - r, sy - r), size=(r * 2, r * 2)))
 
-        # Planet names next to planets
+        for name, x, y, z in positions:
+            if name in major_names:
+                draw_sphere(name, x, y, z)
+        for name, x, y, z in positions:
+            if name in dwarf_names:
+                draw_sphere(name, x, y, z)
+        # Planet names next to planets and dwarfs
         if self.show_planet_labels:
             font_size = max(11, int(13 * sf * min(2.0, self._zoom_factor())))
             for p_name, sx, sy, pr, _ in self._planet_positions:

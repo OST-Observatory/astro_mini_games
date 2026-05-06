@@ -28,7 +28,7 @@ belts:
     r_min_au: 2.0
     r_max_au: 3.4
     jitter_au: 0.08
-    rotation_deg_per_year: 35.0
+    rotation_deg_per_year: 55.0
     pointsize: 2.5
     rgba: [0.55, 0.52, 0.48, 0.85]
   kuiper:
