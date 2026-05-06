@@ -39,6 +39,16 @@ class SolarSystemRenderer(Widget):
         self._min_planet_r = max(disp_cfg.get("min_planet_radius_px", 24), 16)
         self._sun_core = disp_cfg.get("sun_core_factor", 48)
         self._orbit_width = max(disp_cfg.get("orbit_line_base_width", 2), 1)
+        self._orbit_width_min = float(disp_cfg.get("orbit_line_width_min", 1.0))
+        _max = disp_cfg.get("orbit_line_width_max")
+        self._orbit_width_max = (
+            float(_max) if _max is not None else float("inf")
+        )
+        if self._orbit_width_max < self._orbit_width_min:
+            self._orbit_width_min, self._orbit_width_max = (
+                self._orbit_width_max,
+                self._orbit_width_min,
+            )
 
         self.show_planet_labels = True
         self.size_mode = "vergroessert"
@@ -106,7 +116,12 @@ class SolarSystemRenderer(Widget):
         cx = self.x + self.width / 2
         cy = self.y + self.height / 2
         sf = self._scale_factor()
-        orbit_width = max(1, int(sf * 2))
+        zf = self._zoom_factor()
+        orbit_width = sf * self._orbit_width / zf
+        orbit_width = max(
+            self._orbit_width_min,
+            min(self._orbit_width_max, orbit_width),
+        )
 
         positions = get_positions_at(self.sim_date)
 

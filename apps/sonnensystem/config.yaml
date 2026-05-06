@@ -5,7 +5,10 @@ display:
   reference_height: 720
   min_planet_radius_px: 24
   sun_core_factor: 48
-  orbit_line_base_width: 2
+  orbit_line_base_width: 1
+  # Grenzen in Pixel nach Skalierung (sf / Zoom); max weglassen = kein Limit
+  orbit_line_width_min: 1.5
+  orbit_line_width_max: 3.0
 
 touch:
   pinch_enabled: true
