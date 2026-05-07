@@ -2,7 +2,7 @@
 
 import math
 
-NEPTUNE_AU = 30  # ~30 AU for scaling
+NEPTUNE_AU = 45  # ~30 AU for scaling
 
 
 class SolarCamera:
